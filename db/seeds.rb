@@ -8,10 +8,16 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-institutions = [
-  { name: "Wulse Academy", subdomain: "wulse-academy" },
-  { name: "University of Wulse", subdomain: "uow" }
-]
+institutions = [{
+  name: "Wulse Academy",
+  subdomain: "wulse-academy",
+  logo: File.open(Rails.root.join("db", "seeds", "images", "wulse-academy-logo.png"))
+},{
+  name: "University of Wulse",
+  subdomain: "uow",
+  logo: File.open(Rails.root.join("db", "seeds", "images", "uow-logo.png"))
+}]
+  
 institutions.each do |institution|
   institution = Institution.create(institution)
   puts "Created institution: #{institution.name}"
