@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   private
   def set_current_institution
+    return if is_a?(ActiveAdmin::BaseController)
+
     subdomain = request.subdomain
     institution = Institution.find_by(subdomain: subdomain)
     if institution
