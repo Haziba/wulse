@@ -7,3 +7,28 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+institutions = [
+  { name: "Wulse Academy", subdomain: "wulse-academy" },
+  { name: "University of Wulse", subdomain: "uow" }
+]
+institutions.each do |institution|
+  institution = Institution.create(institution)
+  puts "Created institution: #{institution.name}"
+
+  staff = (1..3).map do |i|
+    staff = Staff.create(name: "Staff #{i}", email: "staff#{i}@#{institution.subdomain}.com", password: "password", institution: institution)
+    puts "Created staff: #{staff.email}"
+
+    staff
+  end
+
+  staff.each do |staff|
+    (1..3).each do |i|
+      oer = Oer.create(name: "#{institution.name} Oer #{i}", staff: staff, institution: institution)
+      puts "Created oer: #{oer.name}"
+    end
+  end
+
+  institution
+end
