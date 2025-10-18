@@ -1,0 +1,253 @@
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-burgundy-900 via-burgundy-800 to-burgundy-900 text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="font-serif text-5xl md:text-6xl font-bold mb-6">Discover Academic Excellence</h1>
+    <p class="text-xl md:text-2xl text-burgundy-100 mb-10 max-w-3xl mx-auto">
+      Access thousands of research papers, theses, and academic journals<br class="hidden md:block">from the University of Wulse community
+    </p>
+
+    <!-- Hero Search -->
+    <form action="/search" method="get" class="max-w-2xl mx-auto mb-8">
+      <div class="flex gap-2">
+        <input type="text" name="q" placeholder="Search publications, authors, keywords..." class="flex-1 px-6 py-4 rounded-lg text-gray-900 text-lg focus:outline-none focus:ring-4 focus:ring-burgundy-300">
+        <button type="submit" class="px-8 py-4 bg-white text-burgundy-900 rounded-lg hover:bg-burgundy-50 transition-colors font-semibold text-lg">
+          Search
+        </button>
+      </div>
+    </form>
+
+    <!-- Quick Filters -->
+    <div class="flex flex-wrap justify-center gap-3">
+      <span class="text-burgundy-200 text-sm">Quick filters:</span>
+      <a href="/search?type=article" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors">
+        📄 Articles
+      </a>
+      <a href="/search?type=thesis" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors">
+        📚 Theses
+      </a>
+      <a href="/search?type=journal" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors">
+        📰 Journals
+      </a>
+      <a href="/search?type=book" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors">
+        📖 Books
+      </a>
+      <a href="/search?type=dataset" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium backdrop-blur-sm transition-colors">
+        💾 Datasets
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Collections -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-serif text-4xl font-bold text-gray-900 mb-3">Featured Collections</h2>
+    <p class="text-xl text-gray-600 mb-12">Curated research collections from top academic institutions</p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- AI Research Collection -->
+      <a href="/collections/ai-research" class="group block p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-blue-200">
+        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i class="fas fa-robot text-white text-2xl"></i>
+        </div>
+        <h3 class="font-serif text-2xl font-bold text-gray-900 mb-2">AI Research Group</h3>
+        <p class="text-blue-900 font-medium mb-3">Machine Learning & Neural Networks</p>
+        <p class="text-gray-700 mb-6 leading-relaxed">Latest research in artificial intelligence, deep learning, and computational intelligence from leading universities.</p>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 text-sm">1,247 papers</span>
+          <span class="text-blue-600 font-semibold group-hover:translate-x-1 transition-transform inline-block">Explore →</span>
+        </div>
+      </a>
+
+      <!-- Climate Studies Collection -->
+      <a href="/collections/climate-studies" class="group block p-8 bg-gradient-to-br from-green-50 to-green-100 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-green-200">
+        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i class="fas fa-leaf text-white text-2xl"></i>
+        </div>
+        <h3 class="font-serif text-2xl font-bold text-gray-900 mb-2">Climate Studies</h3>
+        <p class="text-green-900 font-medium mb-3">Environmental Science & Policy</p>
+        <p class="text-gray-700 mb-6 leading-relaxed">Comprehensive research on climate change, environmental policy, and sustainable development initiatives.</p>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 text-sm">892 papers</span>
+          <span class="text-green-600 font-semibold group-hover:translate-x-1 transition-transform inline-block">Explore →</span>
+        </div>
+      </a>
+
+      <!-- Biomedical Research Collection -->
+      <a href="/collections/biomedical-research" class="group block p-8 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-purple-200">
+        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i class="fas fa-dna text-white text-2xl"></i>
+        </div>
+        <h3 class="font-serif text-2xl font-bold text-gray-900 mb-2">Biomedical Research</h3>
+        <p class="text-purple-900 font-medium mb-3">Medicine & Life Sciences</p>
+        <p class="text-gray-700 mb-6 leading-relaxed">Cutting-edge research in medicine, biotechnology, and life sciences from medical institutions worldwide.</p>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-600 text-sm">2,156 papers</span>
+          <span class="text-purple-600 font-semibold group-hover:translate-x-1 transition-transform inline-block">Explore →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Recently Added -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center mb-12">
+      <div>
+        <h2 class="font-serif text-4xl font-bold text-gray-900 mb-2">Recently Added</h2>
+        <p class="text-xl text-gray-600">Latest research and publications</p>
+      </div>
+      <a href="/recent" class="text-burgundy-900 font-semibold hover:text-burgundy-700 transition-colors hidden md:block">
+        View All →
+      </a>
+    </div>
+
+    <div class="space-y-6">
+      <!-- Document 1 -->
+      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-burgundy-900 transition-colors">
+              <a href="/publications/1">Machine Learning Approaches to Climate Prediction Models</a>
+            </h3>
+            <p class="text-gray-600 text-sm mb-3">Dr. Sarah Chen, Computer Science • 2 days ago</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Machine Learning</span>
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Climate Science</span>
+            </div>
+          </div>
+          <a href="/publications/1" class="px-6 py-2 bg-burgundy-900 text-white rounded-lg hover:bg-burgundy-800 transition-colors font-medium text-center">
+            Read More
+          </a>
+        </div>
+      </div>
+
+      <!-- Document 2 -->
+      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-burgundy-900 transition-colors">
+              <a href="/publications/2">Sustainable Urban Development in the 21st Century</a>
+            </h3>
+            <p class="text-gray-600 text-sm mb-3">Prof. Michael Torres, Urban Planning • 5 days ago</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Urban Planning</span>
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Sustainability</span>
+            </div>
+          </div>
+          <a href="/publications/2" class="px-6 py-2 bg-burgundy-900 text-white rounded-lg hover:bg-burgundy-800 transition-colors font-medium text-center">
+            Read More
+          </a>
+        </div>
+      </div>
+
+      <!-- Document 3 -->
+      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-burgundy-900 transition-colors">
+              <a href="/publications/3">Novel Therapeutic Approaches in Cancer Treatment</a>
+            </h3>
+            <p class="text-gray-600 text-sm mb-3">Dr. Emily Rodriguez, Medical School • 1 week ago</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Medicine</span>
+              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Oncology</span>
+            </div>
+          </div>
+          <a href="/publications/3" class="px-6 py-2 bg-burgundy-900 text-white rounded-lg hover:bg-burgundy-800 transition-colors font-medium text-center">
+            Read More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Top Authors -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-serif text-4xl font-bold text-gray-900 mb-3">Top Authors</h2>
+    <p class="text-xl text-gray-600 mb-12">Leading researchers at the University of Wulse</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Author 1 -->
+      <a href="/authors/1" class="group block p-6 bg-gray-50 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="text-6xl mb-4">👤</div>
+        <h3 class="font-semibold text-lg text-gray-900 mb-1 group-hover:text-burgundy-900 transition-colors">Dr. Sarah Chen</h3>
+        <p class="text-gray-600 mb-2">Computer Science</p>
+        <p class="text-gray-500 text-sm">47 Publications</p>
+      </a>
+
+      <!-- Author 2 -->
+      <a href="/authors/2" class="group block p-6 bg-gray-50 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="text-6xl mb-4">👤</div>
+        <h3 class="font-semibold text-lg text-gray-900 mb-1 group-hover:text-burgundy-900 transition-colors">Prof. Michael Torres</h3>
+        <p class="text-gray-600 mb-2">Urban Planning</p>
+        <p class="text-gray-500 text-sm">32 Publications</p>
+      </a>
+
+      <!-- Author 3 -->
+      <a href="/authors/3" class="group block p-6 bg-gray-50 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="text-6xl mb-4">👤</div>
+        <h3 class="font-semibold text-lg text-gray-900 mb-1 group-hover:text-burgundy-900 transition-colors">Dr. Emily Rodriguez</h3>
+        <p class="text-gray-600 mb-2">Medical School</p>
+        <p class="text-gray-500 text-sm">58 Publications</p>
+      </a>
+
+      <!-- Author 4 -->
+      <a href="/authors/4" class="group block p-6 bg-gray-50 rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="text-6xl mb-4">👤</div>
+        <h3 class="font-semibold text-lg text-gray-900 mb-1 group-hover:text-burgundy-900 transition-colors">Dr. James Wilson</h3>
+        <p class="text-gray-600 mb-2">Physics</p>
+        <p class="text-gray-500 text-sm">41 Publications</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Research Departments -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="font-serif text-4xl font-bold text-gray-900 mb-3">Research Departments</h2>
+    <p class="text-xl text-gray-600 mb-12">Browse publications by academic department</p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Department 1 -->
+      <a href="/departments/computer-science" class="group block p-8 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="w-16 h-16 mx-auto bg-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-laptop-code text-white text-2xl"></i>
+        </div>
+        <h3 class="font-semibold text-xl text-gray-900 mb-2 group-hover:text-burgundy-900 transition-colors">Computer Science</h3>
+        <p class="text-gray-600">234 Publications</p>
+      </a>
+
+      <!-- Department 2 -->
+      <a href="/departments/physics" class="group block p-8 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="w-16 h-16 mx-auto bg-indigo-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-atom text-white text-2xl"></i>
+        </div>
+        <h3 class="font-semibold text-xl text-gray-900 mb-2 group-hover:text-burgundy-900 transition-colors">Physics</h3>
+        <p class="text-gray-600">189 Publications</p>
+      </a>
+
+      <!-- Department 3 -->
+      <a href="/departments/medicine" class="group block p-8 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="w-16 h-16 mx-auto bg-red-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-heartbeat text-white text-2xl"></i>
+        </div>
+        <h3 class="font-semibold text-xl text-gray-900 mb-2 group-hover:text-burgundy-900 transition-colors">Medicine</h3>
+        <p class="text-gray-600">312 Publications</p>
+      </a>
+
+      <!-- Department 4 -->
+      <a href="/departments/psychology" class="group block p-8 bg-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 text-center">
+        <div class="w-16 h-16 mx-auto bg-purple-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <i class="fas fa-brain text-white text-2xl"></i>
+        </div>
+        <h3 class="font-semibold text-xl text-gray-900 mb-2 group-hover:text-burgundy-900 transition-colors">Psychology</h3>
+        <p class="text-gray-600">156 Publications</p>
+      </a>
+    </div>
+  </div>
+</section>

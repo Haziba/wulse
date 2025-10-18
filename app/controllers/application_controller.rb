@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
   before_action :set_current_institution
 
+  helper_method :current_institution
+
   private
   def set_current_institution
     return if is_a?(ActiveAdmin::BaseController)
@@ -16,5 +18,9 @@ class ApplicationController < ActionController::Base
     else
       render plain: "Institution not found", status: :not_found
     end
+  end
+
+  def current_institution
+    ActsAsTenant.current_tenant
   end
 end

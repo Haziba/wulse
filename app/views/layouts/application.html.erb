@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Wulse" %></title>
+    <title><%= content_for(:title) || "University Research Library" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -10,19 +10,109 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%# Google Fonts %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <%# Font Awesome %>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <%# Tailwind CSS %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              burgundy: {
+                50: '#fdf2f4',
+                100: '#fce7eb',
+                200: '#f9d0d9',
+                300: '#f4a8b8',
+                400: '#ec7491',
+                500: '#e0486d',
+                600: '#cc2952',
+                700: '#ad1d43',
+                800: '#90193d',
+                900: '#800020',
+              }
+            },
+            fontFamily: {
+              'serif': ['Playfair Display', 'serif'],
+              'sans': ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="bg-gray-50 font-sans">
+    <!-- Brand Strip -->
+    <div class="h-2 bg-gradient-to-r from-burgundy-900 via-burgundy-700 to-burgundy-900"></div>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex items-center justify-between gap-8">
+          <!-- Logo -->
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+            <span class="font-serif text-xl font-bold text-burgundy-900"><%= current_institution.name.titleize %></span>
+          </div>
+
+          <!-- Search Bar (Desktop) -->
+          <form action="/search" method="get" class="hidden md:flex flex-1 max-w-xl">
+            <input type="text" name="q" placeholder="Search publications, authors, keywords..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-burgundy-600 focus:border-transparent">
+            <button type="submit" class="px-6 py-2 bg-burgundy-900 text-white rounded-r-lg hover:bg-burgundy-800 transition-colors font-medium">
+              Search
+            </button>
+          </form>
+
+          <!-- Navigation -->
+          <nav class="hidden lg:flex items-center gap-6">
+            <a href="/" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Browse</a>
+            <a href="/collections" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Collections</a>
+            <a href="/authors" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Authors</a>
+            <a href="/help" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Help</a>
+            <a href="/signin" class="text-burgundy-900 hover:text-burgundy-700 transition-colors font-semibold">Sign In</a>
+          </nav>
+        </div>
+
+        <!-- Mobile Search -->
+        <form action="/search" method="get" class="md:hidden mt-4 flex">
+          <input type="text" name="q" placeholder="Search..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-burgundy-600">
+          <button type="submit" class="px-4 py-2 bg-burgundy-900 text-white rounded-r-lg hover:bg-burgundy-800 transition-colors">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-burgundy-900 via-burgundy-800 to-burgundy-900 text-white mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center">
+          <div class="flex flex-wrap justify-center gap-8 mb-6">
+            <a href="/about" class="hover:text-burgundy-200 transition-colors">About</a>
+            <a href="/policies" class="hover:text-burgundy-200 transition-colors">Policies</a>
+            <a href="/contact" class="hover:text-burgundy-200 transition-colors">Contact Us</a>
+            <a href="/accessibility" class="hover:text-burgundy-200 transition-colors">Accessibility</a>
+          </div>
+          <p class="text-burgundy-200 text-sm">© 2024 University Research Library. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
