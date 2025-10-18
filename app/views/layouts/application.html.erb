@@ -57,7 +57,7 @@
     </script>
   </head>
 
-  <body class="bg-gray-50 font-sans">
+  <body class="bg-white font-sans">
     <!-- Brand Strip -->
     <div class="h-2 bg-gradient-to-r from-burgundy-900 via-burgundy-700 to-burgundy-900"></div>
 
@@ -85,7 +85,7 @@
             <a href="/collections" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Collections</a>
             <a href="/authors" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Authors</a>
             <a href="/help" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Help</a>
-            <a href="/signin" class="text-burgundy-900 hover:text-burgundy-700 transition-colors font-semibold">Sign In</a>
+            <a href="<%= new_session_path %>" class="text-burgundy-900 hover:text-burgundy-700 transition-colors font-semibold">Sign In</a>
           </nav>
         </div>
 
@@ -99,8 +99,24 @@
       </div>
     </header>
 
+    <!-- Flash Messages -->
+    <% if flash[:notice] || flash[:alert] %>
+      <div id="flash" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+        <% if flash[:notice] %>
+          <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg shadow-lg mb-4">
+            <%= flash[:notice] %>
+          </div>
+        <% end %>
+        <% if flash[:alert] %>
+          <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg shadow-lg mb-4">
+            <%= flash[:alert] %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
     <!-- Main Content -->
-    <main>
+    <main class="bg-white">
       <%= yield %>
     </main>
 
@@ -114,7 +130,7 @@
             <a href="/contact" class="hover:text-burgundy-200 transition-colors">Contact Us</a>
             <a href="/accessibility" class="hover:text-burgundy-200 transition-colors">Accessibility</a>
           </div>
-          <p class="text-burgundy-200 text-sm">© 2024 University Research Library. All rights reserved.</p>
+          <p class="text-burgundy-200 text-sm">© <%= Time.current.year %> University Research Library. All rights reserved.</p>
         </div>
       </div>
     </footer>
