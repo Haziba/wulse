@@ -26,21 +26,25 @@
     <%# Tailwind CSS %>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      <%
+        branding_colour = current_institution&.branding_colour || "#e0486d"
+        color_shades = generate_color_shades(branding_colour)
+      %>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
               burgundy: {
-                50: '#fdf2f4',
-                100: '#fce7eb',
-                200: '#f9d0d9',
-                300: '#f4a8b8',
-                400: '#ec7491',
-                500: '#e0486d',
-                600: '#cc2952',
-                700: '#ad1d43',
-                800: '#90193d',
-                900: '#800020',
+                50: '<%= color_shades[50] %>',
+                100: '<%= color_shades[100] %>',
+                200: '<%= color_shades[200] %>',
+                300: '<%= color_shades[300] %>',
+                400: '<%= color_shades[400] %>',
+                500: '<%= color_shades[500] %>',
+                600: '<%= color_shades[600] %>',
+                700: '<%= color_shades[700] %>',
+                800: '<%= color_shades[800] %>',
+                900: '<%= color_shades[900] %>',
               }
             },
             fontFamily: {
