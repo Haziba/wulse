@@ -11,7 +11,12 @@ class SessionsController < ApplicationController
     else
       flash.now[:alert] = "Invalid email or password"
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("sign_in_form", partial: "sessions/form", locals: { email: params[:email] }) }
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace("sign_in_form", partial: "sessions/form", locals: { email: params[:email] }),
+            turbo_stream.prepend("toast-container-target", partial: "shared/toast_flash")
+          ]
+        end
         format.html { render :new, status: :unprocessable_entity }
       end
     end
