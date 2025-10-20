@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
     if staff&.authenticate(params[:password])
       session[:staff_id] = staff.id
-      redirect_to dashboard_path, notice: "Welcome back, #{staff.name}!"
+      redirect_to dashboard_path, notice: "Welcome back, #{staff.name}!", status: :see_other
     else
       flash.now[:alert] = "Invalid email or password"
       respond_to do |format|
