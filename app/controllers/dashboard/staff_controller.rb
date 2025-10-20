@@ -3,5 +3,6 @@ class Dashboard::StaffController < ApplicationController
   before_action :require_signed_in
 
   def index
+    @staffs = Staff.all
   end
 end

@@ -6,6 +6,8 @@ class Staff < ApplicationRecord
   has_many :oers
   belongs_to :institution
 
+  enum :status, { active: 0, inactive: 1, away: 2 }
+
   def self.ransackable_attributes(auth_object = nil)
     ['name', 'email']
   end

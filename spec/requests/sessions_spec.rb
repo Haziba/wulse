@@ -27,7 +27,7 @@ RSpec.describe "Sessions", type: :request do
 
   describe "POST /session" do
     context "with valid credentials" do
-      it "creates a session and redirects to root" do
+      it "creates a session and redirects to dashboard" do
         post session_path, params: {
           email: staff.email,
           password: "password123"
@@ -35,6 +35,7 @@ RSpec.describe "Sessions", type: :request do
 
         expect(response).to redirect_to(dashboard_path)
         expect(session[:staff_id]).to eq(staff.id)
+        expect(staff.reload.last_login).to be_within(1.minute).of(Time.current)
       end
 
       it "sets a welcome flash message" do
@@ -44,7 +45,7 @@ RSpec.describe "Sessions", type: :request do
         }
 
         follow_redirect!
-        expect(response.body).to include("Welcome back, #{staff.name}!")
+        expect(response.body).to include("Welcome back, #{CGI.escapeHTML(staff.name)}!")
       end
     end
 
