@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
+
   get "dashboard", to: "dashboard#index", as: :dashboard
+
+  namespace :dashboard do
+    resources :staff
+  end
+
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
