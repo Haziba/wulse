@@ -119,7 +119,7 @@ RSpec.describe "Sessions", type: :request do
 
     context "with staff from different institution" do
       let(:other_institution) { create(:institution) }
-      let(:other_staff) { create(:staff, email: staff.email, institution: other_institution, password: "password123") }
+      let(:other_staff) { create(:staff, email: Faker::Internet.email, institution: other_institution, password: "password123") }
 
       before { other_staff } # ensure other_staff exists
 
