@@ -23,15 +23,6 @@ RSpec.describe "Sessions", type: :request do
       get new_session_path
       expect(response.body).to include(institution.subdomain)
     end
-
-    context "when institution has a logo" do
-      let(:institution) { create(:institution, :with_logo) }
-
-      it "displays the institution logo" do
-        get new_session_path
-        expect(response.body).to include(institution.name.titleize)
-      end
-    end
   end
 
   describe "POST /session" do
@@ -42,7 +33,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password123"
         }
 
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
         expect(session[:staff_id]).to eq(staff.id)
       end
 

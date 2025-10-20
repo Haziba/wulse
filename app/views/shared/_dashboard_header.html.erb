@@ -1,0 +1,37 @@
+<!-- Dashboard Header -->
+<header class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center space-x-8">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-burgundy-500 rounded-lg flex items-center justify-center">
+            <i class="fas fa-graduation-cap text-white text-lg"></i>
+          </div>
+          <div>
+            <h1 class="font-serif font-bold text-xl text-gray-900"><%= current_institution.name.titleize %></h1>
+          </div>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <%= link_to "Dashboard", dashboard_path, class: "#{current_page?(dashboard_path) ? 'text-burgundy-500 border-b-2 border-burgundy-500' : 'text-gray-700 hover:text-burgundy-500'} font-medium pb-1 transition-colors" %>
+          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Documents</span>
+          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Staff</span>
+        </nav>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="text-gray-600 hover:text-burgundy-500 relative">
+          <i class="fas fa-bell text-lg"></i>
+          <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        </button>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-burgundy-500 rounded-full flex items-center justify-center">
+            <span class="text-white text-sm font-medium"><%= current_staff.name.split.map(&:first).join %></span>
+          </div>
+          <span class="text-gray-700 font-medium hidden sm:inline"><%= current_staff.name %></span>
+          <%= link_to session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-600 hover:text-burgundy-500" do %>
+            <i class="fas fa-chevron-down text-sm"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
