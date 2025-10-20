@@ -4,9 +4,9 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center space-x-8">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 bg-burgundy-500 rounded-lg flex items-center justify-center">
-            <i class="fas fa-graduation-cap text-white text-lg"></i>
-          </div>
+          <% if current_institution.logo.attached? %>
+            <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+          <% end %>
           <div>
             <h1 class="font-serif font-bold text-xl text-gray-900"><%= current_institution.name.titleize %></h1>
           </div>
