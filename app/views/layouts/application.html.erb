@@ -67,7 +67,9 @@
         <div class="flex items-center justify-between gap-8">
           <!-- Logo -->
           <div class="flex items-center gap-3 flex-shrink-0">
-            <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+            <% if current_institution.logo.attached? %>
+              <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+            <% end %>
             <span class="font-serif text-xl font-bold text-burgundy-900"><%= current_institution.name.titleize %></span>
           </div>
 

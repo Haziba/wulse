@@ -10,7 +10,10 @@ class SessionsController < ApplicationController
       redirect_to root_path, notice: "Welcome back, #{staff.name}!"
     else
       flash.now[:alert] = "Invalid email or password"
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("sign_in_form", partial: "sessions/form", locals: { email: params[:email] }) }
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
