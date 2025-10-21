@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include Pagy::Frontend
+
   def generate_color_shades(hex_color)
     # Remove # if present
     hex = hex_color.gsub('#', '')

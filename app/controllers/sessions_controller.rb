@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
             turbo_stream.prepend("toast-container-target", partial: "shared/toast_flash")
           ]
         end
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
       end
     end
   end

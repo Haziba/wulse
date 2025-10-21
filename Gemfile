@@ -73,3 +73,5 @@ gem "bcrypt", "~> 3.1"
 
 gem "activeadmin", "~> 3.3"
 gem "sassc-rails"
+
+gem "pagy", "~> 9.0"

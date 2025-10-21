@@ -14,7 +14,7 @@
         <nav class="hidden md:flex space-x-6">
           <%= link_to "Dashboard", dashboard_path, class: "#{current_page?(dashboard_path) ? 'text-burgundy-500 border-b-2 border-burgundy-500' : 'text-gray-700 hover:text-burgundy-500'} font-medium pb-1 transition-colors" %>
           <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Documents</span>
-          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Staff</span>
+          <%= link_to "Staff", dashboard_staff_index_path, class: "#{current_page?(dashboard_staff_index_path) ? 'text-burgundy-500 border-b-2 border-burgundy-500' : 'text-gray-700 hover:text-burgundy-500'} font-medium pb-1 transition-colors" %>
         </nav>
       </div>
       <div class="flex items-center space-x-4">
