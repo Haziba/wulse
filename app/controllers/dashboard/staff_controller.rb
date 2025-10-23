@@ -3,7 +3,17 @@ class Dashboard::StaffController < ApplicationController
   before_action :require_signed_in
 
   def index
-    @pagy, @staffs = pagy(Staff.all)
+    staffs = Staff.all
+
+    if params[:search].present?
+      staffs = staffs.where("name LIKE ? OR email LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+
+    if params[:status].present? && params[:status] != "All Status"
+      staffs = staffs.where(status: params[:status].downcase)
+    end
+
+    @pagy, @staffs = pagy(staffs)
   end
 
   def new

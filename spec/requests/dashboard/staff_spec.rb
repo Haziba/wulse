@@ -85,6 +85,50 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response.body).to include("Next")
         end
       end
+
+      context "with filtering" do
+        it "filters staff by search term matching name" do
+          get dashboard_staff_index_path(search: "Alice")
+          expect(response.body).to include("Alice Smith")
+          expect(response.body).not_to include("Bob Jones")
+        end
+
+        it "filters staff by search term matching email" do
+          get dashboard_staff_index_path(search: "bob@test.com")
+          expect(response.body).to include("Bob Jones")
+          expect(response.body).not_to include("Alice Smith")
+        end
+
+        it "filters staff by status" do
+          get dashboard_staff_index_path(status: "active")
+          expect(response.body).to include("Alice Smith")
+          expect(response.body).not_to include("Bob Jones")
+        end
+
+        it "filters staff by inactive status" do
+          get dashboard_staff_index_path(status: "inactive")
+          expect(response.body).to include("Bob Jones")
+          expect(response.body).not_to include("Alice Smith")
+        end
+
+        it "shows all staff when status is 'All Status'" do
+          get dashboard_staff_index_path(status: "All Status")
+          expect(response.body).to include("Alice Smith")
+          expect(response.body).to include("Bob Jones")
+        end
+
+        it "combines search and status filters" do
+          get dashboard_staff_index_path(search: "Alice", status: "active")
+          expect(response.body).to include("Alice Smith")
+          expect(response.body).not_to include("Bob Jones")
+        end
+
+        it "returns no results when filters don't match" do
+          get dashboard_staff_index_path(search: "Alice", status: "inactive")
+          expect(response.body).not_to include("Alice Smith")
+          expect(response.body).not_to include("Bob Jones")
+        end
+      end
     end
   end
 
