@@ -4,6 +4,10 @@ class Oer < ApplicationRecord
   belongs_to :staff
   belongs_to :institution
 
+  has_one_attached :document
+
+  validates :name, presence: true
+
   def self.ransackable_attributes(auth_object = nil)
     ['name']
   end

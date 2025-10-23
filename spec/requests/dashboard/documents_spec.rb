@@ -43,7 +43,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
       it "displays document author" do
         get dashboard_documents_path
-        expect(response.body).to include(staff.name)
+        expect(response.body).to include(CGI.escapeHTML(staff.name))
       end
 
       it "displays last updated times" do
@@ -99,6 +99,74 @@ RSpec.describe "Dashboard::Documents", type: :request do
           get dashboard_documents_path(search: "JavaScript")
           expect(response.body).not_to include("Introduction to Ruby")
           expect(response.body).not_to include("Advanced Rails")
+        end
+      end
+    end
+  end
+
+  describe "POST /dashboard/documents" do
+    context "when authenticated" do
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      context "with valid parameters" do
+        let(:valid_params) do
+          {
+            oer: {
+              name: "Test Document",
+              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+            }
+          }
+        end
+
+        it "creates a new document" do
+          expect {
+            post dashboard_documents_path, params: valid_params
+          }.to change(Oer, :count).by(1)
+        end
+
+        it "associates document with current staff" do
+          post dashboard_documents_path, params: valid_params
+          expect(Oer.last.staff).to eq(staff)
+        end
+
+        it "responds with turbo stream that updates the document list" do
+          post dashboard_documents_path, params: valid_params, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+          expect(response).to have_http_status(:success)
+          expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+          expect(response.body).to include("Test Document")
+          expect(response.body).to include('turbo-stream action="replace" target="document_list"')
+        end
+
+        it "redirects on html request" do
+          post dashboard_documents_path, params: valid_params
+          expect(response).to redirect_to(dashboard_documents_path)
+        end
+      end
+
+      context "with invalid parameters" do
+        let(:invalid_params) do
+          {
+            oer: {
+              name: ""
+            }
+          }
+        end
+
+        it "does not create a new document" do
+          expect {
+            post dashboard_documents_path, params: invalid_params
+          }.not_to change(Oer, :count)
+        end
+
+        it "renders the form again" do
+          post dashboard_documents_path, params: invalid_params
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

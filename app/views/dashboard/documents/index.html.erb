@@ -7,12 +7,14 @@
         <h2 class="font-serif text-3xl font-bold text-gray-900 mb-2">Document Management</h2>
         <p class="text-gray-600">Manage educational resources and documents</p>
       </div>
-      <button class="bg-burgundy-500 text-white px-6 py-3 rounded-lg hover:bg-burgundy-600 transition-colors flex items-center space-x-2">
+      <%= link_to new_dashboard_document_path, data: { turbo_frame: "modal" }, class: "bg-burgundy-500 text-white px-6 py-3 rounded-lg hover:bg-burgundy-600 transition-colors flex items-center space-x-2" do %>
         <i class="fas fa-plus"></i>
         <span class="font-medium">Add Document</span>
-      </button>
+      <% end %>
     </div>
   </div>
+
+  <%= turbo_frame_tag "modal" %>
 
   <!-- Filters and Search -->
   <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-controller="document-search">
