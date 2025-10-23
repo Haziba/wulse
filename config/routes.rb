@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resources :staff
+    resources :documents
   end
 
   ActiveAdmin.routes(self)

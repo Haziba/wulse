@@ -1,0 +1,37 @@
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <!-- Page Header -->
+  <div class="mb-8">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="font-serif text-3xl font-bold text-gray-900 mb-2">Document Management</h2>
+        <p class="text-gray-600">Manage educational resources and documents</p>
+      </div>
+      <button class="bg-burgundy-500 text-white px-6 py-3 rounded-lg hover:bg-burgundy-600 transition-colors flex items-center space-x-2">
+        <i class="fas fa-plus"></i>
+        <span class="font-medium">Add Document</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-controller="document-search">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+      <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+        <div class="relative">
+          <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <input type="text" placeholder="Search documents..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:border-transparent w-full md:w-80" data-document-search-target="input" data-action="input->document-search#searchDebounced">
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button class="text-gray-600 hover:text-burgundy-500 p-2">
+          <i class="fas fa-download"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <%= turbo_frame_tag "document_list" do %>
+    <%= render "document_list", documents: @documents, pagy: @pagy %>
+  <% end %>
+</div>
