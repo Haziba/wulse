@@ -34,6 +34,7 @@ institutions.each do |institution|
   staff.each do |staff|
     (1..3).each do |i|
       oer = Oer.create(name: "#{institution.name} Oer #{i}", staff: staff, institution: institution)
+      oer.document.attach(File.open(Rails.root.join("db", "seeds", "documents", "wulse_test_document.pdf")))
       puts "Created oer: #{oer.name}"
     end
   end
