@@ -1,0 +1,32 @@
+<header class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <%= link_to "/", class: "flex items-center space-x-3" do %>
+          <% if current_institution&.logo&.attached? %>
+            <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+          <% else %>
+            <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center">
+              <i class="fas fa-graduation-cap text-white text-lg"></i>
+            </div>
+          <% end %>
+          <div>
+            <h1 class="font-serif font-bold text-xl text-gray-900"><%= current_institution&.name&.titleize || "University of Wulse" %></h1>
+          </div>
+        <% end %>
+        <nav class="hidden md:flex space-x-6">
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Browse</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Collections</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Departments</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">About</span>
+        </nav>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="text-gray-600 hover:text-brand-500">
+          <i class="fas fa-bookmark text-lg"></i>
+        </button>
+        <%= link_to "Sign In", new_session_path, class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</header>
