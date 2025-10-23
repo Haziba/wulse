@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
 
   get "dashboard", to: "dashboard#index", as: :dashboard
+  get "library", to: "library#index", as: :library
 
   namespace :dashboard do
     resources :staff

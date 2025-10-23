@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "University of Wulse - Digital Library" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= javascript_importmap_tags %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Google Fonts %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <%# Font Awesome %>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <%# Tailwind CSS %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      ::-webkit-scrollbar { display: none; }
+    </style>
+    <script>
+      <%
+        branding_colour = current_institution&.branding_colour || "#8B4513"
+        color_shades = generate_color_shades(branding_colour)
+      %>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              burgundy: {
+                50: '<%= color_shades[50] %>',
+                100: '<%= color_shades[100] %>',
+                200: '<%= color_shades[200] %>',
+                300: '<%= color_shades[300] %>',
+                400: '<%= color_shades[400] %>',
+                500: '<%= color_shades[500] %>',
+                600: '<%= color_shades[600] %>',
+                700: '<%= color_shades[700] %>',
+                800: '<%= color_shades[800] %>',
+                900: '<%= color_shades[900] %>',
+              }
+            },
+            fontFamily: {
+              'serif': ['Playfair Display', 'serif'],
+              'sans': ['Inter', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+
+  <body class="font-sans bg-gray-50">
+    <%= yield %>
+  </body>
+</html>
