@@ -1,14 +1,17 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
+export default class DropdownController extends Controller<HTMLElement> {
   static targets = ["menu"];
 
-  connect() {
+  declare readonly menuTarget: HTMLElement;
+  declare readonly hasMenuTarget: boolean;
+
+  connect(): void {
     // Close dropdown when clicking outside
     this.closeOnClickOutside = this.closeOnClickOutside.bind(this);
   }
 
-  toggle(event) {
+  toggle(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
 
@@ -22,14 +25,15 @@ export default class extends Controller {
     }
   }
 
-  closeOnClickOutside(event) {
-    if (!this.element.contains(event.target)) {
+  closeOnClickOutside(event: Event): void {
+    const target = event.target as Node;
+    if (!this.element.contains(target)) {
       this.menuTarget.classList.add("hidden");
       document.removeEventListener("click", this.closeOnClickOutside);
     }
   }
 
-  disconnect() {
+  disconnect(): void {
     document.removeEventListener("click", this.closeOnClickOutside);
   }
 }
