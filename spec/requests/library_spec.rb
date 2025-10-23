@@ -92,7 +92,7 @@ RSpec.describe "Library", type: :request do
 
       it "shows active page highlight" do
         get library_path(page: 2)
-        expect(response.body).to include('bg-burgundy-500')
+        expect(response.body).to include('bg-brand-500')
       end
     end
 

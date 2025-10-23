@@ -7,7 +7,7 @@
         <h2 class="font-serif text-3xl font-bold text-gray-900 mb-2">Document Management</h2>
         <p class="text-gray-600">Manage educational resources and documents</p>
       </div>
-      <%= link_to new_dashboard_document_path, data: { turbo_frame: "modal" }, class: "bg-burgundy-500 text-white px-6 py-3 rounded-lg hover:bg-burgundy-600 transition-colors flex items-center space-x-2" do %>
+      <%= link_to new_dashboard_document_path, data: { turbo_frame: "modal" }, class: "bg-brand-500 text-white px-6 py-3 rounded-lg hover:bg-brand-600 transition-colors flex items-center space-x-2" do %>
         <i class="fas fa-plus"></i>
         <span class="font-medium">Add Document</span>
       <% end %>
@@ -22,11 +22,11 @@
       <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
         <div class="relative">
           <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          <input type="text" placeholder="Search documents..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:border-transparent w-full md:w-80" data-document-search-target="input" data-action="input->document-search#searchDebounced">
+          <input type="text" placeholder="Search documents..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent w-full md:w-80" data-document-search-target="input" data-action="input->document-search#searchDebounced">
         </div>
       </div>
       <div class="flex items-center space-x-2">
-        <button class="text-gray-600 hover:text-burgundy-500 p-2">
+        <button class="text-gray-600 hover:text-brand-500 p-2">
           <i class="fas fa-download"></i>
         </button>
       </div>

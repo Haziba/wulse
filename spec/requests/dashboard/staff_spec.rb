@@ -162,7 +162,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
 
           expect(response).to have_http_status(:success)
           expect(response.media_type).to eq("text/vnd.turbo-stream.html")
-          expect(response.body).to include(valid_params[:staff][:name])
+          expect(response.body).to include(CGI.escapeHTML(valid_params[:staff][:name]))
           expect(response.body).to include(valid_params[:staff][:email])
           expect(response.body).to include('turbo-stream action="replace" target="staff_list"')
         end

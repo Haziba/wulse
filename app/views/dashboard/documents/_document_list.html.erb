@@ -43,7 +43,7 @@
       </p>
       <div class="flex items-center space-x-2">
         <% if pagy.prev %>
-          <%= link_to "Previous", dashboard_documents_path(page: pagy.prev), class: "px-3 py-2 text-sm text-gray-600 hover:text-burgundy-500", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
+          <%= link_to "Previous", dashboard_documents_path(page: pagy.prev), class: "px-3 py-2 text-sm text-gray-600 hover:text-brand-500", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
         <% else %>
           <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">Previous</span>
         <% end %>
@@ -51,7 +51,7 @@
         <% pagy.series.each do |item| %>
           <%# Display the item's type properly %>
           <% if item.is_a?(Integer) %>
-            <%= link_to item, dashboard_documents_path(page: item), class: "px-3 py-2 text-sm #{item == pagy.page ? 'bg-burgundy-500 text-white rounded' : 'text-gray-600 hover:text-burgundy-500'}", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
+            <%= link_to item, dashboard_documents_path(page: item), class: "px-3 py-2 text-sm #{item == pagy.page ? 'bg-brand-500 text-white rounded' : 'text-gray-600 hover:text-brand-500'}", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
           <% elsif item.is_a?(String) %>
             <span class="px-3 py-2 text-sm text-gray-400"><%= item %></span>
           <% elsif item == :gap %>
@@ -60,7 +60,7 @@
         <% end %>
 
         <% if pagy.next %>
-          <%= link_to "Next", dashboard_documents_path(page: pagy.next), class: "px-3 py-2 text-sm text-gray-600 hover:text-burgundy-500", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
+          <%= link_to "Next", dashboard_documents_path(page: pagy.next), class: "px-3 py-2 text-sm text-gray-600 hover:text-brand-500", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
         <% else %>
           <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">Next</span>
         <% end %>

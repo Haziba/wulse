@@ -35,7 +35,7 @@
         theme: {
           extend: {
             colors: {
-              burgundy: {
+              brand: {
                 50: '<%= color_shades[50] %>',
                 100: '<%= color_shades[100] %>',
                 200: '<%= color_shades[200] %>',
@@ -60,7 +60,7 @@
 
   <body class="bg-white font-sans">
     <!-- Brand Strip -->
-    <div class="h-2 bg-gradient-to-r from-burgundy-900 via-burgundy-700 to-burgundy-900"></div>
+    <div class="h-2 bg-gradient-to-r from-brand-900 via-brand-700 to-brand-900"></div>
 
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -71,31 +71,31 @@
             <% if current_institution.logo.attached? %>
               <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
             <% end %>
-            <span class="font-serif text-xl font-bold text-burgundy-900"><%= current_institution.name.titleize %></span>
+            <span class="font-serif text-xl font-bold text-brand-900"><%= current_institution.name.titleize %></span>
           </div>
 
           <!-- Search Bar (Desktop) -->
           <form action="/search" method="get" class="hidden md:flex flex-1 max-w-xl">
-            <input type="text" name="q" placeholder="Search publications, authors, keywords..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-burgundy-600 focus:border-transparent">
-            <button type="submit" class="px-6 py-2 bg-burgundy-900 text-white rounded-r-lg hover:bg-burgundy-800 transition-colors font-medium">
+            <input type="text" name="q" placeholder="Search publications, authors, keywords..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent">
+            <button type="submit" class="px-6 py-2 bg-brand-900 text-white rounded-r-lg hover:bg-brand-800 transition-colors font-medium">
               Search
             </button>
           </form>
 
           <!-- Navigation -->
           <nav class="hidden lg:flex items-center gap-6">
-            <a href="/" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Browse</a>
-            <a href="/collections" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Collections</a>
-            <a href="/authors" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Authors</a>
-            <a href="/help" class="text-gray-600 hover:text-burgundy-900 transition-colors font-medium">Help</a>
-            <a href="<%= new_session_path %>" class="text-burgundy-900 hover:text-burgundy-700 transition-colors font-semibold">Sign In</a>
+            <a href="/" class="text-gray-600 hover:text-brand-900 transition-colors font-medium">Browse</a>
+            <a href="/collections" class="text-gray-600 hover:text-brand-900 transition-colors font-medium">Collections</a>
+            <a href="/authors" class="text-gray-600 hover:text-brand-900 transition-colors font-medium">Authors</a>
+            <a href="/help" class="text-gray-600 hover:text-brand-900 transition-colors font-medium">Help</a>
+            <a href="<%= new_session_path %>" class="text-brand-900 hover:text-brand-700 transition-colors font-semibold">Sign In</a>
           </nav>
         </div>
 
         <!-- Mobile Search -->
         <form action="/search" method="get" class="md:hidden mt-4 flex">
-          <input type="text" name="q" placeholder="Search..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-burgundy-600">
-          <button type="submit" class="px-4 py-2 bg-burgundy-900 text-white rounded-r-lg hover:bg-burgundy-800 transition-colors">
+          <input type="text" name="q" placeholder="Search..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-brand-600">
+          <button type="submit" class="px-4 py-2 bg-brand-900 text-white rounded-r-lg hover:bg-brand-800 transition-colors">
             <i class="fas fa-search"></i>
           </button>
         </form>
@@ -113,16 +113,16 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-burgundy-900 via-burgundy-800 to-burgundy-900 text-white mt-20">
+    <footer class="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 text-white mt-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="text-center">
           <div class="flex flex-wrap justify-center gap-8 mb-6">
-            <a href="/about" class="hover:text-burgundy-200 transition-colors">About</a>
-            <a href="/policies" class="hover:text-burgundy-200 transition-colors">Policies</a>
-            <a href="/contact" class="hover:text-burgundy-200 transition-colors">Contact Us</a>
-            <a href="/accessibility" class="hover:text-burgundy-200 transition-colors">Accessibility</a>
+            <a href="/about" class="hover:text-brand-200 transition-colors">About</a>
+            <a href="/policies" class="hover:text-brand-200 transition-colors">Policies</a>
+            <a href="/contact" class="hover:text-brand-200 transition-colors">Contact Us</a>
+            <a href="/accessibility" class="hover:text-brand-200 transition-colors">Accessibility</a>
           </div>
-          <p class="text-burgundy-200 text-sm">© <%= Time.current.year %> University Research Library. All rights reserved.</p>
+          <p class="text-brand-200 text-sm">© <%= Time.current.year %> University Research Library. All rights reserved.</p>
         </div>
       </div>
     </footer>

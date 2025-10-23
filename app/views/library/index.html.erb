@@ -7,7 +7,7 @@
           <% if current_institution&.logo&.attached? %>
             <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
           <% else %>
-            <div class="w-10 h-10 bg-burgundy-500 rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center">
               <i class="fas fa-graduation-cap text-white text-lg"></i>
             </div>
           <% end %>
@@ -17,17 +17,17 @@
           </div>
         </div>
         <nav class="hidden md:flex space-x-6">
-          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Browse</span>
-          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Collections</span>
-          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">Departments</span>
-          <span class="text-gray-700 hover:text-burgundy-500 font-medium cursor-pointer">About</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Browse</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Collections</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">Departments</span>
+          <span class="text-gray-700 hover:text-brand-500 font-medium cursor-pointer">About</span>
         </nav>
       </div>
       <div class="flex items-center space-x-4">
-        <button class="text-gray-600 hover:text-burgundy-500">
+        <button class="text-gray-600 hover:text-brand-500">
           <i class="fas fa-bookmark text-lg"></i>
         </button>
-        <%= link_to "Sign In", new_session_path, class: "bg-burgundy-500 text-white px-4 py-2 rounded-lg hover:bg-burgundy-600 transition-colors" %>
+        <%= link_to "Sign In", new_session_path, class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors" %>
       </div>
     </div>
   </div>
@@ -38,13 +38,13 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="max-w-4xl mx-auto">
       <%= form_with url: library_path, method: :get, class: "relative" do |f| %>
-        <%= f.text_field :search, value: @search_term, placeholder: "Search documents...", class: "w-full px-6 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-burgundy-500 focus:outline-none pl-14" %>
+        <%= f.text_field :search, value: @search_term, placeholder: "Search documents...", class: "w-full px-6 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-brand-500 focus:outline-none pl-14" %>
         <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
-        <%= f.submit "Search", class: "absolute right-3 top-1/2 transform -translate-y-1/2 bg-burgundy-500 text-white px-6 py-2 rounded-lg hover:bg-burgundy-600 transition-colors cursor-pointer" %>
+        <%= f.submit "Search", class: "absolute right-3 top-1/2 transform -translate-y-1/2 bg-brand-500 text-white px-6 py-2 rounded-lg hover:bg-brand-600 transition-colors cursor-pointer" %>
       <% end %>
       <div class="flex items-center space-x-4 mt-4">
         <span class="text-sm text-gray-600">Quick filters:</span>
-        <button class="bg-burgundy-500 text-white px-4 py-2 rounded-lg text-sm">All</button>
+        <button class="bg-brand-500 text-white px-4 py-2 rounded-lg text-sm">All</button>
         <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300">Articles</button>
         <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300">Theses</button>
         <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300">Journals</button>
@@ -66,19 +66,19 @@
           <h4 class="font-medium text-gray-700 mb-3">Document Type</h4>
           <div class="space-y-2">
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">Articles (1,247)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">Theses (342)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">Journals (189)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">Books (67)</span>
             </label>
           </div>
@@ -89,15 +89,15 @@
           <h4 class="font-medium text-gray-700 mb-3">Department</h4>
           <div class="space-y-2">
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">Computer Science (892)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">Engineering (234)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">Mathematics (156)</span>
             </label>
           </div>
@@ -108,15 +108,15 @@
           <h4 class="font-medium text-gray-700 mb-3">Publication Year</h4>
           <div class="space-y-2">
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">2024 (234)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">2023 (456)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">2022 (389)</span>
             </label>
           </div>
@@ -127,11 +127,11 @@
           <h4 class="font-medium text-gray-700 mb-3">Language</h4>
           <div class="space-y-2">
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded" checked>
+              <input type="checkbox" class="text-brand-500 rounded" checked>
               <span class="ml-2 text-sm text-gray-600">English (1,456)</span>
             </label>
             <label class="flex items-center">
-              <input type="checkbox" class="text-burgundy-500 rounded">
+              <input type="checkbox" class="text-brand-500 rounded">
               <span class="ml-2 text-sm text-gray-600">Spanish (89)</span>
             </label>
           </div>
@@ -156,7 +156,7 @@
             <option>Author</option>
           </select>
           <div class="flex border border-gray-300 rounded-lg">
-            <button class="p-2 bg-burgundy-500 text-white rounded-l-lg">
+            <button class="p-2 bg-brand-500 text-white rounded-l-lg">
               <i class="fas fa-list"></i>
             </button>
             <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-r-lg">
@@ -172,21 +172,21 @@
           <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center space-x-3">
-                <span class="bg-burgundy-100 text-burgundy-700 px-3 py-1 rounded-full text-sm font-medium">Document</span>
+                <span class="bg-brand-100 text-brand-700 px-3 py-1 rounded-full text-sm font-medium">Document</span>
                 <span class="text-sm text-gray-500"><%= document.staff&.name || "Unknown Author" %></span>
                 <span class="text-sm text-gray-500">•</span>
                 <span class="text-sm text-gray-500"><%= document.created_at.year %></span>
               </div>
               <div class="flex items-center space-x-2">
-                <button class="text-gray-400 hover:text-burgundy-500">
+                <button class="text-gray-400 hover:text-brand-500">
                   <i class="fas fa-bookmark"></i>
                 </button>
-                <button class="text-gray-400 hover:text-burgundy-500">
+                <button class="text-gray-400 hover:text-brand-500">
                   <i class="fas fa-share-alt"></i>
                 </button>
               </div>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2 cursor-pointer hover:text-burgundy-500">
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 cursor-pointer hover:text-brand-500">
               <%= document.name %>
             </h3>
             <p class="text-gray-600 mb-3">
@@ -199,7 +199,7 @@
                 <span><%= time_ago_in_words(document.updated_at) %> ago</span>
               </div>
               <% if document.document.attached? %>
-                <%= link_to rails_blob_path(document.document, disposition: "attachment"), class: "bg-burgundy-500 text-white px-4 py-2 rounded-lg hover:bg-burgundy-600 transition-colors text-sm" do %>
+                <%= link_to rails_blob_path(document.document, disposition: "attachment"), class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm" do %>
                   <i class="fas fa-download mr-2"></i>Download PDF
                 <% end %>
               <% end %>
@@ -226,7 +226,7 @@
 
           <% @pagy.series.each do |item| %>
             <% if item.is_a?(Integer) %>
-              <%= link_to item, library_path(page: item, search: @search_term), class: "px-3 py-2 #{item == @pagy.page ? 'bg-burgundy-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg" %>
+              <%= link_to item, library_path(page: item, search: @search_term), class: "px-3 py-2 #{item == @pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg" %>
             <% elsif item == :gap %>
               <span class="px-2 text-gray-500">...</span>
             <% end %>
@@ -253,7 +253,7 @@
     <div class="grid md:grid-cols-4 gap-8">
       <div>
         <div class="flex items-center space-x-3 mb-4">
-          <div class="w-10 h-10 bg-burgundy-500 rounded-lg flex items-center justify-center">
+          <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center">
             <i class="fas fa-graduation-cap text-white text-lg"></i>
           </div>
           <div>
