@@ -1,5 +1,5 @@
-<div id="user_profile_menu" class="flex items-center space-x-3">
-  <%= link_to edit_dashboard_profile_path, class: "flex items-center space-x-3 hover:opacity-80 transition-opacity" do %>
+<div id="user_profile_menu" class="relative" data-controller="dropdown">
+  <button type="button" class="flex items-center space-x-3 hover:opacity-80 transition-opacity" data-action="click->dropdown#toggle">
     <% if staff.avatar.attached? %>
       <%= image_tag staff.avatar, alt: staff.name, class: "w-8 h-8 rounded-full object-cover" %>
     <% else %>
@@ -8,8 +8,18 @@
       </div>
     <% end %>
     <span class="text-gray-700 font-medium hidden sm:inline"><%= staff.name %></span>
-  <% end %>
-  <%= link_to session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-600 hover:text-brand-500" do %>
-    <i class="fas fa-chevron-down text-sm"></i>
-  <% end %>
+    <i class="fas fa-chevron-down text-sm text-gray-600"></i>
+  </button>
+
+  <!-- Dropdown Menu -->
+  <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+    <%= link_to edit_dashboard_profile_path, class: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors" do %>
+      <i class="fas fa-user-edit mr-3 text-gray-400"></i>
+      <span>Edit Profile</span>
+    <% end %>
+    <%= link_to session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors" do %>
+      <i class="fas fa-sign-out-alt mr-3 text-gray-400"></i>
+      <span>Log Out</span>
+    <% end %>
+  </div>
 </div>
