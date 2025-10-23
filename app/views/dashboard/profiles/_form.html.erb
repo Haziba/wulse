@@ -1,0 +1,123 @@
+<%= form_with model: staff, url: dashboard_profile_path, method: :patch, multipart: true, class: "bg-white rounded-xl border border-gray-200 overflow-hidden" do |f| %>
+  <!-- Profile Picture Section -->
+  <div class="p-8 border-b border-gray-200" data-controller="avatar-preview" data-avatar-preview-initials-value="<%= staff.name.split.map(&:first).join %>">
+    <h3 class="font-serif text-xl font-semibold text-gray-900 mb-6">Profile Picture</h3>
+    <div class="flex items-center space-x-6">
+      <div class="relative">
+        <div data-avatar-preview-target="preview">
+          <% if staff.avatar.attached? %>
+            <%= image_tag staff.avatar, alt: "Profile Picture", class: "w-24 h-24 rounded-full object-cover border-4 border-gray-200" %>
+          <% else %>
+            <div class="w-24 h-24 bg-brand-500 rounded-full flex items-center justify-center">
+              <span class="text-white text-2xl font-medium"><%= staff.name.split.map(&:first).join %></span>
+            </div>
+          <% end %>
+        </div>
+        <button type="button" class="absolute bottom-0 right-0 w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center text-white hover:bg-brand-600 transition-colors">
+          <i class="fas fa-camera text-sm"></i>
+        </button>
+      </div>
+      <div class="flex-1">
+        <p class="text-gray-700 mb-2">Upload a new profile picture</p>
+        <p class="text-sm text-gray-500 mb-4">JPG, PNG or GIF. Max size 2MB</p>
+        <div class="flex space-x-3">
+          <%= f.file_field :avatar, class: "hidden", id: "avatar-upload", accept: "image/*", data: { avatar_preview_target: "input", action: "change->avatar-preview#preview" } %>
+          <%= hidden_field_tag :remove_avatar, "0", data: { avatar_preview_target: "removeCheckbox" } %>
+          <label for="avatar-upload" class="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm font-medium cursor-pointer">
+            <i class="fas fa-upload mr-2"></i>Upload New
+          </label>
+          <% if staff.avatar.attached? %>
+            <button type="button" class="text-gray-600 hover:text-red-600 px-4 py-2 text-sm font-medium" data-avatar-preview-target="removeButton" data-action="click->avatar-preview#remove">
+              Remove
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Information Section -->
+  <div class="p-8 border-b border-gray-200">
+    <h3 class="font-serif text-xl font-semibold text-gray-900 mb-6">Personal Information</h3>
+    <div class="space-y-6">
+      <div>
+        <%= f.label :email, "Email Address", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.email_field :email, disabled: true, class: "w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed" %>
+        <p class="text-xs text-gray-500 mt-1">Email address cannot be changed. Contact IT support if needed.</p>
+      </div>
+
+      <div>
+        <%= f.label :name, "Name", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :name, class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+        <% if staff.errors[:name].any? %>
+          <p class="text-xs text-red-500 mt-1"><%= staff.errors[:name].first %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Section -->
+  <div class="p-8 border-b border-gray-200">
+    <h3 class="font-serif text-xl font-semibold text-gray-900 mb-6">Change Password</h3>
+    <div class="space-y-6">
+      <div>
+        <%= label_tag :current_password, "Current Password", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <div class="relative" data-controller="password-toggle">
+          <%= password_field_tag :current_password, nil, class: "w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent", data: { password_toggle_target: "input" } %>
+          <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" data-action="click->password-toggle#toggle">
+            <i class="fas fa-eye" data-password-toggle-target="icon"></i>
+          </button>
+        </div>
+        <% if staff.errors[:current_password].any? %>
+          <p class="text-xs text-red-500 mt-1"><%= staff.errors[:current_password].first %></p>
+        <% end %>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <%= f.label :password, "New Password", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <div class="relative" data-controller="password-toggle">
+            <%= f.password_field :password, class: "w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent", data: { password_toggle_target: "input" } %>
+            <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" data-action="click->password-toggle#toggle">
+              <i class="fas fa-eye" data-password-toggle-target="icon"></i>
+            </button>
+          </div>
+          <% if staff.errors[:password].any? %>
+            <p class="text-xs text-red-500 mt-1"><%= staff.errors[:password].first %></p>
+          <% end %>
+        </div>
+        <div>
+          <%= f.label :password_confirmation, "Confirm New Password", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <div class="relative" data-controller="password-toggle">
+            <%= f.password_field :password_confirmation, class: "w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent", data: { password_toggle_target: "input" } %>
+            <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" data-action="click->password-toggle#toggle">
+              <i class="fas fa-eye" data-password-toggle-target="icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h4 class="text-sm font-medium text-blue-900 mb-2">Password Requirements:</h4>
+        <ul class="text-xs text-blue-700 space-y-1">
+          <li class="flex items-center space-x-2">
+            <i class="fas fa-check text-green-500"></i>
+            <span>At least 8 characters long</span>
+          </li>
+          <li class="flex items-center space-x-2">
+            <i class="fas fa-info-circle text-blue-500"></i>
+            <span>Leave blank to keep current password</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="bg-gray-50 px-8 py-6 flex justify-end items-center">
+    <div class="flex space-x-4">
+      <%= link_to "Cancel", dashboard_path, class: "px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium transition-colors" %>
+      <%= f.submit "Save Changes", class: "px-6 py-3 bg-brand-500 text-white rounded-lg hover:bg-brand-600 font-medium transition-colors cursor-pointer", data: { turbo_submits_with: "Saving..." } %>
+    </div>
+  </div>
+<% end %>

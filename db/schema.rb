@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_135902) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_23_192930) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -80,6 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_135902) do
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
     t.datetime "last_login"
+    t.string "title"
     t.index ["institution_id"], name: "index_staffs_on_institution_id"
   end
 

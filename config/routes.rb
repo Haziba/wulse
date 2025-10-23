@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     resources :staff
     resources :documents
+    resource :profile, only: [:edit, :update]
   end
 
   ActiveAdmin.routes(self)

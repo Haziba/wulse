@@ -3,6 +3,7 @@ class Staff < ApplicationRecord
 
   has_secure_password validations: false
 
+  has_one_attached :avatar
   has_many :oers
   belongs_to :institution
 
@@ -11,6 +12,7 @@ class Staff < ApplicationRecord
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { scope: :institution_id }
   validates :password, presence: true, length: { minimum: 8 }, if: :password_digest_changed?
+  validates :password, confirmation: true, if: :password_digest_changed?
 
   def self.ransackable_attributes(auth_object = nil)
     ['name', 'email']

@@ -1,0 +1,15 @@
+<div id="user_profile_menu" class="flex items-center space-x-3">
+  <%= link_to edit_dashboard_profile_path, class: "flex items-center space-x-3 hover:opacity-80 transition-opacity" do %>
+    <% if staff.avatar.attached? %>
+      <%= image_tag staff.avatar, alt: staff.name, class: "w-8 h-8 rounded-full object-cover" %>
+    <% else %>
+      <div class="w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center">
+        <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
+      </div>
+    <% end %>
+    <span class="text-gray-700 font-medium hidden sm:inline"><%= staff.name %></span>
+  <% end %>
+  <%= link_to session_path, method: :delete, data: { turbo_method: :delete }, class: "text-gray-600 hover:text-brand-500" do %>
+    <i class="fas fa-chevron-down text-sm"></i>
+  <% end %>
+</div>
