@@ -63,14 +63,14 @@
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-600 mb-1">Storage Used</p>
-          <p class="text-2xl font-bold text-gray-900"><%= @stats[:storage_used] %></p>
+          <p class="text-2xl font-bold text-gray-900"><%= number_to_human_size(@stats[:storage_used]) %></p>
         </div>
         <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
           <i class="fas fa-database text-purple-500 text-xl"></i>
         </div>
       </div>
       <div class="mt-4 flex items-center text-sm">
-        <span class="text-gray-500">of <%= @stats[:storage_total] %> total</span>
+        <span class="text-gray-500">of <%= number_to_human_size(@stats[:storage_total]) %> total</span>
       </div>
     </div>
   </div>

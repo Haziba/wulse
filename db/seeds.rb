@@ -12,12 +12,14 @@ institutions = [{
   name: "Wulse Academy",
   subdomain: "wulse-academy",
   logo: File.open(Rails.root.join("db", "seeds", "images", "wulse-academy-logo.png")),
-  branding_colour: "#1B2A41"
+  branding_colour: "#1B2A41",
+  storage_total: 1000000000
 },{
   name: "University of Wulse",
   subdomain: "uow",
   logo: File.open(Rails.root.join("db", "seeds", "images", "uow-logo.png")),
-  branding_colour: "#800020"
+  branding_colour: "#800020",
+  storage_total: 2000000000
 }]
   
 institutions.each do |institution|

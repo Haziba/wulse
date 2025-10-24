@@ -11,8 +11,8 @@ class DashboardController < ApplicationController
       staff_change: "+5%",
       pending_reviews: 23,
       reviews_change: "-8%",
-      storage_used: "847 GB",
-      storage_total: "2TB"
+      storage_used: current_institution.storage_used,
+      storage_total: current_institution.storage_total
     }
   end
 end
