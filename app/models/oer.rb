@@ -4,6 +4,8 @@ class Oer < ApplicationRecord
   belongs_to :staff
   belongs_to :institution
 
+  has_many :metadata, dependent: :destroy
+
   has_one_attached :document
 
   validates :name, presence: true
