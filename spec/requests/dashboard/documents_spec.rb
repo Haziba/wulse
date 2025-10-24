@@ -211,6 +211,26 @@ RSpec.describe "Dashboard::Documents", type: :request do
         expect(assigns(:document).metadata.count).to eq(2)
       end
 
+      it "displays file upload UI" do
+        get edit_dashboard_document_path(document)
+
+        expect(response.body).to include('Upload file')
+        expect(response.body).to include('id="document-file-input"')
+        expect(response.body).to include('type="file"')
+      end
+
+      it "displays file upload with correct accept attribute" do
+        get edit_dashboard_document_path(document)
+
+        expect(response.body).to include('accept="application/pdf,application/epub+zip"')
+      end
+
+      it "displays upload icon in overlay" do
+        get edit_dashboard_document_path(document)
+
+        expect(response.body).to include('fa-upload')
+      end
+
       it "cannot edit other institution's documents" do
         get edit_dashboard_document_path(other_institution_document)
         expect(response).to have_http_status(:not_found)

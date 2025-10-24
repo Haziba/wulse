@@ -19,25 +19,35 @@
       <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Preview</h3>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="md:col-span-1">
-          <% if @document.preview_image.attached? %>
-            <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-              <%= image_tag @document.preview_image, class: "w-full h-full object-cover" %>
-            </div>
-          <% elsif @document.document.attached? %>
-            <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div class="text-center">
-                <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
-                <p class="text-gray-600 font-medium">PDF Preview</p>
+          <div class="relative group cursor-pointer" onclick="document.getElementById('document-file-input').click()">
+            <% if @document.preview_image.attached? %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+                <%= image_tag @document.preview_image, class: "w-full h-full object-cover" %>
               </div>
-            </div>
-          <% else %>
-            <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div class="text-center">
-                <i class="fas fa-file text-6xl text-gray-400 mb-4"></i>
-                <p class="text-gray-600 font-medium">No Preview</p>
+            <% elsif @document.document.attached? %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div class="text-center">
+                  <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
+                  <p class="text-gray-600 font-medium">PDF Preview</p>
+                </div>
               </div>
+            <% else %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div class="text-center">
+                  <i class="fas fa-file text-6xl text-gray-400 mb-4"></i>
+                  <p class="text-gray-600 font-medium">No Preview</p>
+                </div>
+              </div>
+            <% end %>
+
+            <!-- Upload file overlay -->
+            <div class="absolute bottom-0 left-0 right-0 bg-brand-500 bg-opacity-90 text-white py-3 px-4 rounded-b-lg flex items-center justify-center space-x-2 group-hover:bg-opacity-100 transition-all">
+              <i class="fas fa-upload"></i>
+              <span class="font-medium">Upload file</span>
             </div>
-          <% end %>
+          </div>
+
+          <%= f.file_field :document, id: "document-file-input", class: "hidden", accept: "application/pdf,application/epub+zip" %>
         </div>
         <div class="md:col-span-2 space-y-4">
           <div>
