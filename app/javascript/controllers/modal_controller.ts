@@ -1,22 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
-  connect() {
+export default class extends Controller<HTMLDialogElement> {
+  connect(): void {
     this.element.showModal();
 
-    this.element.addEventListener("click", (e) => {
+    this.element.addEventListener("click", (e: MouseEvent) => {
       if (e.target === this.element) {
         this.close();
       }
     });
   }
 
-  close() {
+  close(): void {
     this.element.close();
     this.element.remove();
   }
 
-  submitEnd(e) {
+  submitEnd(e: CustomEvent): void {
     if (e.detail.success) {
       this.close();
     }

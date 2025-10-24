@@ -1,19 +1,27 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
+export default class extends Controller<HTMLElement> {
   static targets = ["input", "preview", "removeCheckbox", "removeButton"];
   static values = { initials: String };
 
-  preview() {
-    const file = this.inputTarget.files[0];
+  declare readonly inputTarget: HTMLInputElement;
+  declare readonly previewTarget: HTMLElement;
+  declare readonly hasRemoveCheckboxTarget: boolean;
+  declare readonly removeCheckboxTarget: HTMLInputElement;
+  declare readonly hasRemoveButtonTarget: boolean;
+  declare readonly removeButtonTarget: HTMLElement;
+  declare readonly initialsValue: string;
+
+  preview(): void {
+    const file = this.inputTarget.files?.[0];
 
     if (file) {
       const reader = new FileReader();
 
-      reader.onload = (e) => {
+      reader.onload = (e: ProgressEvent<FileReader>) => {
         // Update the preview image
         this.previewTarget.innerHTML = `
-          <img src="${e.target.result}" alt="Profile Picture Preview" class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
+          <img src="${e.target?.result}" alt="Profile Picture Preview" class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
         `;
 
         // Show remove button if hidden
@@ -26,7 +34,7 @@ export default class extends Controller {
     }
   }
 
-  remove(event) {
+  remove(event: Event): void {
     event.preventDefault();
 
     // Clear the file input

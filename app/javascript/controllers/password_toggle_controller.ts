@@ -1,9 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
+export default class extends Controller<HTMLElement> {
   static targets = ["input", "icon"];
 
-  toggle() {
+  declare readonly inputTarget: HTMLInputElement;
+  declare readonly iconTarget: HTMLElement;
+
+  toggle(): void {
     const input = this.inputTarget;
     const icon = this.iconTarget;
 

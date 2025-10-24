@@ -12,11 +12,11 @@
     "resolveJsonModule": true,
     "outDir": "./app/assets/builds",
     "rootDir": "./app/javascript",
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
+    "declarationMap": false,
     "sourceMap": true,
     "types": ["jest", "@types/node", "@testing-library/jest-dom"]
   },
-  "include": ["app/javascript/**/*", "jest.setup.ts"],
-  "exclude": ["node_modules"]
+  "include": ["app/javascript/**/*"],
+  "exclude": ["node_modules", "app/javascript/controllers/__tests__/**/*", "jest.setup.ts"]
 }
