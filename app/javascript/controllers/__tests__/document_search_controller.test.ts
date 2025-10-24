@@ -8,7 +8,7 @@ describe('DocumentSearchController', () => {
 
   const createSearchForm = (): void => {
     const html = `
-      <div data-controller="document-search">
+      <div data-controller="document-search" data-document-search-frame-value="document_list">
         <input type="text"
                data-document-search-target="input"
                data-action="input->document-search#searchDebounced">

@@ -8,7 +8,7 @@ describe('LibrarySearchController', () => {
 
   const createSearchForm = (): void => {
     const html = `
-      <div data-controller="library-search">
+      <div data-controller="library-search" data-library-search-frame-value="library_list">
         <input type="text"
                data-library-search-target="input"
                data-action="input->library-search#searchDebounced">

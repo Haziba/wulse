@@ -9,7 +9,7 @@ describe('StaffSearchController', () => {
 
   const createSearchForm = (): void => {
     const html = `
-      <div data-controller="staff-search">
+      <div data-controller="staff-search" data-staff-search-frame-value="staff_list">
         <input type="text"
                data-staff-search-target="input"
                data-action="input->staff-search#searchDebounced">
