@@ -1,6 +1,7 @@
 class Institution < ApplicationRecord
   has_many :staffs
   has_many :oers
+  has_many :institution_stats
 
   has_one_attached :logo
 
