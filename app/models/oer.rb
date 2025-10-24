@@ -1,6 +1,8 @@
 class Oer < ApplicationRecord
   include TracksStorage
 
+  REQUIRED_METADATA = %w[isbn author title]
+
   acts_as_tenant :institution
 
   belongs_to :staff

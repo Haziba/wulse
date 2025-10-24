@@ -1,0 +1,28 @@
+<div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
+  <div>
+    <input type="text"
+           name="oer[metadata_attributes][<%= index %>][key]"
+           value="<%= key %>"
+           placeholder="Enter key"
+           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent <%= 'bg-gray-100 cursor-not-allowed' if required %>"
+           <%= 'disabled' if required %>>
+    <% if required %>
+      <input type="hidden" name="oer[metadata_attributes][<%= index %>][key]" value="<%= key %>">
+    <% end %>
+  </div>
+  <div class="flex gap-2">
+    <input type="text"
+           name="oer[metadata_attributes][<%= index %>][value]"
+           value="<%= value %>"
+           placeholder="Enter value"
+           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+    <% unless required %>
+      <button type="button"
+              class="text-red-600 hover:text-red-800 px-2"
+              data-action="click->metadata-fields#removeRow">
+        <i class="fas fa-trash"></i>
+      </button>
+    <% end %>
+  </div>
+  <input type="hidden" name="oer[metadata_attributes][<%= index %>][_destroy]" value="<%= destroy_value %>">
+</div>

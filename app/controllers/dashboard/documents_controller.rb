@@ -1,6 +1,7 @@
 class Dashboard::DocumentsController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
+  before_action :set_document, only: [:edit, :update]
 
   def index
     documents = Oer.all
@@ -34,9 +35,29 @@ class Dashboard::DocumentsController < ApplicationController
     end
   end
 
+  def edit
+    @metadata = ordered_metadata
+  end
+
+  def update
+    if @document.update(document_params)
+      redirect_to dashboard_documents_path, notice: "Document updated successfully!", status: :see_other
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
   private
 
+  def ordered_metadata
+    @ordered_metadata = Oer::REQUIRED_METADATA.map { |key| @document.metadata.find_or_initialize_by(key: key) } + @document.metadata.where.not(key: Oer::REQUIRED_METADATA)
+  end
+
+  def set_document
+    @document = Oer.includes(:metadata).find(params[:id])
+  end
+
   def document_params
-    params.require(:oer).permit(:name, :document)
+    params.require(:oer).permit(:name, :document, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
   end
 end

@@ -1,0 +1,120 @@
+<div class="max-w-5xl mx-auto px-6 py-8">
+  <div class="mb-8">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="font-serif text-3xl font-bold text-gray-900 mb-2">Edit Document</h2>
+        <p class="text-gray-600">Update document details and metadata</p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button type="submit" form="edit-document-form" class="bg-brand-500 text-white px-6 py-3 rounded-lg hover:bg-brand-600 font-medium">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <%= form_with model: @document, url: dashboard_document_path(@document), method: :patch, id: "edit-document-form", class: "space-y-8" do |f| %>
+    <!-- Document Preview -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Preview</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-1">
+          <% if @document.preview_image.attached? %>
+            <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+              <%= image_tag @document.preview_image, class: "w-full h-full object-cover" %>
+            </div>
+          <% elsif @document.document.attached? %>
+            <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div class="text-center">
+                <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 font-medium">PDF Preview</p>
+              </div>
+            </div>
+          <% else %>
+            <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div class="text-center">
+                <i class="fas fa-file text-6xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 font-medium">No Preview</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="md:col-span-2 space-y-4">
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2"><%= @document.metadata.find_by(key: 'title')&.value || @document.name %></h4>
+            <p class="text-gray-600 text-sm"><%= @document.metadata.find_by(key: 'description')&.value %></p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <% if @document.metadata.find_by(key: 'author') %>
+              <div>
+                <span class="font-medium text-gray-700">Author:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'author').value %></span>
+              </div>
+            <% end %>
+            <% if @document.metadata.find_by(key: 'category') %>
+              <div>
+                <span class="font-medium text-gray-700">Category:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'category').value %></span>
+              </div>
+            <% end %>
+            <% if @document.metadata.find_by(key: 'publication_date') %>
+              <div>
+                <span class="font-medium text-gray-700">Published:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'publication_date').value %></span>
+              </div>
+            <% end %>
+            <% if @document.document.attached? %>
+              <div>
+                <span class="font-medium text-gray-700">File Size:</span>
+                <span class="text-gray-600 ml-2"><%= number_to_human_size(@document.document.byte_size) %></span>
+              </div>
+            <% end %>
+          </div>
+          <% if @document.metadata.find_by(key: 'keywords') %>
+            <div>
+              <span class="font-medium text-gray-700 text-sm">Keywords:</span>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <% @document.metadata.find_by(key: 'keywords').value.split(',').each do |keyword| %>
+                  <span class="bg-brand-100 text-brand-700 px-2 py-1 rounded-full text-xs"><%= keyword.strip %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6" data-controller="metadata-fields">
+      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Metadata</h3>
+
+      <div data-metadata-fields-target="container" class="space-y-4">
+        <%= f.fields_for :metadata do |metadata_form| %>
+          <%= render "metadata_row",
+              index: metadata_form.index,
+              key: metadata_form.object.key,
+              value: metadata_form.object.value,
+              required: Oer::REQUIRED_METADATA.include?(metadata_form.object.key),
+              destroy_value: metadata_form.object._destroy || 0 %>
+        <% end %>
+      </div>
+
+      <template data-metadata-fields-target="template">
+        <%= render "metadata_row",
+            index: "INDEX",
+            key: "",
+            value: "",
+            required: false,
+            destroy_value: 0 %>
+      </template>
+
+      <div class="flex justify-center pt-4">
+        <button type="button"
+                class="bg-brand-50 text-brand-600 px-4 py-2 rounded-lg hover:bg-brand-100 font-medium flex items-center space-x-2"
+                data-action="click->metadata-fields#addRow">
+          <i class="fas fa-plus"></i>
+          <span>Add Another Row</span>
+        </button>
+      </div>
+    </div>
+  <% end %>
+</div>
