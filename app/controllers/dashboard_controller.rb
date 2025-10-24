@@ -3,16 +3,18 @@ class DashboardController < ApplicationController
   before_action :require_signed_in
 
   def index
-    # These would be real queries in production
+    last_months_stats = current_institution.institution_stats.where(date: 1.month.ago).first
+
     @stats = {
-      total_documents: 2847,
-      documents_change: "+12%",
-      active_staff: 147,
-      staff_change: "+5%",
-      pending_reviews: 23,
-      reviews_change: "-8%",
+      total_documents: current_institution.oers.count,
+      active_staff: current_institution.staffs.where(status: 'active').count,
       storage_used: current_institution.storage_used,
-      storage_total: current_institution.storage_total
     }
+
+    if last_months_stats.present?
+      @stats[:documents_change] = current_institution.oers.count - last_months_stats.total_documents
+      @stats[:staff_change] = current_institution.staffs.where(status: 'active').count - last_months_stats.active_staff
+      @stats[:storage_used_change] = current_institution.storage_used - last_months_stats.storage_used
+    end
   end
 end

@@ -18,11 +18,17 @@
           <i class="fas fa-file-alt text-brand-500 text-xl"></i>
         </div>
       </div>
-      <div class="mt-4 flex items-center text-sm">
-        <i class="fas fa-arrow-up text-green-500 mr-1"></i>
-        <span class="text-green-500">12%</span>
-        <span class="text-gray-500 ml-1">vs last month</span>
-      </div>
+      <% if @stats[:documents_change].present? && @stats[:documents_change] != 0 %> 
+        <div class="mt-4 flex items-center text-sm">
+          <% if @stats[:documents_change] > 0 %>
+            <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+          <% else %>
+            <i class="fas fa-arrow-down text-red-500 mr-1"></i>
+          <% end %>
+          <span class="<%= @stats[:documents_change] > 0 ? 'text-green-500' : 'text-red-500' %>"><%= number_with_delimiter(@stats[:documents_change]) %></span>
+          <span class="text-gray-500 ml-1">vs last month</span>
+        </div>
+      <% end %>
     </div>
 
     <div class="bg-white rounded-xl p-6 border border-gray-200">
@@ -35,43 +41,42 @@
           <i class="fas fa-users text-blue-500 text-xl"></i>
         </div>
       </div>
-      <div class="mt-4 flex items-center text-sm">
-        <i class="fas fa-arrow-up text-green-500 mr-1"></i>
-        <span class="text-green-500">5%</span>
-        <span class="text-gray-500 ml-1">vs last month</span>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 border border-gray-200">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600 mb-1">Pending Reviews</p>
-          <p class="text-2xl font-bold text-gray-900"><%= @stats[:pending_reviews] %></p>
+      <% if @stats[:staff_change].present? && @stats[:staff_change] != 0 %>
+        <div class="mt-4 flex items-center text-sm">
+          <% if @stats[:staff_change] > 0 %>
+            <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+          <% else %>
+            <i class="fas fa-arrow-down text-red-500 mr-1"></i>
+          <% end %>
+          <span class="<%= @stats[:staff_change] > 0 ? 'text-green-500' : 'text-red-500' %>"><%= number_with_delimiter(@stats[:staff_change]) %></span>
+          <span class="text-gray-500 ml-1">vs last month</span>
         </div>
-        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-          <i class="fas fa-clock text-orange-500 text-xl"></i>
-        </div>
-      </div>
-      <div class="mt-4 flex items-center text-sm">
-        <i class="fas fa-arrow-down text-red-500 mr-1"></i>
-        <span class="text-red-500">8%</span>
-        <span class="text-gray-500 ml-1">vs last week</span>
-      </div>
+      <% end %>
     </div>
 
     <div class="bg-white rounded-xl p-6 border border-gray-200">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-600 mb-1">Storage Used</p>
-          <p class="text-2xl font-bold text-gray-900"><%= number_to_human_size(@stats[:storage_used]) %></p>
+          <p class="text-2xl font-bold text-gray-900"><%= number_to_human_size(@stats[:storage_used]) %>
+            <span class="text-sm text-gray-500">/ <%= number_to_human_size(current_institution.storage_total) %></span>
+          </p>
         </div>
         <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
           <i class="fas fa-database text-purple-500 text-xl"></i>
         </div>
       </div>
-      <div class="mt-4 flex items-center text-sm">
-        <span class="text-gray-500">of <%= number_to_human_size(@stats[:storage_total]) %> total</span>
-      </div>
+      <% if @stats[:storage_used_change].present? && @stats[:storage_used_change] != 0 %>
+        <div class="mt-4 flex items-center text-sm">
+          <% if @stats[:storage_used_change] > 0 %>
+            <i class="fas fa-arrow-up text-green-500 mr-1"></i>
+          <% else %>
+            <i class="fas fa-arrow-down text-red-500 mr-1"></i>
+          <% end %>
+          <span class="<%= @stats[:storage_used_change] > 0 ? 'text-green-500' : 'text-red-500' %>"><%= number_to_human_size(@stats[:storage_used_change], precision: 0) %></span>
+          <span class="text-gray-500 ml-1">vs last month</span>
+        </div>
+      <% end %>
     </div>
   </div>
 
