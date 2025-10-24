@@ -11,4 +11,16 @@ class Institution < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     ['staffs', 'oers']
   end
+
+  # Recalculate storage_used from scratch (useful for backfilling or fixing drift)
+  def recalculate_storage!
+    total = oers.sum(:document_size)
+    update!(storage_used: total)
+    total
+  end
+
+  # Human-readable storage display
+  def storage_used_human
+    ActiveSupport::NumberHelper.number_to_human_size(storage_used)
+  end
 end

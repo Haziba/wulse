@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_23_192930) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_24_140711) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -59,6 +59,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_23_192930) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "branding_colour"
+    t.integer "storage_used", limit: 8, default: 0, null: false
   end
 
   create_table "oers", force: :cascade do |t|
@@ -67,6 +68,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_23_192930) do
     t.integer "institution_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "document_size", limit: 8, default: 0, null: false
+    t.index ["document_size"], name: "index_oers_on_document_size"
     t.index ["institution_id"], name: "index_oers_on_institution_id"
     t.index ["staff_id"], name: "index_oers_on_staff_id"
   end
