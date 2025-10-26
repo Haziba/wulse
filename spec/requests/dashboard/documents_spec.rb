@@ -235,6 +235,63 @@ RSpec.describe "Dashboard::Documents", type: :request do
         get edit_dashboard_document_path(other_institution_document)
         expect(response).to have_http_status(:not_found)
       end
+
+      context "required metadata" do
+        it "always includes required metadata fields even when none exist" do
+          get edit_dashboard_document_path(document)
+
+          metadata = assigns(:metadata)
+          metadata_keys = metadata.map(&:key)
+
+          expect(metadata_keys).to include('isbn')
+          expect(metadata_keys).to include('author')
+          expect(metadata_keys).to include('title')
+        end
+
+        it "shows required metadata first in order" do
+          create(:metadatum, oer: document, key: 'publisher', value: 'O\'Reilly')
+          create(:metadatum, oer: document, key: 'year', value: '2024')
+
+          get edit_dashboard_document_path(document)
+
+          metadata = assigns(:metadata)
+          metadata_keys = metadata.map(&:key)
+
+          # Required metadata should appear first
+          expect(metadata_keys[0..2]).to eq(['isbn', 'author', 'title'])
+          # Custom metadata should appear after
+          expect(metadata_keys[3..4]).to match_array(['publisher', 'year'])
+        end
+
+        it "initializes required metadata as new records when they don't exist" do
+          get edit_dashboard_document_path(document)
+
+          metadata = assigns(:metadata)
+          isbn_metadata = metadata.find { |m| m.key == 'isbn' }
+          author_metadata = metadata.find { |m| m.key == 'author' }
+          title_metadata = metadata.find { |m| m.key == 'title' }
+
+          expect(isbn_metadata).to be_present
+          expect(isbn_metadata.new_record?).to be true
+          expect(author_metadata).to be_present
+          expect(author_metadata.new_record?).to be true
+          expect(title_metadata).to be_present
+          expect(title_metadata.new_record?).to be true
+        end
+
+        it "uses existing required metadata when they exist" do
+          existing_author = create(:metadatum, oer: document, key: 'author', value: 'Jane Doe')
+
+          get edit_dashboard_document_path(document)
+
+          metadata = assigns(:metadata)
+          author_metadata = metadata.find { |m| m.key == 'author' }
+
+          expect(author_metadata).to eq(existing_author)
+          expect(author_metadata.new_record?).to be false
+          expect(author_metadata.value).to eq('Jane Doe')
+        end
+      end
     end
   end
 
