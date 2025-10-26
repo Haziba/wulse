@@ -7,7 +7,10 @@ class Dashboard::DocumentsController < ApplicationController
     documents = Oer.all
 
     if params[:search].present?
-      documents = documents.where("name LIKE ?", "%#{params[:search]}%")
+      documents = documents.joins(:metadata)
+                          .where(metadata: { key: 'title' })
+                          .where("metadata.value LIKE ?", "%#{params[:search]}%")
+                          .distinct
     end
 
     @pagy, @documents = pagy(documents)
@@ -67,6 +70,6 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def document_params
-    params.require(:oer).permit(:name, :document, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
+    params.require(:oer).permit(:document, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
   end
 end

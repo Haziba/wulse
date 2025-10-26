@@ -2,13 +2,18 @@ class LibraryController < ApplicationController
   layout "library"
 
   def index
-    documents = Oer.all
-
-    if params[:search].present?
-      documents = documents.where("name LIKE ?", "%#{params[:search]}%")
-    end
-
-    @pagy, @documents = pagy(documents, limit: 10)
+    @pagy, @documents = pagy(filtered_documents(params[:search]), limit: 10)
     @search_term = params[:search]
+  end
+
+  private
+
+  def filtered_documents(search = nil)
+    return Oer.all if search.blank?
+
+    Oer.joins(:metadata)
+       .where(metadata: { key: 'title' })
+       .where("metadata.value LIKE ?", "%#{search}%")
+       .distinct
   end
 end

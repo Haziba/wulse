@@ -51,7 +51,7 @@
         </div>
         <div class="md:col-span-2 space-y-4">
           <div>
-            <h4 class="font-semibold text-gray-900 mb-2"><%= @document.metadata.find_by(key: 'title')&.value || @document.name %></h4>
+            <h4 class="font-semibold text-gray-900 mb-2"><%= @document.metadata.find_by(key: 'title')&.value %></h4>
             <p class="text-gray-600 text-sm"><%= @document.metadata.find_by(key: 'description')&.value %></p>
           </div>
           <div class="grid grid-cols-2 gap-4 text-sm">

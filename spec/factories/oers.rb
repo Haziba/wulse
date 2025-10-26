@@ -4,7 +4,6 @@
 #
 #  id             :integer          not null, primary key
 #  document_size  :integer          default(0), not null
-#  name           :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  institution_id :integer          not null
@@ -23,8 +22,15 @@
 #
 FactoryBot.define do
   factory :oer do
-    name { Faker::Book.title }
     association :institution
     association :staff
+
+    transient do
+      title { nil }
+    end
+
+    after(:create) do |oer, evaluator|
+      oer.metadata.create(key: 'title', value: evaluator.title || Faker::Book.title)
+    end
   end
 end

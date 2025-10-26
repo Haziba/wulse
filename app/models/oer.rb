@@ -4,7 +4,6 @@
 #
 #  id             :integer          not null, primary key
 #  document_size  :integer          default(0), not null
-#  name           :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  institution_id :integer          not null
@@ -25,6 +24,7 @@ class Oer < ApplicationRecord
   include TracksStorage
 
   REQUIRED_METADATA = %w[isbn author title]
+  SUGGESTED_METADATA = %w[description publication_date document_type language department]
 
   acts_as_tenant :institution
 
@@ -37,13 +37,26 @@ class Oer < ApplicationRecord
   has_one_attached :document
   has_one_attached :preview_image
 
-  validates :name, presence: true
+  validate :title_presence
 
   def self.ransackable_attributes(auth_object = nil)
-    ['name']
+    ['staff', 'institution']
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['staff', 'institution']
+    ['staff', 'institution', 'metadata']
+  end
+
+  def title
+    metadata.find_by(key: 'title')&.value
+  end
+
+  private
+
+  def title_presence
+    title_metadata = metadata.detect { |m| m.key == 'title' }
+    if title_metadata.nil? || title_metadata.value.blank?
+      errors.add(:base, "Title can't be blank")
+    end
   end
 end

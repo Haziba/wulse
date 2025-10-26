@@ -13,7 +13,7 @@
       <tbody class="divide-y divide-gray-200">
         <% documents.each do |document| %>
         <tr class="hover:bg-gray-50">
-          <td class="py-4 px-6"><%= document.name %></td>
+          <td class="py-4 px-6"><%= document.title %></td>
           <td class="py-4 px-6 text-gray-700"><%= document.staff&.name || "Unknown" %></td>
           <td class="py-4 px-6 text-gray-700"><%= time_ago_in_words(document.updated_at) + " ago" if document.updated_at %></td>
           <td class="py-4 px-6">
