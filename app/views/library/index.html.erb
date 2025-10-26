@@ -35,7 +35,7 @@
         <h3 class="font-semibold text-gray-900 mb-4">Refine Results</h3>
 
         <% @filters.each do |filter_key, filter_values| %>
-          <div class="mb-6" data-controller="filter-list">
+          <div class="mb-6" data-controller="filter-list library-search" data-library-search-frame-value="library_list">
             <div class="flex items-center justify-between mb-3">
               <h4 class="font-medium text-gray-700"><%= filter_key.to_s.humanize %></h4>
               <div class="flex gap-2 text-xs">
@@ -46,8 +46,19 @@
             </div>
             <div class="space-y-2">
               <% filter_values.each do |value, count| %>
+                <%
+                  filter_param_key = filter_key.to_s
+                  is_checked = params[filter_param_key].nil? || params[filter_param_key].include?(value)
+                %>
                 <label class="flex items-center" data-filter-list-target="item">
-                  <input type="checkbox" class="text-brand-500 rounded" data-filter-list-target="checkbox">
+                  <input type="checkbox"
+                         class="text-brand-500 rounded"
+                         data-filter-list-target="checkbox"
+                         data-param="<%= filter_param_key %>"
+                         name="<%= filter_param_key %>[]"
+                         value="<%= value %>"
+                         <%= 'checked' if is_checked %>
+                         data-action="change->library-search#search">
                   <span class="ml-2 text-sm text-gray-600"><%= value.titleize %> (<%= number_with_delimiter(count) %>)</span>
                 </label>
               <% end %>
