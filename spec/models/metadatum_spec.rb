@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  oer_id  (oer_id => oers.id)
+#  oer_id  (oer_id => oers.id) ON DELETE => cascade
 #
 require 'rails_helper'
 

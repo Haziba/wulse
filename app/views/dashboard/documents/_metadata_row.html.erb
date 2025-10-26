@@ -1,4 +1,7 @@
 <div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
+  <% if local_assigns[:id] %>
+    <input type="hidden" name="oer[metadata_attributes][<%= index %>][id]" value="<%= id %>">
+  <% end %>
   <div>
     <input type="text"
            name="oer[metadata_attributes][<%= index %>][key]"

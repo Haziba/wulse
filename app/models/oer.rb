@@ -34,10 +34,10 @@ class Oer < ApplicationRecord
   has_many :metadata, dependent: :destroy
   accepts_nested_attributes_for :metadata, allow_destroy: true, reject_if: :all_blank
 
-  has_one_attached :document
-  has_one_attached :preview_image
+  has_one_attached :document, dependent: :purge_later
+  has_one_attached :preview_image, dependent: :purge_later
 
-  validate :title_presence
+  validate :title_metadata_present
 
   def self.ransackable_attributes(auth_object = nil)
     ['staff', 'institution']
@@ -53,9 +53,10 @@ class Oer < ApplicationRecord
 
   private
 
-  def title_presence
-    title_metadata = metadata.detect { |m| m.key == 'title' }
-    if title_metadata.nil? || title_metadata.value.blank?
+  def title_metadata_present
+    # This works because Rails builds metadata objects in memory from metadata_attributes
+    title_meta = metadata.detect { |m| m.key == 'title' && !m.marked_for_destruction? }
+    if title_meta.nil? || title_meta.value.blank?
       errors.add(:base, "Title can't be blank")
     end
   end

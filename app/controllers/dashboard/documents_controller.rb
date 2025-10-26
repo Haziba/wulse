@@ -18,6 +18,7 @@ class Dashboard::DocumentsController < ApplicationController
 
   def new
     @document = Oer.new
+    @document.metadata.build(key: 'title')
   end
 
   def create
@@ -25,6 +26,7 @@ class Dashboard::DocumentsController < ApplicationController
     @document.staff = current_staff
 
     if @document.save
+      update_preview
       @pagy, @documents = pagy(Oer.all)
 
       respond_to do |format|
@@ -47,6 +49,7 @@ class Dashboard::DocumentsController < ApplicationController
       update_preview if new_document_uploaded?
       redirect_to dashboard_documents_path, notice: "Document updated successfully!", status: :see_other
     else
+      @metadata = ordered_metadata
       render :edit, status: :unprocessable_content
     end
   end

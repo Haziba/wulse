@@ -29,8 +29,8 @@ FactoryBot.define do
       title { nil }
     end
 
-    after(:create) do |oer, evaluator|
-      oer.metadata.create(key: 'title', value: evaluator.title || Faker::Book.title)
+    after(:build) do |oer, evaluator|
+      oer.metadata.build(key: 'title', value: evaluator.title || Faker::Book.title)
     end
   end
 end

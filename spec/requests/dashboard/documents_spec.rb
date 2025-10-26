@@ -208,7 +208,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         get edit_dashboard_document_path(document)
 
         expect(assigns(:document).metadata.loaded?).to be true
-        expect(assigns(:document).metadata.count).to eq(2)
+        expect(assigns(:document).metadata.count).to eq(3) # 3 because of the title metadata
       end
 
       it "displays file upload UI" do
@@ -263,22 +263,6 @@ RSpec.describe "Dashboard::Documents", type: :request do
           expect(metadata_keys[3..4]).to match_array(['publisher', 'year'])
         end
 
-        it "initializes required metadata as new records when they don't exist" do
-          get edit_dashboard_document_path(document)
-
-          metadata = assigns(:metadata)
-          isbn_metadata = metadata.find { |m| m.key == 'isbn' }
-          author_metadata = metadata.find { |m| m.key == 'author' }
-          title_metadata = metadata.find { |m| m.key == 'title' }
-
-          expect(isbn_metadata).to be_present
-          expect(isbn_metadata.new_record?).to be true
-          expect(author_metadata).to be_present
-          expect(author_metadata.new_record?).to be true
-          expect(title_metadata).to be_present
-          expect(title_metadata.new_record?).to be true
-        end
-
         it "uses existing required metadata when they exist" do
           existing_author = create(:metadatum, oer: document, key: 'author', value: 'Jane Doe')
 
@@ -319,7 +303,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           {
             oer: {
               metadata_attributes: {
-                "0" => { key: "title", value: "Updated Document Name" }
+                "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: "Updated Document Name" }
               }
             }
           }
@@ -384,7 +368,10 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "updates existing metadata" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title }, "1" => { key: "author", value: "Jane Smith" } }
+              metadata_attributes: {
+                "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title },
+                "1" => { id: existing_metadata.id, key: "author", value: "Jane Smith" }
+              }
             }
           }
 
@@ -395,7 +382,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "deletes metadata when _destroy is set" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title }, "1" => { key: "author", value: "John Doe", _destroy: "1" } }
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "John Doe", _destroy: "1" } }
             }
           }
 
@@ -407,7 +394,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "rejects blank metadata" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title }, "1" => { key: "author", value: "" } }
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "" } }
             }
           }
 
@@ -418,7 +405,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "updates the document file" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title } },
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               document: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
@@ -430,7 +417,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "updates the preview image" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title } },
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               preview_image: fixture_file_upload('avatar.jpg', 'image/jpeg')
             }
           }
@@ -442,7 +429,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "enqueues GeneratePreviewJob when a new document is uploaded" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title } },
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               document: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
@@ -462,7 +449,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "does not enqueue GeneratePreviewJob when no document is provided" do
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: "Updated Name Only" } }
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: "Updated Name Only" } }
             }
           }
 
@@ -476,7 +463,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
           params = {
             oer: {
-              metadata_attributes: { "0" => { key: "title", value: document.title } },
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               document: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }

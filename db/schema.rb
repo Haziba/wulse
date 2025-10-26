@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_26_152246) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_26_171756) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -109,7 +109,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_152246) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "institution_stats", "institutions"
-  add_foreign_key "metadata", "oers"
+  add_foreign_key "metadata", "oers", on_delete: :cascade
   add_foreign_key "oers", "institutions"
   add_foreign_key "oers", "staffs"
   add_foreign_key "staffs", "institutions"
