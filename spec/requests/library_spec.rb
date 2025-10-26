@@ -103,5 +103,121 @@ RSpec.describe "Library", type: :request do
         expect(response).not_to redirect_to(new_session_path)
       end
     end
+
+    context "with filters" do
+      let!(:book1) do
+        oer = create(:oer, institution: institution, staff: staff, title: "CS Book 2024")
+        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
+        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
+        create(:metadatum, oer: oer, key: 'language', value: 'english')
+        create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-15')
+        oer
+      end
+
+      let!(:book2) do
+        oer = create(:oer, institution: institution, staff: staff, title: "CS Book 2023")
+        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
+        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
+        create(:metadatum, oer: oer, key: 'language', value: 'english')
+        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-06-20')
+        oer
+      end
+
+      let!(:article1) do
+        oer = create(:oer, institution: institution, staff: staff, title: "Economics Article")
+        create(:metadatum, oer: oer, key: 'document_type', value: 'article')
+        create(:metadatum, oer: oer, key: 'department', value: 'economics')
+        create(:metadatum, oer: oer, key: 'language', value: 'spanish')
+        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-12-01')
+        oer
+      end
+
+      it "displays filter sections" do
+        get library_path
+
+        expect(response.body).to include("Document type")
+        expect(response.body).to include("Department")
+        expect(response.body).to include("Language")
+        expect(response.body).to include("Publishing date")
+      end
+
+      it "displays document type filters with counts" do
+        get library_path
+
+        expect(response.body).to include("Book (2)")
+        expect(response.body).to include("Article (1)")
+      end
+
+      it "displays department filters with counts" do
+        get library_path
+
+        expect(response.body).to include("Computer Science (2)")
+        expect(response.body).to include("Economics (1)")
+      end
+
+      it "displays language filters with counts" do
+        get library_path
+
+        expect(response.body).to include("English (2)")
+        expect(response.body).to include("Spanish (1)")
+      end
+
+      it "displays publishing date filters with years" do
+        get library_path
+
+        expect(response.body).to include("2023 (2)")
+        expect(response.body).to include("2024 (1)")
+      end
+
+      it "assigns @filters instance variable" do
+        get library_path
+
+        expect(assigns(:filters)).to be_a(Hash)
+        expect(assigns(:filters).keys).to include('document_type', 'department', 'language', :publishing_date)
+      end
+
+      it "displays checkboxes for each filter option" do
+        get library_path
+
+        # Count checkboxes - should have one for each filter value
+        checkbox_count = response.body.scan(/type="checkbox"/).count
+        # 2 document types + 2 departments + 2 languages + 2 years = 8
+        expect(checkbox_count).to be >= 8
+      end
+
+      it "displays 'All' and 'None' links for each filter section" do
+        get library_path
+
+        # Should have All/None links for each of the 4 filter sections
+        all_links = response.body.scan(/click->filter-list#selectAll/).count
+        none_links = response.body.scan(/click->filter-list#selectNone/).count
+
+        expect(all_links).to eq(4)
+        expect(none_links).to eq(4)
+      end
+
+      it "displays Refine Results header" do
+        get library_path
+
+        expect(response.body).to include("Refine Results")
+      end
+
+      context "with many filter values" do
+        before do
+          5.times do |i|
+            oer = create(:oer, institution: institution, staff: staff, title: "Journal #{i}")
+            create(:metadatum, oer: oer, key: 'document_type', value: 'journal')
+            create(:metadatum, oer: oer, key: 'department', value: "department_#{i}")
+          end
+        end
+
+        it "displays show all/show less toggle for filters with more than 3 items" do
+          get library_path
+
+          # Should have show all buttons for department filter (has 6+ departments)
+          expect(response.body).to include('data-filter-list-target="toggle"')
+        end
+      end
+    end
   end
 end

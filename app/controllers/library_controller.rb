@@ -4,6 +4,7 @@ class LibraryController < ApplicationController
   def index
     @pagy, @documents = pagy(filtered_documents(params[:search]), limit: 10)
     @search_term = params[:search]
+    @filters = Library::FilterCounts.new(filtered_documents(params[:search])).call
   end
 
   private
