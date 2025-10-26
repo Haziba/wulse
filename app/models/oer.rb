@@ -24,7 +24,7 @@ class Oer < ApplicationRecord
   include TracksStorage
 
   REQUIRED_METADATA = %w[isbn author title]
-  SUGGESTED_METADATA = %w[description publication_date document_type language department]
+  SUGGESTED_METADATA = %w[description publishing_date document_type language department]
 
   acts_as_tenant :institution
 

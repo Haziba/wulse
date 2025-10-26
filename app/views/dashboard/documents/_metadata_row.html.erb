@@ -7,8 +7,14 @@
            name="oer[metadata_attributes][<%= index %>][key]"
            value="<%= key %>"
            placeholder="Enter key"
+           list="metadata-key-suggestions"
            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent <%= 'bg-gray-100 cursor-not-allowed' if required %>"
            <%= 'disabled' if required %>>
+    <datalist id="metadata-key-suggestions">
+      <% metadata_key_suggestions.each do |suggestion| %>
+        <option value="<%= suggestion %>"></option>
+      <% end %>
+    </datalist>
     <% if required %>
       <input type="hidden" name="oer[metadata_attributes][<%= index %>][key]" value="<%= key %>">
     <% end %>

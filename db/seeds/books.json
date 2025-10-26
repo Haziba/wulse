@@ -1,0 +1,306 @@
+[
+  {
+    "title": "The Invisible Market",
+    "department": "School of Economics",
+    "author": "Barry White",
+    "publishing_date": "2025-01-01",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Microfinance and the Modern World",
+    "department": "School of Economics",
+    "author": "Sara López",
+    "publishing_date": "2023-04-12",
+    "document_type": "Journal",
+    "language": "Spanish"
+  },
+  {
+    "title": "Behavioral Patterns in Global Trade",
+    "department": "School of Economics",
+    "author": "David Chen",
+    "publishing_date": "2024-09-19",
+    "document_type": "Article",
+    "language": "English"
+  },
+  {
+    "title": "Renewable Futures: Green Finance Strategies",
+    "department": "School of Environmental Studies",
+    "author": "Amelia Frost",
+    "publishing_date": "2022-06-03",
+    "document_type": "Thesis",
+    "language": "English"
+  },
+  {
+    "title": "Post-Industrial Urban Landscapes",
+    "department": "School of Architecture",
+    "author": "Carlos Mendoza",
+    "publishing_date": "2021-12-15",
+    "document_type": "Journal",
+    "language": "Spanish"
+  },
+  {
+    "title": "The Geometry of Public Policy",
+    "department": "School of Mathematics and Economics",
+    "author": "Eleanor Hughes",
+    "publishing_date": "2025-05-10",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Trade Winds and Global Markets",
+    "department": "School of Economics",
+    "author": "Jun Park",
+    "publishing_date": "2020-03-21",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "The Philosophy of Currency",
+    "department": "School of Philosophy",
+    "author": "Isabella Costa",
+    "publishing_date": "2025-02-01",
+    "document_type": "Article",
+    "language": "Spanish"
+  },
+  {
+    "title": "Machine Learning in Financial Forecasting",
+    "department": "School of Computer Science",
+    "author": "Aaron Patel",
+    "publishing_date": "2024-11-22",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Cultural Capital and Inequality",
+    "department": "School of Sociology",
+    "author": "Emma Watson",
+    "publishing_date": "2023-07-01",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Digital Economies: A Case Study of Latin America",
+    "department": "School of Economics",
+    "author": "María González",
+    "publishing_date": "2024-01-30",
+    "document_type": "Article",
+    "language": "Spanish"
+  },
+  {
+    "title": "Algorithmic Fairness in Market Systems",
+    "department": "School of Computer Science",
+    "author": "Liam Carter",
+    "publishing_date": "2022-10-12",
+    "document_type": "Thesis",
+    "language": "English"
+  },
+  {
+    "title": "Climate Finance and Risk Mitigation",
+    "department": "School of Environmental Studies",
+    "author": "Nora Hassan",
+    "publishing_date": "2025-03-18",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "The Politics of Global Health Funding",
+    "department": "School of Public Policy",
+    "author": "Benjamin Ruiz",
+    "publishing_date": "2021-08-04",
+    "document_type": "Book",
+    "language": "Spanish"
+  },
+  {
+    "title": "From Keynes to Crypto",
+    "department": "School of Economics",
+    "author": "Rachel Morris",
+    "publishing_date": "2024-02-14",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Economic Ethics in a Digital Age",
+    "department": "School of Philosophy and Economics",
+    "author": "George Kim",
+    "publishing_date": "2025-01-25",
+    "document_type": "Article",
+    "language": "English"
+  },
+  {
+    "title": "Sustainability in Construction Practices",
+    "department": "School of Architecture",
+    "author": "Lucía Torres",
+    "publishing_date": "2022-09-30",
+    "document_type": "Thesis",
+    "language": "Spanish"
+  },
+  {
+    "title": "Game Theory and Public Decision-Making",
+    "department": "School of Mathematics and Economics",
+    "author": "Priya Sharma",
+    "publishing_date": "2023-05-09",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Visual Narratives in Postmodern Cities",
+    "department": "School of Art and Design",
+    "author": "Hugo Tanaka",
+    "publishing_date": "2020-07-22",
+    "document_type": "Article",
+    "language": "English"
+  },
+  {
+    "title": "Sociotechnical Futures and Financial Systems",
+    "department": "School of Sociology and Economics",
+    "author": "Ava Martin",
+    "publishing_date": "2025-04-17",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Cross-Border Taxation in Emerging Economies",
+    "department": "School of Law and Economics",
+    "author": "Mateo Fernández",
+    "publishing_date": "2023-02-11",
+    "document_type": "Thesis",
+    "language": "Spanish"
+  },
+  {
+    "title": "Art, Wealth, and Power",
+    "department": "School of Art History",
+    "author": "Sophia Gray",
+    "publishing_date": "2022-08-18",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Macroeconomic Stability and Crisis Management",
+    "department": "School of Economics",
+    "author": "Omar Al-Khaled",
+    "publishing_date": "2021-03-27",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Networks of Innovation",
+    "department": "School of Engineering and Economics",
+    "author": "Anna Petrov",
+    "publishing_date": "2025-05-05",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Postcolonial Markets and Global Trade Ethics",
+    "department": "School of Sociology",
+    "author": "Laila Nasser",
+    "publishing_date": "2020-01-13",
+    "document_type": "Article",
+    "language": "English"
+  },
+  {
+    "title": "The Semiotics of Branding",
+    "department": "School of Marketing",
+    "author": "Hannah Müller",
+    "publishing_date": "2023-11-02",
+    "document_type": "Book",
+    "language": "German"
+  },
+  {
+    "title": "The Quantum Economy",
+    "department": "School of Physics and Economics",
+    "author": "Tomás Rivera",
+    "publishing_date": "2024-06-14",
+    "document_type": "Thesis",
+    "language": "Spanish"
+  },
+  {
+    "title": "Cognitive Bias in Economic Forecasting",
+    "department": "School of Psychology and Economics",
+    "author": "Olivia Brooks",
+    "publishing_date": "2022-05-20",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Social Narratives in Consumer Behavior",
+    "department": "School of Marketing",
+    "author": "Rosa Delgado",
+    "publishing_date": "2021-12-09",
+    "document_type": "Article",
+    "language": "Spanish"
+  },
+  {
+    "title": "Artificial Intelligence and Economic Policy",
+    "department": "School of Computer Science and Economics",
+    "author": "James O’Connor",
+    "publishing_date": "2025-09-01",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Local Economies in the Global South",
+    "department": "School of Development Studies",
+    "author": "Beatriz Silva",
+    "publishing_date": "2024-03-03",
+    "document_type": "Thesis",
+    "language": "Spanish"
+  },
+  {
+    "title": "Metropolitan Transport and Economics",
+    "department": "School of Urban Studies",
+    "author": "Daniel Weber",
+    "publishing_date": "2023-10-18",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Ethical AI in Financial Systems",
+    "department": "School of Computer Science",
+    "author": "Aiden Wright",
+    "publishing_date": "2025-04-10",
+    "document_type": "Article",
+    "language": "English"
+  },
+  {
+    "title": "Crisis Narratives and Global Policy",
+    "department": "School of Political Science",
+    "author": "Inés Duarte",
+    "publishing_date": "2020-06-07",
+    "document_type": "Book",
+    "language": "Spanish"
+  },
+  {
+    "title": "Gender, Power, and the Global Economy",
+    "department": "School of Sociology and Gender Studies",
+    "author": "Naomi Reed",
+    "publishing_date": "2023-02-26",
+    "document_type": "Journal",
+    "language": "English"
+  },
+  {
+    "title": "Blockchain and International Finance",
+    "department": "School of Computer Science and Economics",
+    "author": "Victor Lim",
+    "publishing_date": "2024-08-28",
+    "document_type": "Book",
+    "language": "English"
+  },
+  {
+    "title": "Cultural Heritage and Sustainable Tourism",
+    "department": "School of Environmental Studies",
+    "author": "Marta Ruiz",
+    "publishing_date": "2022-04-05",
+    "document_type": "Thesis",
+    "language": "Spanish"
+  },
+  {
+    "title": "Econometrics for Emerging Markets",
+    "department": "School of Economics",
+    "author": "Henry Wallace",
+    "publishing_date": "2021-11-11",
+    "document_type": "Journal",
+    "language": "English"
+  }
+]
