@@ -449,6 +449,53 @@ RSpec.describe "Dashboard::Documents", type: :request do
           patch dashboard_document_path(document), params: params
           expect(document.reload.preview_image).to be_attached
         end
+
+        it "enqueues GeneratePreviewJob when a new document is uploaded" do
+          params = {
+            oer: {
+              name: document.name,
+              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+            }
+          }
+
+          expect {
+            patch dashboard_document_path(document), params: params
+          }.to have_enqueued_job(GeneratePreviewJob)
+
+          # Verify job is enqueued with correct parameters
+          expect(GeneratePreviewJob).to have_been_enqueued.with(
+            'Oer',
+            document.id,
+            document.reload.document.blob.key
+          )
+        end
+
+        it "does not enqueue GeneratePreviewJob when no document is provided" do
+          params = {
+            oer: {
+              name: "Updated Name Only"
+            }
+          }
+
+          expect {
+            patch dashboard_document_path(document), params: params
+          }.not_to have_enqueued_job(GeneratePreviewJob)
+        end
+
+        it "does not enqueue GeneratePreviewJob when document upload fails" do
+          allow_any_instance_of(Oer).to receive(:update).and_return(false)
+
+          params = {
+            oer: {
+              name: document.name,
+              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+            }
+          }
+
+          expect {
+            patch dashboard_document_path(document), params: params
+          }.not_to have_enqueued_job(GeneratePreviewJob)
+        end
       end
 
       context "multi-tenancy" do

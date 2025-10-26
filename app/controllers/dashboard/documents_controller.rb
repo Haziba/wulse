@@ -41,6 +41,7 @@ class Dashboard::DocumentsController < ApplicationController
 
   def update
     if @document.update(document_params)
+      update_preview if new_document_uploaded?
       redirect_to dashboard_documents_path, notice: "Document updated successfully!", status: :see_other
     else
       render :edit, status: :unprocessable_content
@@ -48,6 +49,14 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   private
+
+  def update_preview
+    GeneratePreviewJob.perform_later(@document.class.name, @document.id, @document.document.blob.key)
+  end
+
+  def new_document_uploaded?
+    @document.document.attached? && params[:oer][:document].present?
+  end
 
   def ordered_metadata
     @ordered_metadata = Oer::REQUIRED_METADATA.map { |key| @document.metadata.find_or_initialize_by(key: key) } + @document.metadata.where.not(key: Oer::REQUIRED_METADATA)
