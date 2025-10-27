@@ -11,8 +11,24 @@ module Library
     end
 
     def call
+      all_filters = get_filters(Oer.all)
+      filtered_filters = get_filters(@scope)
+
+      combined_filters = all_filters.map do |key, filter_values|
+        inner_filters = filter_values.map do |inner_key, value|
+          [inner_key, [filtered_filters[key].to_h[inner_key] || 0, value]]
+        end
+        [key, inner_filters]
+      end
+      combined_filters.to_h.map { |key, values| [key, values.sort_by { |_, count| -count[0] }] }
+    end
+
+    private
+
+    def get_filters(scope)
       simple_counts = Metadatum
         .joins(:oer)
+        .merge(scope)
         .where(key: FILTER_KEYS)
         .group(:key, :value)
         .count
@@ -24,14 +40,10 @@ module Library
         sort_desc(pairs.to_h)
       end
 
-      facets.merge(publishing_date: tally_years)
+      facets.merge(publishing_date: tally_years(scope))
     end
 
-    private
-
-    attr_reader :scope
-
-    def tally_years
+    def tally_years(scope)
       adapter = ActiveRecord::Base.connection.adapter_name.downcase
 
       rel = Metadatum

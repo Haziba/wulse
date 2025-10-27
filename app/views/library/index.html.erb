@@ -45,7 +45,7 @@
               </div>
             </div>
             <div class="space-y-2">
-              <% filter_values.each do |value, count| %>
+              <% filter_values.each do |value, (filtered_count, total_count)| %>
                 <%
                   filter_param_key = filter_key.to_s
                   is_checked = params[filter_param_key].nil? || params[filter_param_key].include?(value)
@@ -59,7 +59,7 @@
                          value="<%= value %>"
                          <%= 'checked' if is_checked %>
                          data-action="change->library-search#search">
-                  <span class="ml-2 text-sm text-gray-600"><%= value.titleize %> (<%= number_with_delimiter(count) %>)</span>
+                  <span class="ml-2 text-sm text-gray-600"><%= value.titleize %> (<%= number_with_delimiter(filtered_count) %>/<%= number_with_delimiter(total_count) %>)</span>
                 </label>
               <% end %>
             </div>
@@ -77,7 +77,7 @@
     <!-- Results Content -->
     <main class="flex-1">
       <%= turbo_frame_tag "library_list" do %>
-        <%= render "library_list", documents: @documents, pagy: @pagy, search_term: @search_term %>
+        <%= render "library_list", documents: @documents, pagy: @pagy, search_term: @search_term, filtered_count: @filtered_count, total_count: @total_count, filtered_filters: @filtered_filters %>
       <% end %>
     </main>
   </div>

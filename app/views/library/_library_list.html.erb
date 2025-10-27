@@ -2,7 +2,7 @@
 <div class="flex items-center justify-between mb-6">
   <div>
     <h2 class="text-2xl font-bold text-gray-900">Search Results</h2>
-    <p class="text-gray-600"><%= pagy.count %> documents found<%= " for \"#{search_term}\"" if search_term.present? %></p>
+    <p class="text-gray-600"><%= filtered_count %>/<%= total_count %> documents found<%= " for \"#{search_term}\"" if search_term.present? %></p>
   </div>
   <div class="flex items-center space-x-4">
     <span class="text-sm text-gray-600">Sort by:</span>

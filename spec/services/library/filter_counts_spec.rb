@@ -1,18 +1,24 @@
+# spec/services/library/filter_counts_spec.rb
 require 'rails_helper'
 
 RSpec.describe Library::FilterCounts do
   let(:institution) { create(:institution) }
   let(:staff) { create(:staff, institution: institution) }
 
+  # Small helper: convert the service's array-of-pairs into a hash for easier expectations
+  def result_hash_for(scope)
+    described_class.new(scope).call.to_h
+  end
+
   describe "#call" do
     context "with no documents" do
-      it "returns empty counts for all filters" do
-        result = described_class.new(Oer.none).call
+      it "returns empty arrays for all filters" do
+        result = result_hash_for(Oer.none)
 
         expect(result).to eq({
           'document_type' => [],
-          'department' => [],
-          'language' => [],
+          'department'    => [],
+          'language'      => [],
           publishing_date: []
         })
       end
@@ -21,107 +27,121 @@ RSpec.describe Library::FilterCounts do
     context "with documents" do
       let!(:oer1) do
         oer = create(:oer, institution: institution, staff: staff, title: "Book One")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'language', value: 'english')
+        create(:metadatum, oer: oer, key: 'document_type',  value: 'book')
+        create(:metadatum, oer: oer, key: 'department',     value: 'computer science')
+        create(:metadatum, oer: oer, key: 'language',       value: 'english')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-15')
         oer
       end
 
       let!(:oer2) do
         oer = create(:oer, institution: institution, staff: staff, title: "Book Two")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'economics')
-        create(:metadatum, oer: oer, key: 'language', value: 'english')
+        create(:metadatum, oer: oer, key: 'document_type',  value: 'book')
+        create(:metadatum, oer: oer, key: 'department',     value: 'economics')
+        create(:metadatum, oer: oer, key: 'language',       value: 'english')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-06-20')
         oer
       end
 
       let!(:oer3) do
         oer = create(:oer, institution: institution, staff: staff, title: "Article One")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'article')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'language', value: 'spanish')
+        create(:metadatum, oer: oer, key: 'document_type',  value: 'article')
+        create(:metadatum, oer: oer, key: 'department',     value: 'computer science')
+        create(:metadatum, oer: oer, key: 'language',       value: 'spanish')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-03-10')
         oer
       end
 
-      it "returns counts for all filter types" do
+      it "returns all filter categories" do
         result = described_class.new(Oer.all).call
-
-        expect(result.keys).to match_array(['document_type', 'department', 'language', :publishing_date])
+        expect(result.map(&:first)).to match_array(['document_type', 'department', 'language', :publishing_date])
       end
 
-      it "counts document types correctly" do
-        result = described_class.new(Oer.all).call
-
-        expect(result['document_type']).to eq([['book', 2], ['article', 1]])
+      it "returns [filtered, total] for document types with filtered=total when scope is all" do
+        result = result_hash_for(Oer.all)
+        expect(result['document_type']).to eq([
+          ['book',    [2, 2]],
+          ['article', [1, 1]]
+        ])
       end
 
-      it "counts departments correctly" do
-        result = described_class.new(Oer.all).call
-
-        expect(result['department']).to eq([['computer science', 2], ['economics', 1]])
+      it "returns [filtered, total] for departments with filtered=total when scope is all" do
+        result = result_hash_for(Oer.all)
+        expect(result['department']).to eq([
+          ['computer science', [2, 2]],
+          ['economics',        [1, 1]]
+        ])
       end
 
-      it "counts languages correctly" do
-        result = described_class.new(Oer.all).call
-
-        expect(result['language']).to eq([['english', 2], ['spanish', 1]])
+      it "returns [filtered, total] for languages with filtered=total when scope is all" do
+        result = result_hash_for(Oer.all)
+        expect(result['language']).to eq([
+          ['english', [2, 2]],
+          ['spanish', [1, 1]]
+        ])
       end
 
-      it "extracts years from publishing dates" do
-        result = described_class.new(Oer.all).call
-
-        expect(result[:publishing_date]).to eq([['2024', 2], ['2023', 1]])
+      it "extracts publishing years and returns [filtered, total] with filtered=total when scope is all" do
+        result = result_hash_for(Oer.all)
+        expect(result[:publishing_date]).to eq([
+          ['2024', [2, 2]],
+          ['2023', [1, 1]]
+        ])
       end
 
-      it "sorts all filters by count descending" do
-        result = described_class.new(Oer.all).call
-
+      it "sorts each category by filtered count descending" do
+        result = result_hash_for(Oer.all)
         result.each do |_, counts|
-          sorted = counts.sort_by { |_, count| -count }
+          sorted = counts.sort_by { |(_, (filtered, _))| -filtered }
           expect(counts).to eq(sorted)
         end
       end
     end
 
-    context "with scoped documents" do
+    context "with a restrictive scope" do
       let!(:oer1) do
         oer = create(:oer, institution: institution, staff: staff, title: "2024 CS Book")
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
+        create(:metadatum, oer: oer, key: 'department',      value: 'computer science')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-01')
         oer
       end
 
       let!(:oer2) do
         oer = create(:oer, institution: institution, staff: staff, title: "2023 CS Article")
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
+        create(:metadatum, oer: oer, key: 'department',      value: 'computer science')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-01-01')
         oer
       end
 
       let!(:oer3) do
         oer = create(:oer, institution: institution, staff: staff, title: "2023 Economics")
-        create(:metadatum, oer: oer, key: 'department', value: 'economics')
+        create(:metadatum, oer: oer, key: 'department',      value: 'economics')
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-06-01')
         oer
       end
 
-      it "respects the scope for publishing_date counts" do
-        # Scope to only 2024 documents
-        scope = Oer.where(id: oer1.id)
-        result = described_class.new(scope).call
+      it "reports filtered counts from the scope and total counts from the unfiltered set (departments)" do
+        scope  = Oer.where(id: oer1.id)
+        result = result_hash_for(scope)
 
-        # Simple filters count ALL records, not scoped
-        expect(result['department']).to eq([['computer science', 2], ['economics', 1]])
+        expect(result['department']).to eq([
+          ['computer science', [1, 2]],
+          ['economics',        [0, 1]]
+        ])
+      end
 
-        # But publishing_date respects the scope - only 2024
-        expect(result[:publishing_date]).to eq([['2024', 1]])
+      it "reports filtered vs total for publishing_date years" do
+        scope  = Oer.where(id: oer2.id) # one of the 2023 records
+        result = result_hash_for(scope)
+
+        expect(result[:publishing_date]).to eq([
+          ['2023', [1, 2]],
+          ['2024', [0, 1]]
+        ])
       end
     end
 
-    context "with multiple scopes" do
+    context "with multiple scopes (filtering one year only)" do
       let!(:doc2024) do
         oer = create(:oer, institution: institution, staff: staff, title: "Doc 2024")
         create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-01')
@@ -134,12 +154,15 @@ RSpec.describe Library::FilterCounts do
         oer
       end
 
-      it "uses the scope only for publishing_date filtering" do
-        scope = Oer.where(id: doc2024.id)
-        result = described_class.new(scope).call
+      it "shows only the scoped year with filtered>0, and other years with filtered=0" do
+        scope  = Oer.where(id: doc2024.id)
+        result = result_hash_for(scope)
 
-        expect(result[:publishing_date]).to eq([['2024', 1]])
-        expect(result[:publishing_date].map(&:first)).not_to include('2023')
+        # Expect both years present, 2024 filtered=1/total=1; 2023 filtered=0/total=1
+        expect(result[:publishing_date]).to eq([
+          ['2024', [1, 1]],
+          ['2023', [0, 1]]
+        ])
       end
     end
 
@@ -162,10 +185,12 @@ RSpec.describe Library::FilterCounts do
         oer
       end
 
-      it "handles ISO date format (YYYY-MM-DD)" do
-        result = described_class.new(Oer.all).call
-
-        expect(result[:publishing_date]).to eq([['2023', 2], ['2024', 1]])
+      it "handles ISO YYYY-MM-DD and aggregates by year with [filtered, total]" do
+        result = result_hash_for(Oer.all)
+        expect(result[:publishing_date]).to eq([
+          ['2023', [2, 2]],
+          ['2024', [1, 1]]
+        ])
       end
     end
 
@@ -188,10 +213,11 @@ RSpec.describe Library::FilterCounts do
         oer
       end
 
-      it "excludes blank and nil dates from counts" do
-        result = described_class.new(Oer.all).call
-
-        expect(result[:publishing_date]).to eq([['2024', 1]])
+      it "excludes blank and nil dates from both filtered and total counts" do
+        result = result_hash_for(Oer.all)
+        expect(result[:publishing_date]).to eq([
+          ['2024', [1, 1]]
+        ])
       end
     end
   end
@@ -203,11 +229,11 @@ RSpec.describe Library::FilterCounts do
       oer
     end
 
-    it "is a convenience method that creates an instance and calls #call" do
-      result = described_class.for(Oer.all)
+    it "is a convenience method that returns array-of-pairs; values are [filtered, total]" do
+      result = described_class.for(Oer.all).to_h
 
-      expect(result).to be_a(Hash)
-      expect(result['document_type']).to eq([['book', 1]])
+      expect(result).to have_key('document_type')
+      expect(result['document_type']).to eq([['book', [1, 1]]])
     end
   end
 end
