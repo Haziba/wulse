@@ -41,7 +41,16 @@ export default class SearchController extends Controller<HTMLElement> {
     const params = this.buildSearchParams();
     const url = `${window.location.pathname}?${params.toString()}`;
 
-    Turbo.visit(url, { frame: this.frameValue, action: "advance" });
+    fetch(url, {
+      headers: {
+        Accept: "text/vnd.turbo-stream.html",
+      },
+    })
+      .then((response) => response.text())
+      .then((html) => {
+        (Turbo as any).renderStreamMessage(html);
+        window.history.pushState({}, "", url);
+      });
   }
 
   protected buildSearchParams(): URLSearchParams {

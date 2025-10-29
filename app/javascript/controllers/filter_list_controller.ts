@@ -1,13 +1,12 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller<HTMLElement> {
-  static targets = ["item", "toggle", "checkbox"];
+  static targets = ["item", "toggle"];
   static values = { limit: { type: Number, default: 3 } };
 
   declare readonly itemTargets: HTMLElement[];
   declare readonly toggleTarget: HTMLElement;
   declare readonly hasToggleTarget: boolean;
-  declare readonly checkboxTargets: HTMLInputElement[];
   declare readonly limitValue: number;
 
   connect(): void {
@@ -45,25 +44,20 @@ export default class extends Controller<HTMLElement> {
     this.updateVisibility();
   }
 
-  selectAll(event: Event): void {
-    event.preventDefault();
-    this.checkboxTargets.forEach((checkbox) => {
-      checkbox.checked = true;
-    });
-  }
-
-  selectNone(event: Event): void {
-    event.preventDefault();
-    this.checkboxTargets.forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-  }
-
   get isExpanded(): boolean {
-    return this.data.get("expanded") === "true";
+    const key = this.storageKey;
+    if (!key) return false;
+    return localStorage.getItem(key) === "true";
   }
 
   set isExpanded(value: boolean) {
-    this.data.set("expanded", value.toString());
+    const key = this.storageKey;
+    if (!key) return;
+    localStorage.setItem(key, value.toString());
+  }
+
+  get storageKey(): string | null {
+    const id = this.element.id;
+    return id ? `filter-expanded-${id}` : null;
   }
 }

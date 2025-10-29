@@ -8,6 +8,11 @@ class LibraryController < ApplicationController
     @filters = Library::FilterCounts.new(filtered_scope).call
     @filtered_count = filtered_scope.count
     @total_count = Document.count
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def read

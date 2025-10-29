@@ -31,60 +31,18 @@
        data-action="click->sidebar#close"></div>
 
   <div class="flex gap-8">
-    <aside class="w-80 flex-shrink-0 fixed lg:static top-0 left-0 h-full lg:h-auto z-50 lg:z-auto bg-gray-50 lg:bg-transparent transform -translate-x-full duration-300 lg:duration-0 lg:translate-x-0 transition-transform overflow-y-auto"
+    <!-- Sidebar Filters -->
+    <aside class="w-80 flex-shrink-0 fixed lg:static top-0 left-0 h-full lg:h-auto bg-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto"
            data-sidebar-target="sidebar">
-      <div class="bg-white rounded-lg border border-gray-200 p-6 m-4 lg:m-0">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-semibold text-gray-900">Refine Results</h3>
-          <button class="lg:hidden text-gray-500 hover:text-gray-700"
-                  data-action="click->sidebar#close">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-
-        <% @filters.each do |filter_key, filter_values| %>
-          <div class="mb-6" data-controller="filter-list library-search" data-library-search-frame-value="library_list">
-            <div class="flex items-center justify-between mb-3">
-              <h4 class="font-medium text-gray-700"><%= filter_key.to_s.humanize %></h4>
-              <div class="flex gap-2 text-xs">
-                <a href="#" class="text-brand-500 hover:text-brand-600" data-action="click->filter-list#selectAll">All</a>
-                <span class="text-gray-400">|</span>
-                <a href="#" class="text-brand-500 hover:text-brand-600" data-action="click->filter-list#selectNone">None</a>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <% filter_values.each do |value, (filtered_count, total_count)| %>
-                <%
-                  filter_param_key = filter_key.to_s
-                  is_checked = params[filter_param_key].nil? || params[filter_param_key].include?(value)
-                %>
-                <label class="flex items-center" data-filter-list-target="item">
-                  <input type="checkbox"
-                         class="text-brand-500 rounded"
-                         data-filter-list-target="checkbox"
-                         data-param="<%= filter_param_key %>"
-                         name="<%= filter_param_key %>[]"
-                         value="<%= value %>"
-                         <%= 'checked' if is_checked %>
-                         data-action="change->library-search#search">
-                  <span class="ml-2 text-sm text-gray-600"><%= value.titleize %> (<%= number_with_delimiter(filtered_count) %>/<%= number_with_delimiter(total_count) %>)</span>
-                </label>
-              <% end %>
-            </div>
-            <button type="button"
-                    class="mt-2 text-sm text-brand-500 hover:text-brand-600 font-medium hidden"
-                    data-filter-list-target="toggle"
-                    data-action="click->filter-list#toggle">
-              Show all
-            </button>
-          </div>
-        <% end %>
-      </div>
+      <%= turbo_frame_tag "filters_list" do %>
+        <%= render "filters_list", filters: @filters %>
+      <% end %>
     </aside>
 
-    <main class="flex-1 w-full lg:w-auto">
+    <!-- Results Content -->
+    <main class="flex-1">
       <%= turbo_frame_tag "library_list" do %>
-        <%= render "library_list", documents: @documents, pagy: @pagy, query: @query, filtered_count: @filtered_count, total_count: @total_count, filtered_filters: @filtered_filters %>
+        <%= render "library_list", documents: @documents, pagy: @pagy, query: @query, filtered_count: @filtered_count, total_count: @total_count %>
       <% end %>
     </main>
   </div>

@@ -57,42 +57,26 @@ RSpec.describe Library::FilterCounts do
         expect(result.map(&:first)).to match_array(['document_type', 'department', 'language', :publishing_date])
       end
 
-      it "returns [filtered, total] for document types with filtered=total when scope is all" do
-        result = result_hash_for(Document.all)
-        expect(result['document_type']).to eq([
-          ['book',    [2, 2]],
-          ['article', [1, 1]]
-        ])
-      end
-
-      it "returns [filtered, total] for departments with filtered=total when scope is all" do
-        result = result_hash_for(Document.all)
-        expect(result['department']).to eq([
-          ['computer science', [2, 2]],
-          ['economics',        [1, 1]]
-        ])
-      end
-
-      it "returns [filtered, total] for languages with filtered=total when scope is all" do
+      it "returns the filtered count for languages with filtered=total when scope is all" do
         result = result_hash_for(Document.all)
         expect(result['language']).to eq([
-          ['english', [2, 2]],
-          ['spanish', [1, 1]]
+          ['english', 2],
+          ['spanish', 1]
         ])
       end
 
-      it "extracts publishing years and returns [filtered, total] with filtered=total when scope is all" do
+      it "extracts publishing years and returns the filtered count for publishing_date with filtered=total when scope is all" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2024', [2, 2]],
-          ['2023', [1, 1]]
+          ['2024', 2],
+          ['2023', 1]
         ])
       end
 
       it "sorts each category by filtered count descending" do
         result = result_hash_for(Document.all)
         result.each do |_, counts|
-          sorted = counts.sort_by { |(_, (filtered, _))| -filtered }
+          sorted = counts.sort_by { |(_, count)| -count }
           expect(counts).to eq(sorted)
         end
       end
@@ -125,8 +109,8 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(scope)
 
         expect(result['department']).to eq([
-          ['computer science', [1, 2]],
-          ['economics',        [0, 1]]
+          ['computer science', 1],
+          ['economics',        0]
         ])
       end
 
@@ -135,8 +119,8 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(scope)
 
         expect(result[:publishing_date]).to eq([
-          ['2023', [1, 2]],
-          ['2024', [0, 1]]
+          ['2023', 1],
+          ['2024', 0]
         ])
       end
     end
@@ -154,14 +138,13 @@ RSpec.describe Library::FilterCounts do
         document
       end
 
-      it "shows only the scoped year with filtered>0, and other years with filtered=0" do
+      it "shows only the scoped year with count>0, and other years with count=0" do
         scope  = Document.where(id: doc2024.id)
         result = result_hash_for(scope)
 
-        # Expect both years present, 2024 filtered=1/total=1; 2023 filtered=0/total=1
         expect(result[:publishing_date]).to eq([
-          ['2024', [1, 1]],
-          ['2023', [0, 1]]
+          ['2024', 1],
+          ['2023', 0]
         ])
       end
     end
@@ -185,11 +168,11 @@ RSpec.describe Library::FilterCounts do
         document
       end
 
-      it "handles ISO YYYY-MM-DD and aggregates by year with [filtered, total]" do
+      it "handles ISO YYYY-MM-DD and aggregates by year with the filtered count" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2023', [2, 2]],
-          ['2024', [1, 1]]
+          ['2023', 2],
+          ['2024', 1]
         ])
       end
     end
@@ -216,7 +199,7 @@ RSpec.describe Library::FilterCounts do
       it "excludes blank and nil dates from both filtered and total counts" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2024', [1, 1]]
+          ['2024', 1]
         ])
       end
     end
@@ -229,11 +212,11 @@ RSpec.describe Library::FilterCounts do
       document
     end
 
-    it "is a convenience method that returns array-of-pairs; values are [filtered, total]" do
+    it "is a convenience method that returns the filtered count for document_type" do
       result = described_class.for(Document.all).to_h
 
       expect(result).to have_key('document_type')
-      expect(result['document_type']).to eq([['book', [1, 1]]])
+      expect(result['document_type']).to eq([['book', 1]])
     end
   end
 end

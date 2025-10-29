@@ -1,7 +1,7 @@
 import SearchController from "./search_controller";
 
 export default class extends SearchController {
-  static targets = ["input"];
+  static targets = ["input", "checkbox"];
   static values = {
     ...SearchController.values,
     preserveParams: { type: Boolean, default: false },
@@ -9,6 +9,23 @@ export default class extends SearchController {
 
   declare readonly inputTarget: HTMLInputElement;
   declare readonly hasInputTarget: boolean;
+  declare readonly checkboxTargets: HTMLInputElement[];
+
+  selectAll(event: Event): void {
+    event.preventDefault();
+    this.checkboxTargets.forEach((checkbox) => {
+      checkbox.checked = true;
+    });
+    this.search();
+  }
+
+  selectNone(event: Event): void {
+    event.preventDefault();
+    this.checkboxTargets.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    this.search();
+  }
 
   protected buildSearchParams(): URLSearchParams {
     const params = new URLSearchParams();

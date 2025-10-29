@@ -15,12 +15,13 @@ module Library
       filtered_filters = get_filters(@scope)
 
       combined_filters = all_filters.map do |key, filter_values|
+        filtered_filters_hash = filtered_filters[key].to_h
         inner_filters = filter_values.map do |inner_key, value|
-          [inner_key, [filtered_filters[key].to_h[inner_key] || 0, value]]
+          [inner_key, filtered_filters_hash[inner_key] || 0]
         end
         [key, inner_filters]
       end
-      combined_filters.to_h.map { |key, values| [key, values.sort_by { |_, count| -count[0] }] }
+      combined_filters.to_h.map { |key, values| [key, values.sort_by { |_, count| -count }] }
     end
 
     private

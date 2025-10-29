@@ -32,7 +32,7 @@ RSpec.describe "Library", type: :request do
 
     it "displays institution name" do
       get library_path
-      expect(response.body).to include(institution.name.titleize)
+      expect(response.body).to include(CGI.escapeHTML(institution.name.titleize))
     end
 
     context "with q" do
@@ -149,37 +149,36 @@ RSpec.describe "Library", type: :request do
       it "displays document type filters with counts" do
         get library_path
 
-        expect(response.body).to include("Book (2/2)")
-        expect(response.body).to include("Article (1/1)")
+        expect(response.body).to include("Book (2)")
+        expect(response.body).to include("Article (1)")
       end
 
       it "displays department filters with counts" do
         get library_path
 
-        expect(response.body).to include("Computer Science (2/2)")
-        expect(response.body).to include("Economics (1/1)")
+        expect(response.body).to include("Computer Science (2)")
+        expect(response.body).to include("Economics (1)")
       end
 
       it "displays language filters with counts" do
         get library_path
 
-        expect(response.body).to include("English (2/2)")
-        expect(response.body).to include("Spanish (1/1)")
+        expect(response.body).to include("English (2)")
+        expect(response.body).to include("Spanish (1)")
       end
 
       it "displays publishing date filters with years" do
         get library_path
 
-        expect(response.body).to include("2023 (2/2)")
-        expect(response.body).to include("2024 (1/1)")
+        expect(response.body).to include("2023 (2)")
+        expect(response.body).to include("2024 (1)")
       end
 
       it "displays filtered vs total in filter counts when some filters are applied" do
         get library_path('document_type' => ['book'])
 
-        # Book should show all books (2/2), article should show 0 filtered out of 1 total
-        expect(response.body).to include("Book (2/2)")
-        expect(response.body).to include("Article (0/1)")
+        expect(response.body).to include("Book (2)")
+        expect(response.body).to include("Article (0)")
       end
 
       it "assigns @filters instance variable" do
@@ -192,18 +191,15 @@ RSpec.describe "Library", type: :request do
       it "displays checkboxes for each filter option" do
         get library_path
 
-        # Count checkboxes - should have one for each filter value
         checkbox_count = response.body.scan(/type="checkbox"/).count
-        # 2 document types + 2 departments + 2 languages + 2 years = 8
         expect(checkbox_count).to be >= 8
       end
 
       it "displays 'All' and 'None' links for each filter section" do
         get library_path
 
-        # Should have All/None links for each of the 4 filter sections
-        all_links = response.body.scan(/click->filter-list#selectAll/).count
-        none_links = response.body.scan(/click->filter-list#selectNone/).count
+        all_links = response.body.scan(/click->library-search#selectAll/).count
+        none_links = response.body.scan(/click->library-search#selectNone/).count
 
         expect(all_links).to eq(4)
         expect(none_links).to eq(4)
@@ -212,14 +208,12 @@ RSpec.describe "Library", type: :request do
       it "displays filtered count vs total count when filters are applied" do
         get library_path('document_type' => ['book'])
 
-        # 2 books filtered out of 6 total documents (3 from outer context + 3 from this context)
         expect(response.body).to include("2/6 documents found")
       end
 
       it "displays all counts when no filters are applied" do
         get library_path
 
-        # All 6 documents shown (3 from outer context + 3 from this context)
         expect(response.body).to include("6/6 documents found")
       end
 
@@ -241,7 +235,6 @@ RSpec.describe "Library", type: :request do
         it "displays show all/show less toggle for filters with more than 3 items" do
           get library_path
 
-          # Should have show all buttons for department filter (has 6+ departments)
           expect(response.body).to include('data-filter-list-target="toggle"')
         end
       end
