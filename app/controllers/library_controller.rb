@@ -9,4 +9,8 @@ class LibraryController < ApplicationController
     @filtered_count = filtered_scope.count
     @total_count = Oer.count
   end
+
+  def read
+    @document = Oer.find(params[:id])
+  end
 end

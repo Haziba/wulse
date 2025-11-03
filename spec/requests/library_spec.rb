@@ -247,4 +247,27 @@ RSpec.describe "Library", type: :request do
       end
     end
   end
+
+  describe "GET /library/:id/read" do
+    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test PDF Document") }
+
+    context "when document exists" do
+      it "returns http success" do
+        get library_read_path(document)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays the document title" do
+        get library_read_path(document)
+        expect(response.body).to include("Test PDF Document")
+      end
+    end
+
+    context "when document does not exist" do
+      it "returns 404 not found" do
+        get library_read_path(id: 99999)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end

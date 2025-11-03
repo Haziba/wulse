@@ -51,10 +51,13 @@ class Oer < ApplicationRecord
     metadata.find_by(key: 'title')&.value
   end
 
+  def authors
+    metadata.find_by(key: 'authors')&.value || metadata.find_by(key: 'author')&.value
+  end
+
   private
 
   def title_metadata_present
-    # This works because Rails builds metadata objects in memory from metadata_attributes
     title_meta = metadata.detect { |m| m.key == 'title' && !m.marked_for_destruction? }
     if title_meta.nil? || title_meta.value.blank?
       errors.add(:base, "Title can't be blank")

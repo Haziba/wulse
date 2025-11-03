@@ -45,4 +45,25 @@ RSpec.describe Oer, type: :model do
       expect(oer.metadata.count).to be >= 2
     end
   end
+
+  describe 'title' do
+    it 'returns the title metadata value' do
+      oer = create(:oer, institution: institution, staff: staff, title: 'Test PDF Document')
+      expect(oer.title).to eq('Test PDF Document')
+    end
+  end
+
+  describe 'authors' do
+    it 'returns the authors metadata value' do
+      oer = create(:oer, institution: institution, staff: staff)
+      create(:metadatum, oer: oer, key: 'authors', value: 'John Doe, Jane Doe')
+      expect(oer.authors).to eq('John Doe, Jane Doe')
+    end
+
+    it 'returns the author metadata values when authors metadata is not present' do
+      oer = create(:oer, institution: institution, staff: staff)
+      create(:metadatum, oer: oer, key: 'author', value: 'John Doe')
+      expect(oer.authors).to eq('John Doe')
+    end
+  end
 end
