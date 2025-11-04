@@ -1,6 +1,6 @@
     <div id="reader-interface"
          class="flex bg-white"
-         style="height: calc(100vh - 73px);"
+         style="height: calc(100vh - 81px);"
          data-controller="pdf-reader"
          data-pdf-reader-url-value="<%= @document.document.attached? ? rails_blob_url(@document.document) : '' %>"
          data-pdf-reader-document-title-value="<%= @document.title %>"
@@ -92,7 +92,7 @@
                         <p class="text-gray-600">Loading PDF...</p>
                     </div>
                 </div>
-                <div data-pdf-reader-target="pdfContainer" class="hidden flex justify-center p-8">
+                <div data-pdf-reader-target="container" class="hidden flex justify-center p-8">
                     <canvas data-pdf-reader-target="canvas" class="shadow-lg max-w-full"></canvas>
                 </div>
             </div>
