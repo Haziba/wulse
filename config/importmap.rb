@@ -10,3 +10,4 @@ pin_all_from "app/assets/builds/controllers", under: "controllers", preload: fal
 
 # Pin pdfjs-dist for PDF reader
 pin "pdfjs-dist", to: "https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.mjs"
+
