@@ -59,8 +59,6 @@ export default class PdfReaderController extends ReaderController {
       await page.render(renderContext as any).promise;
 
       this.loadingTarget.classList.add("hidden");
-      this.containerTarget.classList.remove("hidden");
-
       this.documentContentTarget.scrollTop = 0;
 
       if (this.pageNumPending !== null) {

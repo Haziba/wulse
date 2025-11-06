@@ -8,6 +8,5 @@ pin "controllers", to: "controllers/index.js"
 pin "controllers/application", to: "controllers/application.js"
 pin_all_from "app/assets/builds/controllers", under: "controllers", preload: false
 
-# Pin pdfjs-dist for PDF reader
 pin "pdfjs-dist", to: "https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.mjs"
-
+pin "epubjs", to: "https://esm.sh/epubjs@0.3.93?target=es2022&bundle"

@@ -1,18 +1,13 @@
 import ReaderController from "./reader_controller";
+import ePub from "epubjs";
 
-// epub.js is loaded via script tag and available globally on window
-declare global {
-  interface Window {
-    ePub: any;
-  }
-}
-
-type Book = any; // epub.js types aren't great
+type Book = any;
 type Rendition = any;
 
 export default class EpubReaderController extends ReaderController {
   private book: Book | null = null;
   private rendition: Rendition | null = null;
+  private lastRelocatedPage: number | null = null;
 
   connect(): void {
     console.log("EPUB Reader Controller connected!");
@@ -21,62 +16,79 @@ export default class EpubReaderController extends ReaderController {
     super.connect();
   }
 
+  // Override to handle resizing for EPUB specifically
+  protected initResizeObserver(): void {
+    if (!this.documentContentTarget) return;
+
+    let resizeTimeout: number | null = null;
+    this.resizeObserver = new ResizeObserver(() => {
+      // Debounce resize events
+      if (resizeTimeout) {
+        window.clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = window.setTimeout(() => {
+        if (this.rendition && this.containerTarget) {
+          const newWidth = this.containerTarget.clientWidth;
+          const newHeight = this.containerTarget.clientHeight;
+          this.rendition.resize(newWidth, newHeight);
+        }
+      }, 150);
+    });
+    this.resizeObserver.observe(this.documentContentTarget);
+  }
+
   protected async initReader(): Promise<void> {
     try {
-      // Check if ePub is available
-      if (typeof window.ePub === "undefined") {
-        throw new Error("ePub library is not loaded. Make sure epub.min.js is included in the page.");
-      }
-
       console.log("Loading EPUB from:", this.urlValue);
-      this.book = window.ePub(this.urlValue);
-
-      console.log("Waiting for book ready...");
-      // Wait for book to be ready before creating rendition
+      this.book = ePub(this.urlValue);
       await this.book.ready;
 
-      // Hide loading, show container BEFORE creating rendition
-      // epub.js needs the container to be visible to calculate dimensions
-      this.loadingTarget.classList.add("hidden");
-      this.containerTarget.classList.remove("hidden");
-
       console.log("Creating rendition...");
-      // Create rendition in the container
+      // Get actual container dimensions
+      const containerWidth = this.containerTarget.clientWidth;
+      const containerHeight = this.containerTarget.clientHeight;
+
+      console.log(`Container dimensions: ${containerWidth} x ${containerHeight}`);
+
       this.rendition = this.book.renderTo(this.containerTarget, {
-        width: "100%",
-        height: "100%",
+        width: containerWidth,
+        height: containerHeight,
         spread: "none",
+        flow: "paginated",
       });
 
-      console.log("Displaying first location...");
-      // Display the first location
+      console.log("Displaying first page...");
       await this.rendition.display();
 
-      console.log("Display completed!");
-
       console.log("Loading navigation...");
-      // Load navigation
       await this.book.loaded.navigation;
       this.totalPages = this.book.spine.length;
       this.pageJumpInputTarget.max = String(this.totalPages);
 
-      console.log("Setting up location handler...");
-      // Set up location changed handler
+      console.log("Setting up relocated handler...");
       this.rendition.on("relocated", (location: any) => {
         const spinePos = this.book.spine.get(location.start.cfi);
         if (spinePos) {
-          this.currentPage = spinePos.index + 1;
-          this.updatePageInfo();
+          const newPage = spinePos.index + 1;
+
+          // Only update if the page actually changed
+          if (this.lastRelocatedPage !== newPage) {
+            this.lastRelocatedPage = newPage;
+            this.currentPage = newPage;
+            this.updatePageInfo();
+          }
         }
       });
 
       // Initial page info
       this.currentPage = 1;
+      this.lastRelocatedPage = 1;
       this.updatePageInfo();
 
-      console.log("EPUB loaded successfully");
+      // Hide loading overlay
+      this.loadingTarget.classList.add("hidden");
 
-      // Load table of contents
+      console.log("EPUB reader fully initialized!");
       void this.loadOutline();
     } catch (error) {
       console.error("Error loading EPUB:", error);
@@ -91,8 +103,10 @@ export default class EpubReaderController extends ReaderController {
       // EPUB pages are called "spine items"
       const section = this.book.spine.get(pageNum - 1);
       if (section) {
-        await this.rendition.display(section.href);
+        // Update tracking before display to prevent relocated event from re-updating
         this.currentPage = pageNum;
+        this.lastRelocatedPage = pageNum;
+        await this.rendition.display(section.href);
         this.updatePageInfo();
       }
     } catch (error) {
@@ -154,6 +168,36 @@ export default class EpubReaderController extends ReaderController {
     }
   }
 
+  // Override sidebar methods to handle EPUB resizing
+  toggleSidebar(event: Event): void {
+    event.preventDefault();
+    this.sidebarOpen = !this.sidebarOpen;
+    this.applySidebarWidth(this.sidebarOpen);
+    // Wait for transition to complete before resizing
+    window.setTimeout(() => {
+      if (this.rendition && this.containerTarget) {
+        const newWidth = this.containerTarget.clientWidth;
+        const newHeight = this.containerTarget.clientHeight;
+        this.rendition.resize(newWidth, newHeight);
+      }
+    }, this.SIDEBAR_TRANSITION_MS);
+  }
+
+  closeSidebar(event: Event): void {
+    event.preventDefault();
+    if (!this.sidebarOpen) return;
+    this.sidebarOpen = false;
+    this.applySidebarWidth(false);
+    // Wait for transition to complete before resizing
+    window.setTimeout(() => {
+      if (this.rendition && this.containerTarget) {
+        const newWidth = this.containerTarget.clientWidth;
+        const newHeight = this.containerTarget.clientHeight;
+        this.rendition.resize(newWidth, newHeight);
+      }
+    }, this.SIDEBAR_TRANSITION_MS);
+  }
+
   // Override navigation methods to use EPUB-specific navigation
   prevPage(event: Event): void {
     event.preventDefault();
@@ -196,7 +240,8 @@ export default class EpubReaderController extends ReaderController {
 
     if (this.rendition) {
       // Toggle dark theme for EPUB content
-      const isDark = this.documentContentTarget.classList.contains("bg-gray-900");
+      const isDark =
+        this.documentContentTarget.classList.contains("bg-gray-900");
       this.rendition.themes.default({
         body: {
           background: isDark ? "#1f2937" : "#ffffff",

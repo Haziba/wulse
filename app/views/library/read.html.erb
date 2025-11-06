@@ -90,14 +90,14 @@
                 </div>
             </div>
 
-            <div data-<%= reader_type %>-target="documentContent" class="flex-1 overflow-y-auto bg-white min-h-0">
-                <div data-<%= reader_type %>-target="loading" class="flex items-center justify-center h-full">
+            <div data-<%= reader_type %>-target="documentContent" class="flex-1 overflow-y-auto bg-white min-h-0 relative">
+                <div data-<%= reader_type %>-target="loading" class="absolute inset-0 flex items-center justify-center bg-white z-10">
                     <div class="text-center">
                         <i class="fas fa-spinner fa-spin text-4xl text-burgundy-500 mb-4"></i>
                         <p class="text-gray-600">Loading <%= is_epub ? 'EPUB' : 'PDF' %>...</p>
                     </div>
                 </div>
-                <div data-<%= reader_type %>-target="container" class="hidden <%= is_epub ? 'w-full h-full' : 'flex justify-center p-8' %>">
+                <div data-<%= reader_type %>-target="container" class="<%= is_epub ? 'w-full h-full' : 'flex justify-center p-8' %>">
                     <% unless is_epub %>
                       <canvas data-<%= reader_type %>-target="canvas" class="shadow-lg max-w-full"></canvas>
                     <% end %>
