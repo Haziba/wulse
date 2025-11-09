@@ -1,13 +1,3 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-
 institutions = [{
   name: "Wulse Academy",
   subdomain: "wulse-academy",
@@ -34,11 +24,11 @@ institutions.each do |institution|
   end
 
   staff.each do |staff|
-    (1..3).each do |i|
-      oer = Oer.create(name: "#{institution.name} Oer #{i}", staff: staff, institution: institution)
-      oer.document.attach(File.open(Rails.root.join("db", "seeds", "documents", "wulse_test_document.pdf")))
+    (1..30).each do |i|
+      oer = Oer.create(metadata_attributes: [{ key: "title", value: "#{institution.name} Oer #{i}" }], staff: staff, institution: institution)
+      oer.document.attach(File.open(Rails.root.join("db", "seeds", "documents", "Test-Book.epub")))
       GeneratePreviewJob.perform_later(Oer.name, oer.id, oer.document.blob.key)
-      puts "Created oer: #{oer.name}"
+      puts "Created oer: #{oer.title}"
     end
   end
 
