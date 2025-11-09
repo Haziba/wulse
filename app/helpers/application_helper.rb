@@ -1,6 +1,10 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def current_page_starts_with?(path)
+    request.path.start_with?(path)
+  end
+
   def generate_color_shades(hex_color)
     # Remove # if present
     hex = hex_color.gsub('#', '')

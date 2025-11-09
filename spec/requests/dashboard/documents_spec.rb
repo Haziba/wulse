@@ -34,6 +34,11 @@ RSpec.describe "Dashboard::Documents", type: :request do
         expect(response).to have_http_status(:success)
       end
 
+      it "highlights documents link in the header" do
+        get dashboard_documents_path
+        expect(response.body).to include('href="' + dashboard_documents_path + '"', "Documents", "text-brand-500 border-b-2 border-brand-500")
+      end
+
       it "displays only documents from the current institution" do
         get dashboard_documents_path
         expect(response.body).to include("Introduction to Ruby")
@@ -194,6 +199,11 @@ RSpec.describe "Dashboard::Documents", type: :request do
       it "returns http success" do
         get edit_dashboard_document_path(document)
         expect(response).to have_http_status(:success)
+      end
+
+      it "highlights documents link in the header" do
+        get edit_dashboard_document_path(document)
+        expect(response.body).to include('href="' + dashboard_documents_path + '"', "Documents", "text-brand-500 border-b-2 border-brand-500")
       end
 
       it "assigns the document" do

@@ -39,6 +39,11 @@ RSpec.describe "Dashboards", type: :request do
         expect(response).to have_http_status(:success)
       end
 
+      it "highlights dashboard link in the header" do
+        get dashboard_path
+        expect(response.body).to include('href="' + dashboard_path + '"', "Dashboard", "text-brand-500 border-b-2 border-brand-500")
+      end
+
       it "assigns current stats" do
         get dashboard_path
 

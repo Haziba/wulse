@@ -1,0 +1,88 @@
+<div class="max-w-5xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Preview</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-1">
+          <div class="relative group cursor-pointer" onclick="document.getElementById('document-file-input').click()">
+            <% if @document.preview_image.attached? %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+                <%= image_tag @document.preview_image, class: "w-full h-full object-contain" %>
+              </div>
+            <% elsif @document.document.attached? %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div class="text-center">
+                  <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
+                  <p class="text-gray-600 font-medium">Preview</p>
+                </div>
+              </div>
+            <% else %>
+              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                <div class="text-center">
+                  <i class="fas fa-file text-6xl text-gray-400 mb-4"></i>
+                  <p class="text-gray-600 font-medium">No file uploaded</p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="md:col-span-2 space-y-4">
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2"><%= @document.title %></h4>
+            <p class="text-gray-600 text-sm"><%= @document.metadata.find_by(key: 'description')&.value %></p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <% if @document.metadata.find_by(key: 'author') %>
+              <div>
+                <span class="font-medium text-gray-700">Author:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'author').value %></span>
+              </div>
+            <% end %>
+            <% if @document.metadata.find_by(key: 'department') %>
+              <div>
+                <span class="font-medium text-gray-700">Department:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'department').value %></span>
+              </div>
+            <% end %>
+            <% if @document.metadata.find_by(key: 'publishing_date') %>
+              <div>
+                <span class="font-medium text-gray-700">Published:</span>
+                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'publishing_date').value %></span>
+              </div>
+            <% end %>
+            <% if @document.document.attached? %>
+              <div>
+                <span class="font-medium text-gray-700">File Size:</span>
+                <span class="text-gray-600 ml-2"><%= number_to_human_size(@document.document.byte_size) %></span>
+              </div>
+            <% end %>
+          </div>
+          <% if @document.metadata.find_by(key: 'keywords') %>
+            <div>
+              <span class="font-medium text-gray-700 text-sm">Keywords:</span>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <% @document.metadata.find_by(key: 'keywords').value.split(',').each do |keyword| %>
+                  <span class="bg-brand-100 text-brand-700 px-2 py-1 rounded-full text-xs"><%= keyword.strip %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Metadata</h3>
+
+      <div class="space-y-4">
+        <% @document.metadata.each do |metadata| %>
+          <%= render "metadata_row",
+              index: metadata.id,
+              key: metadata.key,
+              value: metadata.value,
+              required: true,
+              destroy_value: 0 %>
+        <% end %>
+      </div>
+    </div>
+</div>
+

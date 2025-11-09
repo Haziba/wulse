@@ -34,6 +34,11 @@ RSpec.describe "Dashboard::Staff", type: :request do
         expect(response).to have_http_status(:success)
       end
 
+      it "highlights staff link in the header" do
+        get dashboard_staff_index_path
+        expect(response.body).to include('href="' + dashboard_staff_index_path + '"', "Staff", "text-brand-500 border-b-2 border-brand-500")
+      end
+
       it "displays only staff from the current institution" do
         get dashboard_staff_index_path
         expect(response.body).to include("Alice Smith")
