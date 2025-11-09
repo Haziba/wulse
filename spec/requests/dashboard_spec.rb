@@ -10,7 +10,6 @@ RSpec.describe "Dashboards", type: :request do
 
   before do
     host! "#{institution.subdomain}.lvh.me"
-    # Create some OERs
     5.times { create(:oer, institution: institution, staff: staff) }
   end
 
@@ -46,6 +45,8 @@ RSpec.describe "Dashboards", type: :request do
         expect(assigns(:stats)[:total_documents]).to eq(5)
         expect(assigns(:stats)[:active_staff]).to eq(2)
         expect(assigns(:stats)[:storage_used]).to eq(100_000)
+        expect(assigns(:staff_overview).size).to eq(3)
+        expect(assigns(:recent_documents).size).to eq(3)
       end
 
       it "does not include change stats when no historical data exists" do

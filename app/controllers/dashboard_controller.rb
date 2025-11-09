@@ -16,5 +16,14 @@ class DashboardController < ApplicationController
       @stats[:staff_change] = current_institution.staffs.where(status: 'active').count - last_months_stats.active_staff
       @stats[:storage_used_change] = current_institution.storage_used - last_months_stats.storage_used
     end
+
+    @recent_documents = current_institution.oers.order(created_at: :desc).includes(:staff, :metadata).limit(3)
+
+    @staff_overview = current_institution.staffs
+      .left_joins(:oers)
+      .group('staffs.id')
+      .select('staffs.*, COUNT(oers.id) AS oers_count')
+      .order('oers_count DESC')
+      .limit(3)
   end
 end
