@@ -145,7 +145,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           expect(response).to have_http_status(:success)
           expect(response.media_type).to eq("text/vnd.turbo-stream.html")
           expect(response.body).to include("Test Document")
-          expect(response.body).to include('turbo-stream action="replace" target="document_list"')
+          expect(response.body).to include('turbo-stream action="update" target="document_list"')
         end
 
         it "redirects on html request" do
@@ -530,6 +530,39 @@ RSpec.describe "Dashboard::Documents", type: :request do
           patch dashboard_document_path(other_institution_document), params: { oer: { metadata_attributes: { "0" => { key: "title", value: "Hacked" } } } }
           expect(response).to have_http_status(:not_found)
         end
+      end
+    end
+  end
+
+  describe "DELETE /dashboard/documents/:id" do
+    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
+
+    context "when authenticated" do
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "deletes the document" do
+        expect {
+          delete dashboard_document_path(document)
+        }.to change(Oer, :count).by(-1)
+      end
+
+      it "responds with turbo stream that updates the document list" do
+        delete dashboard_document_path(document), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+        expect(response.body).not_to include("Test Document")
+        expect(response.body).to include('turbo-stream action="update" target="document_list"')
+      end
+
+      it "redirects on html request" do
+        delete dashboard_document_path(document)
+        expect(response).to redirect_to(dashboard_documents_path)
       end
     end
   end

@@ -1,7 +1,7 @@
 class Dashboard::DocumentsController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :set_document, only: [:show, :edit, :update]
+  before_action :set_document, only: [:show, :edit, :update, :destroy]
 
   def index
     documents = Oer.all
@@ -30,14 +30,7 @@ class Dashboard::DocumentsController < ApplicationController
 
     if @document.save
       update_preview
-      @pagy, @documents = pagy(Oer.all)
-
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
-        end
-        format.html { redirect_to dashboard_documents_path, notice: "Document added successfully!", status: :see_other }
-      end
+      update_document_list
     else
       render :new, status: :unprocessable_content
     end
@@ -57,7 +50,23 @@ class Dashboard::DocumentsController < ApplicationController
     end
   end
 
+  def destroy
+    @document.destroy
+    update_document_list
+  end
+
   private
+
+  def update_document_list
+    @pagy, @documents = pagy(Oer.all)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
+      end
+      format.html { redirect_to dashboard_documents_path, notice: "Document added successfully!", status: :see_other }
+    end
+  end
 
   def update_preview
     GeneratePreviewJob.perform_later(@document.class.name, @document.id, @document.document.blob.key)
