@@ -14,34 +14,13 @@
   </div>
 
   <%= form_with model: @document, url: dashboard_document_path(@document), method: :patch, id: "edit-document-form", class: "space-y-8" do |f| %>
-    <!-- Document Preview -->
     <div class="bg-white rounded-xl border border-gray-200 p-6">
-      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Preview</h3>
+      <h3 class="font-semibold text-lg text-gray-900 mb-6">Document</h3>
       <div class="grid md:grid-cols-3 gap-6">
         <div class="md:col-span-1">
           <div class="relative group cursor-pointer" onclick="document.getElementById('document-file-input').click()">
-            <% if @document.preview_image.attached? %>
-              <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                <%= image_tag @document.preview_image, class: "w-full h-full object-cover" %>
-              </div>
-            <% elsif @document.document.attached? %>
-              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div class="text-center">
-                  <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
-                  <p class="text-gray-600 font-medium">PDF Preview</p>
-                </div>
-              </div>
-            <% else %>
-              <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div class="text-center">
-                  <i class="fas fa-file text-6xl text-gray-400 mb-4"></i>
-                  <p class="text-gray-600 font-medium">No Preview</p>
-                </div>
-              </div>
-            <% end %>
-
             <!-- Upload file overlay -->
-            <div class="absolute bottom-0 left-0 right-0 bg-brand-500 bg-opacity-90 text-white py-3 px-4 rounded-b-lg flex items-center justify-center space-x-2 group-hover:bg-opacity-100 transition-all">
+            <div class="bg-brand-500 bg-opacity-90 text-white py-3 px-4 rounded-lg flex items-center justify-center space-x-2 group-hover:bg-opacity-100 transition-all">
               <i class="fas fa-upload"></i>
               <span class="font-medium">Upload file</span>
             </div>
@@ -50,30 +29,12 @@
           <%= f.file_field :document, id: "document-file-input", class: "hidden", accept: "application/pdf,application/epub+zip" %>
         </div>
         <div class="md:col-span-2 space-y-4">
-          <div>
-            <h4 class="font-semibold text-gray-900 mb-2"><%= @document.title %></h4>
-            <p class="text-gray-600 text-sm"><%= @document.metadata.find_by(key: 'description')&.value %></p>
-          </div>
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <% if @document.metadata.find_by(key: 'author') %>
-              <div>
-                <span class="font-medium text-gray-700">Author:</span>
-                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'author').value %></span>
-              </div>
-            <% end %>
-            <% if @document.metadata.find_by(key: 'department') %>
-              <div>
-                <span class="font-medium text-gray-700">Department:</span>
-                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'department').value %></span>
-              </div>
-            <% end %>
-            <% if @document.metadata.find_by(key: 'publishing_date') %>
-              <div>
-                <span class="font-medium text-gray-700">Published:</span>
-                <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'publishing_date').value %></span>
-              </div>
-            <% end %>
+          <div class="flex flex-col gap-4 text-sm">
             <% if @document.document.attached? %>
+              <div>
+                <span class="font-medium text-gray-700">File Name:</span>
+                <span class="text-gray-600 ml-2"><%= @document.document.filename %></span>
+              </div>
               <div>
                 <span class="font-medium text-gray-700">File Size:</span>
                 <span class="text-gray-600 ml-2"><%= number_to_human_size(@document.document.byte_size) %></span>
@@ -104,6 +65,7 @@
               key: metadata_form.object.key,
               value: metadata_form.object.value,
               required: Oer::REQUIRED_METADATA.include?(metadata_form.object.key),
+              editable: true,
               destroy_value: metadata_form.object._destroy || 0 %>
         <% end %>
       </div>
@@ -114,6 +76,7 @@
             key: "",
             value: "",
             required: false,
+            editable: true,
             destroy_value: 0 %>
       </template>
 
