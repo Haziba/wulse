@@ -1,7 +1,7 @@
 class Dashboard::DocumentsController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :set_document, only: [:edit, :update]
+  before_action :set_document, only: [:show, :edit, :update]
 
   def index
     documents = Oer.all
@@ -14,6 +14,9 @@ class Dashboard::DocumentsController < ApplicationController
     end
 
     @pagy, @documents = pagy(documents)
+  end
+
+  def show
   end
 
   def new

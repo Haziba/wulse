@@ -177,6 +177,47 @@ RSpec.describe "Dashboard::Documents", type: :request do
     end
   end
 
+  describe "GET /dashboard/documents/:id" do
+    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
+    let!(:other_institution_document) { create(:oer, institution: other_institution) }
+
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        get dashboard_document_path(document)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "returns http success" do
+        get dashboard_document_path(document)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "highlights documents link in the header" do
+        get dashboard_document_path(document)
+        expect(response.body).to include('href="' + dashboard_documents_path + '"', "Documents", "text-brand-500 border-b-2 border-brand-500")
+      end
+
+      it "displays the document" do
+        get dashboard_document_path(document)
+        expect(response.body).to include("Test Document")
+      end
+
+      it "cannot view other institution's documents" do
+        get dashboard_document_path(other_institution_document)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   describe "GET /dashboard/documents/:id/edit" do
     let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
     let!(:other_institution_document) { create(:oer, institution: other_institution) }
