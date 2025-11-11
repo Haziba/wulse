@@ -9,20 +9,23 @@ export default class EpubReaderController extends ReaderController {
   private rendition: Rendition | null = null;
   private lastRelocatedPage: number | null = null;
 
-  connect(): void {
-    console.log("EPUB Reader Controller connected!");
-    console.log("URL value:", this.urlValue);
-    console.log("Document title:", this.documentTitleValue);
-    super.connect();
+  async connect(): Promise<void> {
+    try {
+      if (this.canvasTarget && this.canvasTarget.getContext) {
+        this.ctx = this.canvasTarget.getContext("2d");
+      }
+    } catch (_) {}
+
+    this.initSidebar();
+    await this.initReader();
+    this.initResizeObserver();
   }
 
-  // Override to handle resizing for EPUB specifically
   protected initResizeObserver(): void {
     if (!this.documentContentTarget) return;
 
     let resizeTimeout: number | null = null;
     this.resizeObserver = new ResizeObserver(() => {
-      // Debounce resize events
       if (resizeTimeout) {
         window.clearTimeout(resizeTimeout);
       }
@@ -39,16 +42,11 @@ export default class EpubReaderController extends ReaderController {
 
   protected async initReader(): Promise<void> {
     try {
-      console.log("Loading EPUB from:", this.urlValue);
       this.book = ePub(this.urlValue);
       await this.book.ready;
 
-      console.log("Creating rendition...");
-      // Get actual container dimensions
       const containerWidth = this.containerTarget.clientWidth;
       const containerHeight = this.containerTarget.clientHeight;
-
-      console.log(`Container dimensions: ${containerWidth} x ${containerHeight}`);
 
       this.rendition = this.book.renderTo(this.containerTarget, {
         width: containerWidth,
@@ -57,15 +55,12 @@ export default class EpubReaderController extends ReaderController {
         flow: "paginated",
       });
 
-      console.log("Displaying first page...");
       await this.rendition.display();
 
-      console.log("Loading navigation...");
       await this.book.loaded.navigation;
       this.totalPages = this.book.spine.length;
       this.pageJumpInputTarget.max = String(this.totalPages);
 
-      console.log("Setting up relocated handler...");
       this.rendition.on("relocated", (location: any) => {
         const spinePos = this.book.spine.get(location.start.cfi);
         if (spinePos) {
@@ -88,7 +83,6 @@ export default class EpubReaderController extends ReaderController {
       // Hide loading overlay
       this.loadingTarget.classList.add("hidden");
 
-      console.log("EPUB reader fully initialized!");
       void this.loadOutline();
     } catch (error) {
       console.error("Error loading EPUB:", error);
