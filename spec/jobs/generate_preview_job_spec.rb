@@ -8,12 +8,12 @@ RSpec.describe GeneratePreviewJob, type: :job do
   describe "#perform" do
     context "when the record previously had no document" do
       it "calls Preview::Generate" do
-        oer.document.attach(
+        oer.file.attach(
           io: File.open(Rails.root.join('spec/fixtures/files/test_document.pdf')),
           filename: 'test_document.pdf',
           content_type: 'application/pdf'
         )
-        blob_key = oer.document.blob.key
+        blob_key = oer.file.blob.key
 
         expect(Preview::Generate).to receive(:call).with(oer)
 
@@ -23,7 +23,7 @@ RSpec.describe GeneratePreviewJob, type: :job do
 
     context "when the record had a document" do
       before do
-        oer.document.attach(
+        oer.file.attach(
           io: File.open(Rails.root.join('spec/fixtures/files/test_document.pdf')),
           filename: 'old_document.pdf',
           content_type: 'application/pdf'
@@ -32,12 +32,12 @@ RSpec.describe GeneratePreviewJob, type: :job do
 
       it "calls Preview::Generate with new document" do
         # Attach a new document
-        oer.document.attach(
+        oer.file.attach(
           io: File.open(Rails.root.join('spec/fixtures/files/test_document.pdf')),
           filename: 'new_document.pdf',
           content_type: 'application/pdf'
         )
-        new_blob_key = oer.document.blob.key
+        new_blob_key = oer.file.blob.key
 
         expect(Preview::Generate).to receive(:call).with(oer)
 
@@ -47,7 +47,7 @@ RSpec.describe GeneratePreviewJob, type: :job do
 
     context "when the record document is different from expected_blob_key" do
       before do
-        oer.document.attach(
+        oer.file.attach(
           io: File.open(Rails.root.join('spec/fixtures/files/test_document.pdf')),
           filename: 'document.pdf',
           content_type: 'application/pdf'
@@ -81,7 +81,7 @@ RSpec.describe GeneratePreviewJob, type: :job do
 
     context "when an error occurs" do
       before do
-        oer.document.attach(
+        oer.file.attach(
           io: File.open(Rails.root.join('spec/fixtures/files/test_document.pdf')),
           filename: 'document.pdf',
           content_type: 'application/pdf'
@@ -89,7 +89,7 @@ RSpec.describe GeneratePreviewJob, type: :job do
       end
 
       it "logs the error and re-raises" do
-        blob_key = oer.document.blob.key
+        blob_key = oer.file.blob.key
         allow(Preview::Generate).to receive(:call).and_raise(StandardError.new("Test error"))
         allow(Rails.logger).to receive(:error)
 

@@ -8,7 +8,7 @@
               <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
                 <%= image_tag @document.preview_image, class: "w-full h-full object-contain" %>
               </div>
-            <% elsif @document.document.attached? %>
+            <% elsif @document.file.attached? %>
               <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
                 <div class="text-center">
                   <i class="fas fa-file-pdf text-6xl text-gray-400 mb-4"></i>
@@ -49,10 +49,10 @@
                 <span class="text-gray-600 ml-2"><%= @document.metadata.find_by(key: 'publishing_date').value %></span>
               </div>
             <% end %>
-            <% if @document.document.attached? %>
+            <% if @document.file.attached? %>
               <div>
                 <span class="font-medium text-gray-700">File Size:</span>
-                <span class="text-gray-600 ml-2"><%= number_to_human_size(@document.document.byte_size) %></span>
+                <span class="text-gray-600 ml-2"><%= number_to_human_size(@document.file.byte_size) %></span>
               </div>
             <% end %>
           </div>

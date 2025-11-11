@@ -25,17 +25,17 @@
             </div>
           </div>
 
-          <%= f.file_field :document, id: "document-file-input", class: "hidden", accept: "application/pdf,application/epub+zip", data: { file_upload_target: "input", action: "change->file-upload#updatePreview" } %>
+          <%= f.file_field :file, id: "document-file-input", class: "hidden", accept: "application/pdf,application/epub+zip", data: { file_upload_target: "input", action: "change->file-upload#updatePreview" } %>
         </div>
         <div class="md:col-span-2 space-y-4">
-          <div class="flex flex-col gap-4 text-sm <%= 'hidden' unless @document.document.attached? %>" data-file-upload-target="info">
+          <div class="flex flex-col gap-4 text-sm <%= 'hidden' unless @document.file.attached? %>" data-file-upload-target="info">
             <div>
               <span class="font-medium text-gray-700">File Name:</span>
-              <span class="text-gray-600 ml-2" data-file-upload-target="filename"><%= @document.document.attached? ? @document.document.filename : '' %></span>
+              <span class="text-gray-600 ml-2" data-file-upload-target="filename"><%= @document.file.attached? ? @document.file.filename : '' %></span>
             </div>
             <div>
               <span class="font-medium text-gray-700">File Size:</span>
-              <span class="text-gray-600 ml-2" data-file-upload-target="filesize"><%= @document.document.attached? ? number_to_human_size(@document.document.byte_size) : '' %></span>
+              <span class="text-gray-600 ml-2" data-file-upload-target="filesize"><%= @document.file.attached? ? number_to_human_size(@document.file.byte_size) : '' %></span>
             </div>
           </div>
           <% if @document.metadata.find_by(key: 'keywords') %>

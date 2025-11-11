@@ -26,8 +26,8 @@ institutions.each do |institution|
   staff.each do |staff|
     (1..30).each do |i|
       oer = Oer.create(metadata_attributes: [{ key: "title", value: "#{institution.name} Oer #{i}" }], staff: staff, institution: institution)
-      oer.document.attach(File.open(Rails.root.join("db", "seeds", "documents", "Test-Book.epub")))
-      GeneratePreviewJob.perform_later(Oer.name, oer.id, oer.document.blob.key)
+      oer.file.attach(File.open(Rails.root.join("db", "seeds", "documents", "Test-Book.epub")))
+      GeneratePreviewJob.perform_later(Oer.name, oer.id, oer.file.blob.key)
       puts "Created oer: #{oer.title}"
     end
   end

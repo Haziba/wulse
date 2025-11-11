@@ -28,7 +28,7 @@ class Institution < ApplicationRecord
 
   # Recalculate storage_used from scratch (useful for backfilling or fixing drift)
   def recalculate_storage!
-    total = oers.sum(:document_size)
+    total = oers.sum(:file_size)
     update!(storage_used: total)
     total
   end

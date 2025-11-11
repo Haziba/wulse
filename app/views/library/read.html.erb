@@ -1,13 +1,13 @@
 <%
   # Determine reader type based on file content type
-  is_epub = @document.document.attached? && @document.document.content_type == 'application/epub+zip'
+  is_epub = @document.file.attached? && @document.file.content_type == 'application/epub+zip'
   reader_type = is_epub ? 'epub-reader' : 'pdf-reader'
 %>
     <div id="reader-interface"
          class="flex bg-white"
          style="height: calc(100vh - 81px);"
          data-controller="<%= reader_type %>"
-         data-<%= reader_type %>-url-value="<%= @document.document.attached? ? rails_blob_url(@document.document) : '' %>"
+         data-<%= reader_type %>-url-value="<%= @document.file.attached? ? rails_blob_url(@document.file) : '' %>"
          data-<%= reader_type %>-document-title-value="<%= @document.title %>"
          data-action="keydown@document-><%= reader_type %>#handleKeydown">
         <aside data-<%= reader_type %>-target="sidebar" class="flex-shrink-0 bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden w-0 min-w-0">
@@ -76,8 +76,8 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <% if @document.document.attached? %>
-                        <%= link_to rails_blob_path(@document.document, disposition: "attachment"), class: "text-gray-600 hover:text-burgundy-500", title: "Download PDF" do %>
+                    <% if @document.file.attached? %>
+                        <%= link_to rails_blob_path(@document.file, disposition: "attachment"), class: "text-gray-600 hover:text-burgundy-500", title: "Download PDF" do %>
                             <i class="fas fa-download"></i>
                         <% end %>
                     <% end %>

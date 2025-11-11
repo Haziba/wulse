@@ -3,7 +3,7 @@ require "open3"
 
 module Preview
   class Generate
-    def self.call(record, attachment_name: :document, preview_name: :preview_image)
+    def self.call(record, attachment_name: :file, preview_name: :preview_image)
       new(record, attachment_name, preview_name).call
     end
 

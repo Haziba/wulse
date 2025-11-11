@@ -69,11 +69,11 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def update_preview
-    GeneratePreviewJob.perform_later(@document.class.name, @document.id, @document.document.blob.key)
+    GeneratePreviewJob.perform_later(@document.class.name, @document.id, @document.file.blob.key)
   end
 
   def new_document_uploaded?
-    @document.document.attached? && params[:oer][:document].present?
+    @document.file.attached? && params[:oer][:file].present?
   end
 
   def ordered_metadata
@@ -85,6 +85,6 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def document_params
-    params.require(:oer).permit(:document, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
+    params.require(:oer).permit(:file, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
   end
 end

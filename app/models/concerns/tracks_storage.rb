@@ -8,24 +8,24 @@ module TracksStorage
   end
 
   def current_document_size
-    document.attached? ? document.byte_size : 0
+    file.attached? ? file.byte_size : 0
   end
 
   private
 
   def sync_document_size
     new_size = current_document_size
-    old_size = document_size || 0
+    old_size = file_size || 0
     size_delta = new_size - old_size
 
     if size_delta != 0
-      update_column(:document_size, new_size)
+      update_column(:file_size, new_size)
       institution.increment!(:storage_used, size_delta)
     end
   end
 
   def prepare_storage_cleanup
-    @size_to_cleanup = document_size || 0
+    @size_to_cleanup = file_size || 0
   end
 
   def cleanup_storage

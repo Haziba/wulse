@@ -123,7 +123,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           {
             oer: {
               metadata_attributes: { "0" => { key: "title", value: "Test Document" } },
-              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+              file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
         end
@@ -457,12 +457,12 @@ RSpec.describe "Dashboard::Documents", type: :request do
           params = {
             oer: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
-              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+              file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
 
           patch dashboard_document_path(document), params: params
-          expect(document.reload.document).to be_attached
+          expect(document.reload.file).to be_attached
         end
 
         it "updates the preview image" do
@@ -481,7 +481,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           params = {
             oer: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
-              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+              file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
 
@@ -493,7 +493,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           expect(GeneratePreviewJob).to have_been_enqueued.with(
             'Oer',
             document.id,
-            document.reload.document.blob.key
+            document.reload.file.blob.key
           )
         end
 
@@ -515,7 +515,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           params = {
             oer: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
-              document: fixture_file_upload('test_document.pdf', 'application/pdf')
+              file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
 

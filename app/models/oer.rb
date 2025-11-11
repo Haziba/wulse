@@ -3,7 +3,7 @@
 # Table name: oers
 #
 #  id             :integer          not null, primary key
-#  document_size  :integer          default(0), not null
+#  file_size      :integer          default(0), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  institution_id :integer          not null
@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_oers_on_document_size   (document_size)
+#  index_oers_on_file_size       (file_size)
 #  index_oers_on_institution_id  (institution_id)
 #  index_oers_on_staff_id        (staff_id)
 #
@@ -34,7 +34,7 @@ class Oer < ApplicationRecord
   has_many :metadata, dependent: :destroy
   accepts_nested_attributes_for :metadata, allow_destroy: true, reject_if: :all_blank
 
-  has_one_attached :document, dependent: :purge_later
+  has_one_attached :file, dependent: :purge_later
   has_one_attached :preview_image, dependent: :purge_later
 
   validate :title_metadata_present
