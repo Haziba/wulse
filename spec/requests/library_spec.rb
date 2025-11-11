@@ -35,34 +35,34 @@ RSpec.describe "Library", type: :request do
       expect(response.body).to include(institution.name.titleize)
     end
 
-    context "with search" do
+    context "with q" do
       it "filters documents by search term" do
-        get library_path(search: "Machine Learning")
+        get library_path(q: "Machine Learning")
         expect(response.body).to include("Introduction to Machine Learning")
         expect(response.body).not_to include("Advanced Ruby Programming")
         expect(response.body).not_to include("Data Science Fundamentals")
       end
 
       it "filters documents by partial search term" do
-        get library_path(search: "Ruby")
+        get library_path(q: "Ruby")
         expect(response.body).to include("Advanced Ruby Programming")
         expect(response.body).not_to include("Introduction to Machine Learning")
       end
 
       it "returns no results when search doesn't match" do
-        get library_path(search: "JavaScript")
+        get library_path(q: "JavaScript")
         expect(response.body).not_to include("Introduction to Machine Learning")
         expect(response.body).not_to include("Advanced Ruby Programming")
         expect(response.body).to include("0/3 documents found")
       end
 
       it "displays search term in results" do
-        get library_path(search: "Machine Learning")
+        get library_path(q: "Machine Learning")
         expect(response.body).to include("for &quot;Machine Learning&quot;")
       end
 
       it "displays filtered vs total count when searching" do
-        get library_path(search: "Machine Learning")
+        get library_path(q: "Machine Learning")
         expect(response.body).to include("1/3 documents found")
       end
     end

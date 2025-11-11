@@ -4,7 +4,7 @@ class LibraryController < ApplicationController
   def index
     filtered_scope = Library::DocumentFilter.call(params)
     @pagy, @documents = pagy(filtered_scope, limit: 10)
-    @search_term = params[:search]
+    @query = params[:q]
     @filters = Library::FilterCounts.new(filtered_scope).call
     @filtered_count = filtered_scope.count
     @total_count = Document.count

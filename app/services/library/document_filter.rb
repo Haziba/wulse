@@ -12,7 +12,7 @@ module Library
 
     def call
       scope = Document.all
-      scope = apply_search_filter(scope)
+      scope = apply_query_filter(scope)
       scope = apply_metadata_filters(scope)
       scope.distinct
     end
@@ -21,12 +21,12 @@ module Library
 
     attr_reader :params
 
-    def apply_search_filter(scope)
-      return scope if params[:search].blank?
+    def apply_query_filter(scope)
+      return scope if params[:q].blank?
 
       scope.joins(:metadata)
            .where(metadata: { key: 'title' })
-           .where("metadata.value LIKE ?", "%#{params[:search]}%")
+           .where("metadata.value LIKE ?", "%#{params[:q]}%")
     end
 
     def apply_metadata_filters(scope)

@@ -2,7 +2,7 @@
 <div class="flex items-center justify-between mb-6">
   <div>
     <h2 class="text-2xl font-bold text-gray-900">Search Results</h2>
-    <p class="text-gray-600"><%= filtered_count %>/<%= total_count %> documents found<%= " for \"#{search_term}\"" if search_term.present? %></p>
+    <p class="text-gray-600"><%= filtered_count %>/<%= total_count %> documents found<%= " for \"#{query}\"" if query.present? %></p>
   </div>
   <div class="flex items-center space-x-4">
     <span class="text-sm text-gray-600">Sort by:</span>
@@ -77,7 +77,7 @@
   </div>
   <div class="flex items-center space-x-2">
     <% if pagy.prev %>
-      <%= link_to library_path(page: pagy.prev, search: search_term), class: "px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_frame: "library_list", turbo_action: "advance" } do %>
+      <%= link_to library_path(page: pagy.prev, q: query), class: "px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_frame: "library_list", turbo_action: "advance" } do %>
         <i class="fas fa-chevron-left"></i>
       <% end %>
     <% else %>
@@ -88,14 +88,14 @@
 
     <% pagy.series.each do |item| %>
       <% if item.is_a?(Integer) %>
-        <%= link_to item, library_path(page: item, search: search_term), class: "px-3 py-2 #{item == pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg", data: { turbo_frame: "library_list", turbo_action: "advance" } %>
+        <%= link_to item, library_path(page: item, q: query), class: "px-3 py-2 #{item == pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg", data: { turbo_frame: "library_list", turbo_action: "advance" } %>
       <% elsif item == :gap %>
         <span class="px-2 text-gray-500">...</span>
       <% end %>
     <% end %>
 
     <% if pagy.next %>
-      <%= link_to library_path(page: pagy.next, search: search_term), class: "px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_frame: "library_list", turbo_action: "advance" } do %>
+      <%= link_to library_path(page: pagy.next, q: query), class: "px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_frame: "library_list", turbo_action: "advance" } do %>
         <i class="fas fa-chevron-right"></i>
       <% end %>
     <% else %>

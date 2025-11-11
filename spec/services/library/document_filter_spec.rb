@@ -26,26 +26,26 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "filters by search term in title" do
-        result = described_class.call(search: "Ruby")
+        result = described_class.call(q: "Ruby")
 
         expect(result).to include(ruby_doc)
         expect(result).not_to include(python_doc)
       end
 
       it "performs case-insensitive search" do
-        result = described_class.call(search: "ruby")
+        result = described_class.call(q: "ruby")
 
         expect(result).to include(ruby_doc)
       end
 
       it "performs partial match search" do
-        result = described_class.call(search: "Program")
+        result = described_class.call(q: "Program")
 
         expect(result).to include(ruby_doc)
       end
 
       it "returns no results for non-matching search" do
-        result = described_class.call(search: "JavaScript")
+        result = described_class.call(q: "JavaScript")
 
         expect(result).to be_empty
       end
@@ -191,7 +191,7 @@ RSpec.describe Library::DocumentFilter do
 
       it "combines search with metadata filters" do
         result = described_class.call(
-          search: 'CS',
+          q: 'CS',
           'document_type' => ['book']
         )
 
@@ -249,7 +249,7 @@ RSpec.describe Library::DocumentFilter do
 
   describe ".new" do
     it "accepts params and stores them" do
-      params = { search: 'test' }
+      params = { q: 'test' }
       filter = described_class.new(params)
 
       expect(filter.call).to be_a(ActiveRecord::Relation)
