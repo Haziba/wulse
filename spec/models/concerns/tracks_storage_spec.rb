@@ -10,95 +10,95 @@ RSpec.describe TracksStorage, type: :model do
     institution.update!(storage_used: 0)
   end
 
-  describe 'creating an OER with a document' do
-    it 'updates the OER file_size' do
-      oer = create(:oer, institution: institution, staff: staff)
-      oer.file.attach(small_file)
-      oer.save!
+  describe 'creating a document with a file' do
+    it 'updates the document file_size' do
+      document = create(:document, institution: institution, staff: staff)
+      document.file.attach(small_file)
+      document.save!
 
-      expect(oer.reload.file_size).to eq(small_file.size)
+      expect(document.reload.file_size).to eq(small_file.size)
     end
 
     it "updates the institution's storage_used" do
       expect {
-        oer = create(:oer, institution: institution, staff: staff)
-        oer.file.attach(small_file)
-        oer.save!
+        document = create(:document, institution: institution, staff: staff)
+        document.file.attach(small_file)
+        document.save!
       }.to change { institution.reload.storage_used }.by(small_file.size)
     end
 
-    it 'handles OERs without documents' do
-      oer = create(:oer, institution: institution, staff: staff)
+    it 'handles documents without files' do
+      document = create(:document, institution: institution, staff: staff)
 
-      expect(oer.file_size).to eq(0)
+      expect(document.file_size).to eq(0)
       expect(institution.reload.storage_used).to eq(0)
     end
   end
 
-  describe 'updating an OER document' do
-    let!(:oer) do
-      oer = create(:oer, institution: institution, staff: staff)
-      oer.file.attach(small_file)
-      oer.save!
-      oer.reload
+  describe 'updating a document file' do
+    let!(:document) do
+      document = create(:document, institution: institution, staff: staff)
+      document.file.attach(small_file)
+      document.save!
+      document.reload
     end
 
     it 'updates file_size when replacing with a larger file' do
-      old_size = oer.file_size
-      oer.file.attach(large_file)
-      oer.save!
+      old_size = document.file_size
+      document.file.attach(large_file)
+      document.save!
 
-      expect(oer.reload.file_size).to eq(large_file.size)
-      expect(oer.file_size).to be > old_size
+      expect(document.reload.file_size).to eq(large_file.size)
+      expect(document.file_size).to be > old_size
     end
 
     it 'adjusts institution storage_used by the delta when replacing' do
       initial_storage = institution.reload.storage_used
       size_delta = large_file.size - small_file.size
 
-      oer.file.attach(large_file)
-      oer.save!
+      document.file.attach(large_file)
+      document.save!
 
       expect(institution.reload.storage_used).to eq(initial_storage + size_delta)
     end
 
     it 'handles replacing with a smaller file' do
-      oer.file.attach(large_file)
-      oer.save!
+      document.file.attach(large_file)
+      document.save!
       initial_storage = institution.reload.storage_used
 
       size_delta = small_file.size - large_file.size
-      oer.file.attach(small_file)
-      oer.save!
+      document.file.attach(small_file)
+      document.save!
 
-      expect(oer.reload.file_size).to eq(small_file.size)
+      expect(document.reload.file_size).to eq(small_file.size)
       expect(institution.reload.storage_used).to eq(initial_storage + size_delta)
     end
   end
 
-  describe 'deleting an OER' do
-    let!(:oer) do
-      oer = create(:oer, institution: institution, staff: staff)
-      oer.file.attach(small_file)
-      oer.save!
-      oer.reload
+  describe 'deleting a document' do
+    let!(:document) do
+      document = create(:document, institution: institution, staff: staff)
+      document.file.attach(small_file)
+      document.save!
+      document.reload
     end
 
     it "decrements the institution's storage_used" do
       initial_storage = institution.reload.storage_used
-      file_size = oer.file_size
+      file_size = document.file_size
 
       expect {
-        oer.destroy!
+        document.destroy!
       }.to change { institution.reload.storage_used }.by(-file_size)
     end
 
-    it 'handles deleting OERs without documents' do
-      oer_without_doc = create(:oer, institution: institution, staff: staff)
+    it 'handles deleting documents without files' do
+      document_without_doc = create(:document, institution: institution, staff: staff)
       initial_storage = institution.reload.storage_used
 
       expect {
-        oer_without_doc.destroy!
+        document_without_doc.destroy!
       }.not_to change { institution.reload.storage_used }
     end
   end
@@ -107,23 +107,23 @@ RSpec.describe TracksStorage, type: :model do
     it 'correctly tracks storage through multiple creates and deletes' do
       expect(institution.reload.storage_used).to eq(0)
 
-      oer1 = create(:oer, institution: institution, staff: staff)
-      oer1.file.attach(small_file)
-      oer1.save!
+      document1 = create(:document, institution: institution, staff: staff)
+      document1.file.attach(small_file)
+      document1.save!
 
       expect(institution.reload.storage_used).to eq(small_file.size)
 
-      oer2 = create(:oer, institution: institution, staff: staff)
-      oer2.file.attach(large_file)
-      oer2.save!
+      document2 = create(:document, institution: institution, staff: staff)
+      document2.file.attach(large_file)
+      document2.save!
 
       expect(institution.reload.storage_used).to eq(small_file.size + large_file.size)
 
-      oer1.destroy!
+      document1.destroy!
 
       expect(institution.reload.storage_used).to eq(large_file.size)
 
-      oer2.destroy!
+      document2.destroy!
 
       expect(institution.reload.storage_used).to eq(0)
     end

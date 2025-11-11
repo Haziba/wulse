@@ -2,24 +2,24 @@
 #
 # Table name: metadata
 #
-#  id         :integer          not null, primary key
-#  key        :string           not null
-#  value      :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  oer_id     :integer          not null
+#  id          :integer          not null, primary key
+#  key         :string           not null
+#  value       :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  document_id :integer          not null
 #
 # Indexes
 #
-#  index_metadata_on_oer_id          (oer_id)
-#  index_metadata_on_oer_id_and_key  (oer_id,key) UNIQUE
+#  index_metadata_on_document_id          (document_id)
+#  index_metadata_on_document_id_and_key  (document_id,key) UNIQUE
 #
 # Foreign Keys
 #
-#  oer_id  (oer_id => oers.id) ON DELETE => cascade
+#  document_id  (document_id => documents.id) ON DELETE => cascade
 #
 class Metadata < ApplicationRecord
-  belongs_to :oer
+  belongs_to :document
 
-  validates :key, presence: true, uniqueness: { scope: :oer_id }
+  validates :key, presence: true, uniqueness: { scope: :document_id }
 end

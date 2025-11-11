@@ -18,9 +18,9 @@ RSpec.describe "Dashboard::Documents", type: :request do
     end
 
     context "when authenticated" do
-      let!(:document_1) { create(:oer, institution: institution, staff: staff, title: "Introduction to Ruby", updated_at: 1.hour.ago) }
-      let!(:document_2) { create(:oer, institution: institution, staff: staff, title: "Advanced Rails", updated_at: 2.days.ago) }
-      let!(:other_institution_document) { create(:oer, institution: other_institution, title: "Python Basics") }
+      let!(:document_1) { create(:document, institution: institution, staff: staff, title: "Introduction to Ruby", updated_at: 1.hour.ago) }
+      let!(:document_2) { create(:document, institution: institution, staff: staff, title: "Advanced Rails", updated_at: 2.days.ago) }
+      let!(:other_institution_document) { create(:document, institution: other_institution, title: "Python Basics") }
 
       before do
         post session_path, params: {
@@ -60,7 +60,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "with pagination" do
         before do
           stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 2))
-          create_list(:oer, 3, institution: institution, staff: staff)
+          create_list(:document, 3, institution: institution, staff: staff)
         end
 
         it "paginates documents" do
@@ -121,7 +121,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "with valid parameters" do
         let(:valid_params) do
           {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { key: "title", value: "Test Document" } },
               file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
@@ -131,12 +131,12 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "creates a new document" do
           expect {
             post dashboard_documents_path, params: valid_params
-          }.to change(Oer, :count).by(1)
+          }.to change(Document, :count).by(1)
         end
 
         it "associates document with current staff" do
           post dashboard_documents_path, params: valid_params
-          expect(Oer.last.staff).to eq(staff)
+          expect(Document.last.staff).to eq(staff)
         end
 
         it "responds with turbo stream that updates the document list" do
@@ -157,7 +157,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "with invalid parameters" do
         let(:invalid_params) do
           {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { key: "title", value: "" } }
             }
           }
@@ -166,7 +166,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "does not create a new document" do
           expect {
             post dashboard_documents_path, params: invalid_params
-          }.not_to change(Oer, :count)
+          }.not_to change(Document, :count)
         end
 
         it "renders the form again" do
@@ -178,8 +178,8 @@ RSpec.describe "Dashboard::Documents", type: :request do
   end
 
   describe "GET /dashboard/documents/:id" do
-    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
-    let!(:other_institution_document) { create(:oer, institution: other_institution) }
+    let!(:document) { create(:document, institution: institution, staff: staff, title: "Test Document") }
+    let!(:other_institution_document) { create(:document, institution: other_institution) }
 
     context "when not authenticated" do
       it "redirects to sign in page" do
@@ -219,8 +219,8 @@ RSpec.describe "Dashboard::Documents", type: :request do
   end
 
   describe "GET /dashboard/documents/:id/edit" do
-    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
-    let!(:other_institution_document) { create(:oer, institution: other_institution) }
+    let!(:document) { create(:document, institution: institution, staff: staff, title: "Test Document") }
+    let!(:other_institution_document) { create(:document, institution: other_institution) }
 
     context "when not authenticated" do
       it "redirects to sign in page" do
@@ -253,8 +253,8 @@ RSpec.describe "Dashboard::Documents", type: :request do
       end
 
       it "loads document with metadata" do
-        create(:metadatum, oer: document, key: 'author', value: 'John Doe')
-        create(:metadatum, oer: document, key: 'year', value: '2024')
+        create(:metadatum, document: document, key: 'author', value: 'John Doe')
+        create(:metadatum, document: document, key: 'year', value: '2024')
 
         get edit_dashboard_document_path(document)
 
@@ -300,8 +300,8 @@ RSpec.describe "Dashboard::Documents", type: :request do
         end
 
         it "shows required metadata first in order" do
-          create(:metadatum, oer: document, key: 'publisher', value: 'O\'Reilly')
-          create(:metadatum, oer: document, key: 'year', value: '2024')
+          create(:metadatum, document: document, key: 'publisher', value: 'O\'Reilly')
+          create(:metadatum, document: document, key: 'year', value: '2024')
 
           get edit_dashboard_document_path(document)
 
@@ -315,7 +315,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         end
 
         it "uses existing required metadata when they exist" do
-          existing_author = create(:metadatum, oer: document, key: 'author', value: 'Jane Doe')
+          existing_author = create(:metadatum, document: document, key: 'author', value: 'Jane Doe')
 
           get edit_dashboard_document_path(document)
 
@@ -331,12 +331,12 @@ RSpec.describe "Dashboard::Documents", type: :request do
   end
 
   describe "PATCH /dashboard/documents/:id" do
-    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Original Name") }
-    let!(:other_institution_document) { create(:oer, institution: other_institution) }
+    let!(:document) { create(:document, institution: institution, staff: staff, title: "Original Name") }
+    let!(:other_institution_document) { create(:document, institution: other_institution) }
 
     context "when not authenticated" do
       it "redirects to sign in page" do
-        patch dashboard_document_path(document), params: { oer: { metadata_attributes: { "0" => { key: "title", value: "New Name" } } } }
+        patch dashboard_document_path(document), params: { document: { metadata_attributes: { "0" => { key: "title", value: "New Name" } } } }
         expect(response).to redirect_to(new_session_path)
       end
     end
@@ -352,7 +352,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "with valid parameters" do
         let(:valid_params) do
           {
-            oer: {
+            document: {
               metadata_attributes: {
                 "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: "Updated Document Name" }
               }
@@ -379,7 +379,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "with invalid parameters" do
         let(:invalid_params) do
           {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { key: "title", value: "" } }
             }
           }
@@ -398,11 +398,11 @@ RSpec.describe "Dashboard::Documents", type: :request do
       end
 
       context "updating metadata" do
-        let!(:existing_metadata) { create(:metadatum, oer: document, key: 'author', value: 'John Doe') }
+        let!(:existing_metadata) { create(:metadatum, document: document, key: 'author', value: 'John Doe') }
 
         it "creates new metadata" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: {
                 "0" => { key: "year", value: "2024" }
               }
@@ -418,7 +418,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "updates existing metadata" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: {
                 "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title },
                 "1" => { id: existing_metadata.id, key: "author", value: "Jane Smith" }
@@ -432,7 +432,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "deletes metadata when _destroy is set" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "John Doe", _destroy: "1" } }
             }
           }
@@ -444,7 +444,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "rejects blank metadata" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "" } }
             }
           }
@@ -455,7 +455,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         end
         it "updates the document file" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
@@ -467,7 +467,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "updates the preview image" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               preview_image: fixture_file_upload('avatar.jpg', 'image/jpeg')
             }
@@ -479,7 +479,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "enqueues GeneratePreviewJob when a new document is uploaded" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
@@ -491,7 +491,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
           # Verify job is enqueued with correct parameters
           expect(GeneratePreviewJob).to have_been_enqueued.with(
-            'Oer',
+            'Document',
             document.id,
             document.reload.file.blob.key
           )
@@ -499,7 +499,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "does not enqueue GeneratePreviewJob when no document is provided" do
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: "Updated Name Only" } }
             }
           }
@@ -510,10 +510,10 @@ RSpec.describe "Dashboard::Documents", type: :request do
         end
 
         it "does not enqueue GeneratePreviewJob when document upload fails" do
-          allow_any_instance_of(Oer).to receive(:update).and_return(false)
+          allow_any_instance_of(Document).to receive(:update).and_return(false)
 
           params = {
-            oer: {
+            document: {
               metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title } },
               file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
@@ -527,7 +527,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
       context "multi-tenancy" do
         it "cannot update other institution's documents" do
-          patch dashboard_document_path(other_institution_document), params: { oer: { metadata_attributes: { "0" => { key: "title", value: "Hacked" } } } }
+          patch dashboard_document_path(other_institution_document), params: { document: { metadata_attributes: { "0" => { key: "title", value: "Hacked" } } } }
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -535,7 +535,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
   end
 
   describe "DELETE /dashboard/documents/:id" do
-    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test Document") }
+    let!(:document) { create(:document, institution: institution, staff: staff, title: "Test Document") }
 
     context "when authenticated" do
       before do
@@ -548,7 +548,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       it "deletes the document" do
         expect {
           delete dashboard_document_path(document)
-        }.to change(Oer, :count).by(-1)
+        }.to change(Document, :count).by(-1)
       end
 
       it "responds with turbo stream that updates the document list" do

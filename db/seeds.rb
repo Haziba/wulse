@@ -11,7 +11,7 @@ institutions = [{
   branding_colour: "#800020",
   storage_total: 2000000000
 }]
-  
+
 institutions.each do |institution|
   institution = Institution.create(institution)
   puts "Created institution: #{institution.name}"
@@ -25,10 +25,10 @@ institutions.each do |institution|
 
   staff.each do |staff|
     (1..30).each do |i|
-      oer = Oer.create(metadata_attributes: [{ key: "title", value: "#{institution.name} Oer #{i}" }], staff: staff, institution: institution)
-      oer.file.attach(File.open(Rails.root.join("db", "seeds", "documents", "Test-Book.epub")))
-      GeneratePreviewJob.perform_later(Oer.name, oer.id, oer.file.blob.key)
-      puts "Created oer: #{oer.title}"
+      document = Document.create(metadata_attributes: [{ key: "title", value: "#{institution.name} Document #{i}" }], staff: staff, institution: institution)
+      document.file.attach(File.open(Rails.root.join("db", "seeds", "documents", "Test-Book.epub")))
+      GeneratePreviewJob.perform_later(Document.name, document.id, document.file.blob.key)
+      puts "Created document: #{document.title}"
     end
   end
 

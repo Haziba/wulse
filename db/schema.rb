@@ -53,6 +53,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_185641) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "documents", force: :cascade do |t|
+    t.integer "staff_id", null: false
+    t.integer "institution_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "file_size", limit: 8, default: 0, null: false
+    t.index ["file_size"], name: "index_documents_on_file_size"
+    t.index ["institution_id"], name: "index_documents_on_institution_id"
+    t.index ["staff_id"], name: "index_documents_on_staff_id"
+  end
+
   create_table "institution_stats", force: :cascade do |t|
     t.integer "institution_id", null: false
     t.date "date", null: false
@@ -73,24 +84,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_185641) do
   end
 
   create_table "metadata", force: :cascade do |t|
-    t.integer "oer_id", null: false
+    t.integer "document_id", null: false
     t.string "key", null: false
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["oer_id", "key"], name: "index_metadata_on_oer_id_and_key", unique: true
-    t.index ["oer_id"], name: "index_metadata_on_oer_id"
-  end
-
-  create_table "oers", force: :cascade do |t|
-    t.integer "staff_id", null: false
-    t.integer "institution_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "file_size", limit: 8, default: 0, null: false
-    t.index ["file_size"], name: "index_oers_on_file_size"
-    t.index ["institution_id"], name: "index_oers_on_institution_id"
-    t.index ["staff_id"], name: "index_oers_on_staff_id"
+    t.index ["document_id", "key"], name: "index_metadata_on_document_id_and_key", unique: true
+    t.index ["document_id"], name: "index_metadata_on_document_id"
   end
 
   create_table "staffs", force: :cascade do |t|
@@ -108,9 +108,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_11_185641) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "documents", "institutions"
+  add_foreign_key "documents", "staffs"
   add_foreign_key "institution_stats", "institutions"
-  add_foreign_key "metadata", "oers", on_delete: :cascade
-  add_foreign_key "oers", "institutions"
-  add_foreign_key "oers", "staffs"
+  add_foreign_key "metadata", "documents", on_delete: :cascade
   add_foreign_key "staffs", "institutions"
 end

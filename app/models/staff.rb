@@ -27,7 +27,7 @@ class Staff < ApplicationRecord
   has_secure_password validations: false
 
   has_one_attached :avatar
-  has_many :oers
+  has_many :documents
   belongs_to :institution
 
   enum :status, { active: 0, inactive: 1, away: 2 }
@@ -42,6 +42,6 @@ class Staff < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['institution', 'oers']
+    ['institution', 'documents']
   end
 end

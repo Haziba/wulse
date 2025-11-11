@@ -7,8 +7,8 @@ RSpec.describe Library::DocumentFilter do
   describe ".call" do
     context "with no filters" do
       it "returns all documents" do
-        doc1 = create(:oer, institution: institution, staff: staff, title: "Doc 1")
-        doc2 = create(:oer, institution: institution, staff: staff, title: "Doc 2")
+        doc1 = create(:document, institution: institution, staff: staff, title: "Doc 1")
+        doc2 = create(:document, institution: institution, staff: staff, title: "Doc 2")
 
         result = described_class.call({})
 
@@ -18,11 +18,11 @@ RSpec.describe Library::DocumentFilter do
 
     context "with search filter" do
       let!(:ruby_doc) do
-        create(:oer, institution: institution, staff: staff, title: "Ruby Programming")
+        create(:document, institution: institution, staff: staff, title: "Ruby Programming")
       end
 
       let!(:python_doc) do
-        create(:oer, institution: institution, staff: staff, title: "Python Basics")
+        create(:document, institution: institution, staff: staff, title: "Python Basics")
       end
 
       it "filters by search term in title" do
@@ -53,15 +53,15 @@ RSpec.describe Library::DocumentFilter do
 
     context "with document_type filter" do
       let!(:book) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Book")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Book")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        document
       end
 
       let!(:article) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Article")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'article')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Article")
+        create(:metadatum, document: document, key: 'document_type', value: 'article')
+        document
       end
 
       it "filters by single document type" do
@@ -80,15 +80,15 @@ RSpec.describe Library::DocumentFilter do
 
     context "with department filter" do
       let!(:cs_doc) do
-        oer = create(:oer, institution: institution, staff: staff, title: "CS Doc")
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "CS Doc")
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        document
       end
 
       let!(:econ_doc) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Econ Doc")
-        create(:metadatum, oer: oer, key: 'department', value: 'economics')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Econ Doc")
+        create(:metadatum, document: document, key: 'department', value: 'economics')
+        document
       end
 
       it "filters by department" do
@@ -101,15 +101,15 @@ RSpec.describe Library::DocumentFilter do
 
     context "with language filter" do
       let!(:english_doc) do
-        oer = create(:oer, institution: institution, staff: staff, title: "English Doc")
-        create(:metadatum, oer: oer, key: 'language', value: 'english')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "English Doc")
+        create(:metadatum, document: document, key: 'language', value: 'english')
+        document
       end
 
       let!(:spanish_doc) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Spanish Doc")
-        create(:metadatum, oer: oer, key: 'language', value: 'spanish')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Spanish Doc")
+        create(:metadatum, document: document, key: 'language', value: 'spanish')
+        document
       end
 
       it "filters by language" do
@@ -122,15 +122,15 @@ RSpec.describe Library::DocumentFilter do
 
     context "with publishing_date filter" do
       let!(:doc_2024) do
-        oer = create(:oer, institution: institution, staff: staff, title: "2024 Doc")
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-06-15')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "2024 Doc")
+        create(:metadatum, document: document, key: 'publishing_date', value: '2024-06-15')
+        document
       end
 
       let!(:doc_2023) do
-        oer = create(:oer, institution: institution, staff: staff, title: "2023 Doc")
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-03-20')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "2023 Doc")
+        create(:metadatum, document: document, key: 'publishing_date', value: '2023-03-20')
+        document
       end
 
       it "filters by publishing year" do
@@ -155,27 +155,27 @@ RSpec.describe Library::DocumentFilter do
 
     context "with multiple filters combined" do
       let!(:cs_book_2024) do
-        oer = create(:oer, institution: institution, staff: staff, title: "CS Book 2024")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-01')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
+        document
       end
 
       let!(:cs_article_2023) do
-        oer = create(:oer, institution: institution, staff: staff, title: "CS Article 2023")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'article')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-01-01')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "CS Article 2023")
+        create(:metadatum, document: document, key: 'document_type', value: 'article')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2023-01-01')
+        document
       end
 
       let!(:econ_book_2024) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Econ Book 2024")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'economics')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-01')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Econ Book 2024")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        create(:metadatum, document: document, key: 'department', value: 'economics')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
+        document
       end
 
       it "applies all filters together" do
@@ -202,9 +202,9 @@ RSpec.describe Library::DocumentFilter do
 
     context "with empty filter arrays" do
       let!(:doc) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Doc")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Doc")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        document
       end
 
       it "ignores empty filter values" do
@@ -216,13 +216,13 @@ RSpec.describe Library::DocumentFilter do
 
     context "edge cases" do
       let!(:doc_with_metadata) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Doc With Metadata")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Doc With Metadata")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        document
       end
 
       let!(:doc_without_metadata) do
-        create(:oer, institution: institution, staff: staff, title: "Doc Without Metadata")
+        create(:document, institution: institution, staff: staff, title: "Doc Without Metadata")
       end
 
       it "only returns documents matching the filter criteria" do
@@ -233,16 +233,16 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "returns distinct results when multiple joins occur" do
-        oer = create(:oer, institution: institution, staff: staff, title: "Multi Meta")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
+        document = create(:document, institution: institution, staff: staff, title: "Multi Meta")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
 
         result = described_class.call(
           'document_type' => ['book'],
           'department' => ['computer science']
         )
 
-        expect(result.to_a.count(oer)).to eq(1)
+        expect(result.to_a.count(document)).to eq(1)
       end
     end
   end

@@ -13,7 +13,7 @@
 #
 class Institution < ApplicationRecord
   has_many :staffs
-  has_many :oers
+  has_many :documents
   has_many :institution_stats
 
   has_one_attached :logo
@@ -23,12 +23,12 @@ class Institution < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['staffs', 'oers']
+    ['staffs', 'documents']
   end
 
   # Recalculate storage_used from scratch (useful for backfilling or fixing drift)
   def recalculate_storage!
-    total = oers.sum(:file_size)
+    total = documents.sum(:file_size)
     update!(storage_used: total)
     total
   end

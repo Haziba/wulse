@@ -61,7 +61,7 @@
               index: metadata_form.index,
               key: metadata_form.object.key,
               value: metadata_form.object.value,
-              required: Oer::REQUIRED_METADATA.include?(metadata_form.object.key),
+              required: Document::REQUIRED_METADATA.include?(metadata_form.object.key),
               editable: true,
               destroy_value: metadata_form.object._destroy || 0 %>
         <% end %>

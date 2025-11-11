@@ -1,5 +1,5 @@
-class RemoveNameFromOer < ActiveRecord::Migration[8.0]
+class RemoveNameFromDocument < ActiveRecord::Migration[8.0]
   def change
-    remove_column :oers, :name, :string
+    remove_column :documents, :name, :string
   end
 end

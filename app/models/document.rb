@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: oers
+# Table name: documents
 #
 #  id             :integer          not null, primary key
 #  file_size      :integer          default(0), not null
@@ -11,16 +11,16 @@
 #
 # Indexes
 #
-#  index_oers_on_file_size       (file_size)
-#  index_oers_on_institution_id  (institution_id)
-#  index_oers_on_staff_id        (staff_id)
+#  index_documents_on_file_size       (file_size)
+#  index_documents_on_institution_id  (institution_id)
+#  index_documents_on_staff_id        (staff_id)
 #
 # Foreign Keys
 #
 #  institution_id  (institution_id => institutions.id)
 #  staff_id        (staff_id => staffs.id)
 #
-class Oer < ApplicationRecord
+class Document < ApplicationRecord
   include TracksStorage
 
   REQUIRED_METADATA = %w[isbn author title]

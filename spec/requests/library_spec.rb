@@ -9,9 +9,9 @@ RSpec.describe "Library", type: :request do
   end
 
   describe "GET /library" do
-    let!(:document_1) { create(:oer, institution: institution, staff: staff, title: "Introduction to Machine Learning", created_at: 1.day.ago) }
-    let!(:document_2) { create(:oer, institution: institution, staff: staff, title: "Advanced Ruby Programming", created_at: 2.days.ago) }
-    let!(:document_3) { create(:oer, institution: institution, staff: staff, title: "Data Science Fundamentals", created_at: 3.days.ago) }
+    let!(:document_1) { create(:document, institution: institution, staff: staff, title: "Introduction to Machine Learning", created_at: 1.day.ago) }
+    let!(:document_2) { create(:document, institution: institution, staff: staff, title: "Advanced Ruby Programming", created_at: 2.days.ago) }
+    let!(:document_3) { create(:document, institution: institution, staff: staff, title: "Data Science Fundamentals", created_at: 3.days.ago) }
 
     it "returns http success" do
       get library_path
@@ -69,7 +69,7 @@ RSpec.describe "Library", type: :request do
 
     context "with pagination" do
       before do
-        create_list(:oer, 12, institution: institution, staff: staff)
+        create_list(:document, 12, institution: institution, staff: staff)
       end
 
       it "paginates documents" do
@@ -111,30 +111,30 @@ RSpec.describe "Library", type: :request do
 
     context "with filters" do
       let!(:book1) do
-        oer = create(:oer, institution: institution, staff: staff, title: "CS Book 2024")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'language', value: 'english')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2024-01-15')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        create(:metadatum, document: document, key: 'language', value: 'english')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-15')
+        document
       end
 
       let!(:book2) do
-        oer = create(:oer, institution: institution, staff: staff, title: "CS Book 2023")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'book')
-        create(:metadatum, oer: oer, key: 'department', value: 'computer science')
-        create(:metadatum, oer: oer, key: 'language', value: 'english')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-06-20')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2023")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        create(:metadatum, document: document, key: 'language', value: 'english')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2023-06-20')
+        document
       end
 
       let!(:article1) do
-        oer = create(:oer, institution: institution, staff: staff, title: "Economics Article")
-        create(:metadatum, oer: oer, key: 'document_type', value: 'article')
-        create(:metadatum, oer: oer, key: 'department', value: 'economics')
-        create(:metadatum, oer: oer, key: 'language', value: 'spanish')
-        create(:metadatum, oer: oer, key: 'publishing_date', value: '2023-12-01')
-        oer
+        document = create(:document, institution: institution, staff: staff, title: "Economics Article")
+        create(:metadatum, document: document, key: 'document_type', value: 'article')
+        create(:metadatum, document: document, key: 'department', value: 'economics')
+        create(:metadatum, document: document, key: 'language', value: 'spanish')
+        create(:metadatum, document: document, key: 'publishing_date', value: '2023-12-01')
+        document
       end
 
       it "displays filter sections" do
@@ -232,9 +232,9 @@ RSpec.describe "Library", type: :request do
       context "with many filter values" do
         before do
           5.times do |i|
-            oer = create(:oer, institution: institution, staff: staff, title: "Journal #{i}")
-            create(:metadatum, oer: oer, key: 'document_type', value: 'journal')
-            create(:metadatum, oer: oer, key: 'department', value: "department_#{i}")
+            document = create(:document, institution: institution, staff: staff, title: "Journal #{i}")
+            create(:metadatum, document: document, key: 'document_type', value: 'journal')
+            create(:metadatum, document: document, key: 'department', value: "department_#{i}")
           end
         end
 
@@ -249,7 +249,7 @@ RSpec.describe "Library", type: :request do
   end
 
   describe "GET /library/:id/read" do
-    let!(:document) { create(:oer, institution: institution, staff: staff, title: "Test PDF Document") }
+    let!(:document) { create(:document, institution: institution, staff: staff, title: "Test PDF Document") }
 
     context "when document exists" do
       it "returns http success" do

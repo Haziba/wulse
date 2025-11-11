@@ -29,9 +29,9 @@ RSpec.describe InstitutionStat, type: :model do
 
   describe '.record_daily' do
     before do
-      # Create some OERs for the institution
-      5.times { create(:oer, institution: institution, staff: staff1) }
-      3.times { create(:oer, institution: institution, staff: staff2) }
+      # Create some documents for the institution
+      5.times { create(:document, institution: institution, staff: staff1) }
+      3.times { create(:document, institution: institution, staff: staff2) }
     end
 
     it 'creates a new InstitutionStat record' do
@@ -93,7 +93,7 @@ RSpec.describe InstitutionStat, type: :model do
 
         # Day 2: Add more documents and staff
         travel_to 1.day.from_now.beginning_of_day do
-          3.times { create(:oer, institution: institution, staff: staff1) }
+          3.times { create(:document, institution: institution, staff: staff1) }
           create(:staff, institution: institution, status: 'active')
 
           stat2 = InstitutionStat.record_daily(institution)

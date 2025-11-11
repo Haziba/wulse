@@ -1,6 +1,6 @@
-class CreateOers < ActiveRecord::Migration[8.0]
+class CreateDocuments < ActiveRecord::Migration[8.0]
   def change
-    create_table :oers do |t|
+    create_table :documents do |t|
       t.string :name
       t.references :staff, null: false, foreign_key: true
       t.references :institution, null: false, foreign_key: true

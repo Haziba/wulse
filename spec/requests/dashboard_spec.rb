@@ -10,7 +10,7 @@ RSpec.describe "Dashboards", type: :request do
 
   before do
     host! "#{institution.subdomain}.lvh.me"
-    5.times { create(:oer, institution: institution, staff: staff) }
+    5.times { create(:document, institution: institution, staff: staff) }
   end
 
   describe "GET /dashboard" do
@@ -87,8 +87,8 @@ RSpec.describe "Dashboards", type: :request do
           # Update current state to be less than last month
           institution.update!(storage_used: 25_000)
 
-          # Delete 3 OERs
-          institution.oers.limit(3).destroy_all
+          # Delete 3 documents
+          institution.documents.limit(3).destroy_all
 
           # Deactivate staff2
           staff2.update!(status: 'inactive')
@@ -130,14 +130,14 @@ RSpec.describe "Dashboards", type: :request do
         let(:other_staff) { create(:staff, institution: other_institution) }
 
         before do
-          # Create OERs for other institution
-          3.times { create(:oer, institution: other_institution, staff: other_staff) }
+          # Create documents for other institution
+          3.times { create(:document, institution: other_institution, staff: other_staff) }
         end
 
         it "only shows stats for current institution" do
           get dashboard_path
 
-          # Should show 5 OERs from test institution, not 3 from other institution
+          # Should show 5 documents from test institution, not 3 from other institution
           expect(assigns(:stats)[:total_documents]).to eq(5)
           expect(assigns(:stats)[:storage_used]).to eq(100_000)
         end

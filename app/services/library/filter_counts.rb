@@ -11,7 +11,7 @@ module Library
     end
 
     def call
-      all_filters = get_filters(Oer.all)
+      all_filters = get_filters(Document.all)
       filtered_filters = get_filters(@scope)
 
       combined_filters = all_filters.map do |key, filter_values|
@@ -27,7 +27,7 @@ module Library
 
     def get_filters(scope)
       simple_counts = Metadatum
-        .joins(:oer)
+        .joins(:document)
         .merge(scope)
         .where(key: FILTER_KEYS)
         .group(:key, :value)
@@ -47,7 +47,7 @@ module Library
       adapter = ActiveRecord::Base.connection.adapter_name.downcase
 
       rel = Metadatum
-        .joins(:oer)
+        .joins(:document)
         .merge(scope)
         .where(key: "publishing_date")
         .where.not(value: [nil, ""])

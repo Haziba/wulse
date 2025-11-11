@@ -24,30 +24,30 @@ describe("MetadataFieldsController", () => {
         <div data-controller="metadata-fields">
           <div data-metadata-fields-target="container">
             <div data-metadata-fields-target="row">
-              <input name="oer[metadata_attributes][0][key]" />
-              <input name="oer[metadata_attributes][0][value]" />
+              <input name="document[metadata_attributes][0][key]" />
+              <input name="document[metadata_attributes][0][value]" />
             </div>
             <div data-metadata-fields-target="row">
-              <input name="oer[metadata_attributes][1][key]" />
-              <input name="oer[metadata_attributes][1][value]" />
+              <input name="document[metadata_attributes][1][key]" />
+              <input name="document[metadata_attributes][1][value]" />
             </div>
             <div data-metadata-fields-target="row">
-              <input name="oer[metadata_attributes][2][key]" />
-              <input name="oer[metadata_attributes][2][value]" />
+              <input name="document[metadata_attributes][2][key]" />
+              <input name="document[metadata_attributes][2][value]" />
             </div>
           </div>
           <template data-metadata-fields-target="template">
             <div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
               <div>
-                <input type="text" name="oer[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
               </div>
               <div class="flex gap-2">
-                <input type="text" name="oer[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
                 <button type="button" class="text-red-600 hover:text-red-800 px-2" data-action="click->metadata-fields#removeRow">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
-              <input type="hidden" name="oer[metadata_attributes][INDEX][_destroy]" value="0">
+              <input type="hidden" name="document[metadata_attributes][INDEX][_destroy]" value="0">
             </div>
           </template>
           <button data-action="click->metadata-fields#addRow">Add Row</button>
@@ -71,7 +71,7 @@ describe("MetadataFieldsController", () => {
       const keyInput = lastRow.querySelector(
         'input[name*="[key]"]'
       ) as HTMLInputElement;
-      expect(keyInput.name).toBe("oer[metadata_attributes][3][key]");
+      expect(keyInput.name).toBe("document[metadata_attributes][3][key]");
     });
   });
 
@@ -83,15 +83,15 @@ describe("MetadataFieldsController", () => {
           <template data-metadata-fields-target="template">
             <div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
               <div>
-                <input type="text" name="oer[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
               </div>
               <div class="flex gap-2">
-                <input type="text" name="oer[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
                 <button type="button" class="text-red-600 hover:text-red-800 px-2" data-action="click->metadata-fields#removeRow">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
-              <input type="hidden" name="oer[metadata_attributes][INDEX][_destroy]" value="0">
+              <input type="hidden" name="document[metadata_attributes][INDEX][_destroy]" value="0">
             </div>
           </template>
           <button data-action="click->metadata-fields#addRow">Add Row</button>
@@ -141,8 +141,8 @@ describe("MetadataFieldsController", () => {
         'input[name*="[value]"]'
       ) as HTMLInputElement;
 
-      expect(keyInput.name).toBe("oer[metadata_attributes][0][key]");
-      expect(valueInput.name).toBe("oer[metadata_attributes][0][value]");
+      expect(keyInput.name).toBe("document[metadata_attributes][0][key]");
+      expect(valueInput.name).toBe("document[metadata_attributes][0][value]");
       expect(keyInput.placeholder).toBe("Enter key");
       expect(valueInput.placeholder).toBe("Enter value");
     });
@@ -184,9 +184,9 @@ describe("MetadataFieldsController", () => {
         fieldContainer.querySelectorAll('input[name*="[key]"]')
       ) as HTMLInputElement[];
 
-      expect(keyInputs[0].name).toBe("oer[metadata_attributes][0][key]");
-      expect(keyInputs[1].name).toBe("oer[metadata_attributes][1][key]");
-      expect(keyInputs[2].name).toBe("oer[metadata_attributes][2][key]");
+      expect(keyInputs[0].name).toBe("document[metadata_attributes][0][key]");
+      expect(keyInputs[1].name).toBe("document[metadata_attributes][1][key]");
+      expect(keyInputs[2].name).toBe("document[metadata_attributes][2][key]");
     });
 
     it("prevents default event behavior", () => {
@@ -207,9 +207,9 @@ describe("MetadataFieldsController", () => {
           <div data-controller="metadata-fields">
             <div data-metadata-fields-target="container">
               <div data-metadata-fields-target="row">
-                <input name="oer[metadata_attributes][0][key]" />
-                <input name="oer[metadata_attributes][0][value]" />
-                <input type="hidden" name="oer[metadata_attributes][0][_destroy]" value="0" />
+                <input name="document[metadata_attributes][0][key]" />
+                <input name="document[metadata_attributes][0][value]" />
+                <input type="hidden" name="document[metadata_attributes][0][_destroy]" value="0" />
                 <button type="button" data-action="click->metadata-fields#removeRow">
                   <i class="fas fa-trash"></i>
                 </button>
@@ -265,15 +265,14 @@ describe("MetadataFieldsController", () => {
       });
     });
 
-
     describe("preventDefault behavior", () => {
       beforeEach(() => {
         container.innerHTML = `
           <div data-controller="metadata-fields">
             <div data-metadata-fields-target="container">
               <div data-metadata-fields-target="row">
-                <input name="oer[metadata_attributes][0][key]" />
-                <input name="oer[metadata_attributes][0][value]" />
+                <input name="document[metadata_attributes][0][key]" />
+                <input name="document[metadata_attributes][0][value]" />
                 <button type="button" data-action="click->metadata-fields#removeRow">Delete</button>
               </div>
             </div>
@@ -301,15 +300,15 @@ describe("MetadataFieldsController", () => {
           <template data-metadata-fields-target="template">
             <div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
               <div>
-                <input type="text" name="oer[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][key]" placeholder="Enter key" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
               </div>
               <div class="flex gap-2">
-                <input type="text" name="oer[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+                <input type="text" name="document[metadata_attributes][INDEX][value]" placeholder="Enter value" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
                 <button type="button" class="text-red-600 hover:text-red-800 px-2" data-action="click->metadata-fields#removeRow">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
-              <input type="hidden" name="oer[metadata_attributes][INDEX][_destroy]" value="0">
+              <input type="hidden" name="document[metadata_attributes][INDEX][_destroy]" value="0">
             </div>
           </template>
           <button id="add" data-action="click->metadata-fields#addRow">Add Row</button>
@@ -330,7 +329,9 @@ describe("MetadataFieldsController", () => {
       expect(fieldContainer.children.length).toBe(3);
 
       // Verify all rows have _destroy fields
-      const destroyFields = fieldContainer.querySelectorAll('input[name*="_destroy"]');
+      const destroyFields = fieldContainer.querySelectorAll(
+        'input[name*="_destroy"]'
+      );
       expect(destroyFields.length).toBe(3);
       destroyFields.forEach((field) => {
         expect((field as HTMLInputElement).value).toBe("0");
@@ -344,9 +345,15 @@ describe("MetadataFieldsController", () => {
 
       // Verify rows have correct incremental indices
       const keyInputs = fieldContainer.querySelectorAll('input[name*="[key]"]');
-      expect((keyInputs[0] as HTMLInputElement).name).toBe("oer[metadata_attributes][0][key]");
-      expect((keyInputs[1] as HTMLInputElement).name).toBe("oer[metadata_attributes][1][key]");
-      expect((keyInputs[2] as HTMLInputElement).name).toBe("oer[metadata_attributes][2][key]");
+      expect((keyInputs[0] as HTMLInputElement).name).toBe(
+        "document[metadata_attributes][0][key]"
+      );
+      expect((keyInputs[1] as HTMLInputElement).name).toBe(
+        "document[metadata_attributes][1][key]"
+      );
+      expect((keyInputs[2] as HTMLInputElement).name).toBe(
+        "document[metadata_attributes][2][key]"
+      );
     });
   });
 });

@@ -1,6 +1,8 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
 # == Schema Information
 #
-# Table name: oers
+# Table name: documents
 #
 #  id             :integer          not null, primary key
 #  file_size      :integer          default(0), not null
@@ -11,19 +13,27 @@
 #
 # Indexes
 #
+<<<<<<< Updated upstream:test/fixtures/oers.yml
 #  index_oers_on_file_size       (file_size)
 #  index_oers_on_institution_id  (institution_id)
 #  index_oers_on_staff_id        (staff_id)
+=======
+#  index_documents_on_document_size   (document_size)
+#  index_documents_on_institution_id  (institution_id)
+#  index_documents_on_staff_id        (staff_id)
+>>>>>>> Stashed changes:test/fixtures/documents.yml
 #
 # Foreign Keys
 #
 #  institution_id  (institution_id => institutions.id)
 #  staff_id        (staff_id => staffs.id)
 #
-require "test_helper"
+one:
+  name: MyString
+  staff: one
+  institution: one
 
-class OerTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-end
+two:
+  name: MyString
+  staff: two
+  institution: two

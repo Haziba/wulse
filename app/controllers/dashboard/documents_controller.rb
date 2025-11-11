@@ -4,7 +4,7 @@ class Dashboard::DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
 
   def index
-    documents = Oer.all
+    documents = Document.all
 
     if params[:search].present?
       documents = documents.joins(:metadata)
@@ -20,12 +20,12 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def new
-    @document = Oer.new
+    @document = Document.new
     @document.metadata.build(key: 'title')
   end
 
   def create
-    @document = Oer.new(document_params)
+    @document = Document.new(document_params)
     @document.staff = current_staff
 
     if @document.save
@@ -58,7 +58,7 @@ class Dashboard::DocumentsController < ApplicationController
   private
 
   def update_document_list
-    @pagy, @documents = pagy(Oer.all)
+    @pagy, @documents = pagy(Document.all)
 
     respond_to do |format|
       format.turbo_stream do
@@ -73,18 +73,18 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def new_document_uploaded?
-    @document.file.attached? && params[:oer][:file].present?
+    @document.file.attached? && params[:document][:file].present?
   end
 
   def ordered_metadata
-    @ordered_metadata = Oer::REQUIRED_METADATA.map { |key| @document.metadata.find_or_initialize_by(key: key) } + @document.metadata.where.not(key: Oer::REQUIRED_METADATA)
+    @ordered_metadata = Document::REQUIRED_METADATA.map { |key| @document.metadata.find_or_initialize_by(key: key) } + @document.metadata.where.not(key: Document::REQUIRED_METADATA)
   end
 
   def set_document
-    @document = Oer.includes(:metadata).find(params[:id])
+    @document = Document.includes(:metadata).find(params[:id])
   end
 
   def document_params
-    params.require(:oer).permit(:file, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
+    params.require(:document).permit(:file, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
   end
 end

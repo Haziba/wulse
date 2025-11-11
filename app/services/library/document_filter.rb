@@ -11,7 +11,7 @@ module Library
     end
 
     def call
-      scope = Oer.all
+      scope = Document.all
       scope = apply_search_filter(scope)
       scope = apply_metadata_filters(scope)
       scope.distinct
@@ -49,13 +49,13 @@ module Library
       scope.where(
         id: Metadatum.where(key: 'publishing_date')
                      .where("strftime('%Y', date(value)) IN (?)", years)
-                     .select(:oer_id)
+                     .select(:document_id)
       )
     end
 
     def apply_standard_filter(scope, key, values)
       scope.where(
-        id: Metadatum.where(key: key, value: values).select(:oer_id)
+        id: Metadatum.where(key: key, value: values).select(:document_id)
       )
     end
   end

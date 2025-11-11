@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: oers
+# Table name: documents
 #
 #  id             :integer          not null, primary key
 #  file_size      :integer          default(0), not null
@@ -11,9 +11,9 @@
 #
 # Indexes
 #
-#  index_oers_on_file_size       (file_size)
-#  index_oers_on_institution_id  (institution_id)
-#  index_oers_on_staff_id        (staff_id)
+#  index_documents_on_file_size       (file_size)
+#  index_documents_on_institution_id  (institution_id)
+#  index_documents_on_staff_id        (staff_id)
 #
 # Foreign Keys
 #
@@ -21,7 +21,7 @@
 #  staff_id        (staff_id => staffs.id)
 #
 FactoryBot.define do
-  factory :oer do
+  factory :document do
     association :institution
     association :staff
 
@@ -29,8 +29,8 @@ FactoryBot.define do
       title { nil }
     end
 
-    after(:build) do |oer, evaluator|
-      oer.metadata.build(key: 'title', value: evaluator.title || Faker::Book.title)
+    after(:build) do |document, evaluator|
+      document.metadata.build(key: 'title', value: evaluator.title || Faker::Book.title)
     end
   end
 end

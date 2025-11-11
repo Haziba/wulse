@@ -1,12 +1,12 @@
 namespace :storage do
-  desc "Backfill file_size for all OERs and recalculate institution storage_used"
+  desc "Backfill file_size for all Documents and recalculate institution storage_used"
   task backfill: :environment do
-    puts "Backfilling document sizes for OERs..."
+    puts "Backfilling document sizes for Documents..."
 
-    Oer.find_each do |oer|
-      if oer.file.attached?
-        size = oer.file.byte_size
-        oer.update_column(:file_size, size)
+    Document.find_each do |document|
+      if document.file.attached?
+        size = document.file.byte_size
+        document.update_column(:file_size, size)
         print "."
       end
     end
@@ -25,7 +25,7 @@ namespace :storage do
   desc "Verify storage calculations are correct"
   task verify: :environment do
     Institution.find_each do |institution|
-      calculated = institution.oers.sum(:file_size)
+      calculated = institution.documents.sum(:file_size)
       stored = institution.storage_used
 
       if calculated == stored

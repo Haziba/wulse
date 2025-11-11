@@ -7,10 +7,10 @@ class LibraryController < ApplicationController
     @search_term = params[:search]
     @filters = Library::FilterCounts.new(filtered_scope).call
     @filtered_count = filtered_scope.count
-    @total_count = Oer.count
+    @total_count = Document.count
   end
 
   def read
-    @document = Oer.find(params[:id])
+    @document = Document.find(params[:id])
   end
 end

@@ -1,10 +1,10 @@
 <div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
   <% if local_assigns[:id] %>
-    <input type="hidden" name="oer[metadata_attributes][<%= index %>][id]" value="<%= id %>">
+    <input type="hidden" name="document[metadata_attributes][<%= index %>][id]" value="<%= id %>">
   <% end %>
   <div>
     <input type="text"
-           name="oer[metadata_attributes][<%= index %>][key]"
+           name="document[metadata_attributes][<%= index %>][key]"
            value="<%= key %>"
            placeholder="Enter key"
            list="metadata-key-suggestions"
@@ -16,12 +16,12 @@
       <% end %>
     </datalist>
     <% if required %>
-      <input type="hidden" name="oer[metadata_attributes][<%= index %>][key]" value="<%= key %>">
+      <input type="hidden" name="document[metadata_attributes][<%= index %>][key]" value="<%= key %>">
     <% end %>
   </div>
   <div class="flex gap-2">
     <input type="text"
-           name="oer[metadata_attributes][<%= index %>][value]"
+           name="document[metadata_attributes][<%= index %>][value]"
            value="<%= value %>"
            placeholder="Enter value"
            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
@@ -34,5 +34,5 @@
       </button>
     <% end %>
   </div>
-  <input type="hidden" name="oer[metadata_attributes][<%= index %>][_destroy]" value="<%= destroy_value %>">
+  <input type="hidden" name="document[metadata_attributes][<%= index %>][_destroy]" value="<%= destroy_value %>">
 </div>

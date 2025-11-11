@@ -33,13 +33,13 @@ ActiveAdmin.register Staff do
       row :institution
       row :created_at
     end
-    panel "Open Educational Resources (OERs)" do
-      paginated_collection(staff.oers.page(params[:page]).per(10), download_links: false) do
+    panel "Documents" do
+      paginated_collection(staff.documents.page(params[:page]).per(10), download_links: false) do
         table_for collection do
           column :name
           column :created_at
-          column "Actions" do |oer|
-            link_to "View", admin_oer_path(oer)
+          column "Actions" do |document|
+            link_to "View", admin_document_path(document)
           end
         end
       end

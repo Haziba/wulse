@@ -1,4 +1,4 @@
-ActiveAdmin.register Oer do
+ActiveAdmin.register Document do
   permit_params :name, :staff_id, :institution_id
 
   filter :name
@@ -15,7 +15,7 @@ ActiveAdmin.register Oer do
     column :created_at
     actions
   end
-  
+
   form do |f|
     f.inputs do
       f.input :name
@@ -24,7 +24,7 @@ ActiveAdmin.register Oer do
     end
     f.actions
   end
-  
+
   show do
     attributes_table do
       row :name
@@ -36,14 +36,14 @@ ActiveAdmin.register Oer do
 
   controller do
     def create
-      @oer = Oer.new(oer_params)
-      @oer.save!
-      redirect_to admin_oer_path(@oer)
+      @document = Document.new(document_params)
+      @document.save!
+      redirect_to admin_document_path(@document)
     end
 
     private
-    def oer_params
-      params.require(:oer).permit(:name, :staff_id, :institution_id)
+    def document_params
+      params.require(:document).permit(:name, :staff_id, :institution_id)
     end
   end
 end
