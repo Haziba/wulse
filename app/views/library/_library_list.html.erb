@@ -89,6 +89,8 @@
     <% pagy.series.each do |item| %>
       <% if item.is_a?(Integer) %>
         <%= link_to item, library_path(page: item, q: query), class: "px-3 py-2 #{item == pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg", data: { turbo_frame: "library_list", turbo_action: "advance" } %>
+      <% elsif item.is_a?(String) %>
+        <span class="px-3 py-2 text-gray-500"><%= item %></span>
       <% elsif item == :gap %>
         <span class="px-2 text-gray-500">...</span>
       <% end %>
