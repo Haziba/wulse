@@ -58,15 +58,16 @@ export default class EpubReaderController extends ReaderController {
       await this.rendition.display();
 
       await this.book.loaded.navigation;
-      this.totalPages = this.book.spine.length;
+
+      const locations = await this.book.locations.generate(1600);
+      this.totalPages = locations.length;
       this.pageJumpInputTarget.max = String(this.totalPages);
 
       this.rendition.on("relocated", (location: any) => {
-        const spinePos = this.book.spine.get(location.start.cfi);
-        if (spinePos) {
-          const newPage = spinePos.index + 1;
+        const currentLocation = this.book.locations.locationFromCfi(location.start.cfi);
+        if (currentLocation != null) {
+          const newPage = currentLocation + 1;
 
-          // Only update if the page actually changed
           if (this.lastRelocatedPage !== newPage) {
             this.lastRelocatedPage = newPage;
             this.currentPage = newPage;
@@ -75,12 +76,10 @@ export default class EpubReaderController extends ReaderController {
         }
       });
 
-      // Initial page info
       this.currentPage = 1;
       this.lastRelocatedPage = 1;
       this.updatePageInfo();
 
-      // Hide loading overlay
       this.loadingTarget.classList.add("hidden");
 
       void this.loadOutline();
@@ -94,13 +93,11 @@ export default class EpubReaderController extends ReaderController {
     if (!this.book || !this.rendition) return;
 
     try {
-      // EPUB pages are called "spine items"
-      const section = this.book.spine.get(pageNum - 1);
-      if (section) {
-        // Update tracking before display to prevent relocated event from re-updating
+      const cfi = this.book.locations.cfiFromLocation(pageNum - 1);
+      if (cfi) {
         this.currentPage = pageNum;
         this.lastRelocatedPage = pageNum;
-        await this.rendition.display(section.href);
+        await this.rendition.display(cfi);
         this.updatePageInfo();
       }
     } catch (error) {
@@ -243,6 +240,22 @@ export default class EpubReaderController extends ReaderController {
         },
       });
     }
+  }
+
+  protected updatePageInfo(): void {
+    const page = this.currentPage;
+    const total = this.totalPages;
+    const progress = total > 0 ? (page / total) * 100 : 0;
+
+    this.pageIndicatorTarget.textContent = `Location ${page}/${total} (${progress.toFixed(0)}%)`;
+    this.toolbarPageInfoTarget.textContent = `Location ${page} of ${total} (${progress.toFixed(0)}%)`;
+
+    this.progressBarTarget.style.width = `${progress.toFixed(2)}%`;
+
+    this.pageJumpInputTarget.value = String(page);
+
+    this.prevButtonTarget.disabled = page <= 1;
+    this.nextButtonTarget.disabled = page >= total;
   }
 
   disconnect(): void {
