@@ -59,11 +59,16 @@
             <span>•</span>
             <span><%= time_ago_in_words(document.updated_at) %> ago</span>
           </div>
-          <% if document.file.attached? %>
-            <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm" do %>
-              <i class="fas fa-download mr-2"></i>Download PDF
+          <div class="flex gap-2">
+            <%= link_to library_read_path(document), class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm", data: { turbo_frame: "_top" } do %>
+              <i class="fas fa-book-open mr-2"></i>Read
             <% end %>
-          <% end %>
+            <% if document.file.attached? %>
+              <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm" do %>
+                <i class="fas fa-download"></i>
+              <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
