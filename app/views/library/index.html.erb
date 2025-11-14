@@ -19,13 +19,28 @@
   </div>
 </section>
 
-<!-- Search Results -->
-<div class="max-w-7xl mx-auto px-6 py-8">
+<div class="max-w-7xl mx-auto px-6 py-8" data-controller="sidebar">
+  <button class="lg:hidden mb-4 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors flex items-center gap-2"
+          data-action="click->sidebar#toggle">
+    <i class="fas fa-filter"></i>
+    <span>Filters</span>
+  </button>
+
+  <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
+       data-sidebar-target="overlay"
+       data-action="click->sidebar#close"></div>
+
   <div class="flex gap-8">
-    <!-- Sidebar Filters -->
-    <aside class="w-80 flex-shrink-0">
-      <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 class="font-semibold text-gray-900 mb-4">Refine Results</h3>
+    <aside class="w-80 flex-shrink-0 fixed lg:static top-0 left-0 h-full lg:h-auto z-50 lg:z-auto bg-gray-50 lg:bg-transparent transform -translate-x-full duration-300 lg:duration-0 lg:translate-x-0 transition-transform overflow-y-auto"
+           data-sidebar-target="sidebar">
+      <div class="bg-white rounded-lg border border-gray-200 p-6 m-4 lg:m-0">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-gray-900">Refine Results</h3>
+          <button class="lg:hidden text-gray-500 hover:text-gray-700"
+                  data-action="click->sidebar#close">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
 
         <% @filters.each do |filter_key, filter_values| %>
           <div class="mb-6" data-controller="filter-list library-search" data-library-search-frame-value="library_list">
@@ -67,8 +82,7 @@
       </div>
     </aside>
 
-    <!-- Results Content -->
-    <main class="flex-1">
+    <main class="flex-1 w-full lg:w-auto">
       <%= turbo_frame_tag "library_list" do %>
         <%= render "library_list", documents: @documents, pagy: @pagy, query: @query, filtered_count: @filtered_count, total_count: @total_count, filtered_filters: @filtered_filters %>
       <% end %>
