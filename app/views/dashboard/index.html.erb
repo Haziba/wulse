@@ -124,9 +124,13 @@
             <% @staff_overview.each do |staff| %>
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                  <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
-                    <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
-                  </div>
+                  <% if staff.avatar.attached? %>
+                    <%= image_tag staff.avatar, class: "w-10 h-10 rounded-full object-cover" %>
+                  <% else %>
+                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                      <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
+                    </div>
+                  <% end %>
                   <div>
                     <p class="font-medium text-gray-900"><%= staff.name %></p>
                     <p class="text-sm text-gray-500"><%= staff.documents.count %> documents</p>
