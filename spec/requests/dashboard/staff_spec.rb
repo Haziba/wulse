@@ -454,4 +454,57 @@ RSpec.describe "Dashboard::Staff", type: :request do
       end
     end
   end
+
+  describe "DELETE /dashboard/staff/:id" do
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        delete dashboard_staff_path(staff)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      let!(:staff_to_delete) { create(:staff, institution: institution, name: "User to Delete") }
+
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "deletes the staff member" do
+        expect {
+          delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to change(Staff, :count).by(-1)
+      end
+
+      it "responds with turbo stream" do
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      end
+
+      it "removes the staff row from the DOM" do
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="remove" target="staff_' + staff_to_delete.id + '"')
+      end
+
+      it "includes a success toast notification" do
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+        expect(response.body).to include("Staff member deleted successfully")
+      end
+
+      it "actually removes the staff from the database" do
+        staff_id = staff_to_delete.id
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(Staff.find_by(id: staff_id)).to be_nil
+      end
+    end
+  end
 end

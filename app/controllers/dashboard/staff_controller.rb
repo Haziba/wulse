@@ -1,7 +1,7 @@
 class Dashboard::StaffController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :set_staff, only: [:show, :deactivate, :activate]
+  before_action :set_staff, only: [:show, :deactivate, :activate, :destroy]
 
   def index
     staffs = Staff.all
@@ -90,6 +90,21 @@ class Dashboard::StaffController < ApplicationController
   rescue => e
     Rails.logger.error "Error activating staff member: #{e.message}"
     render turbo_stream: add_toast(alert: "Error activating staff member")
+  end
+
+  def destroy
+    @staff.destroy
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove("staff_#{@staff.id}"),
+          add_toast(notice: "Staff member deleted successfully")
+        ]
+      end
+    end
+  rescue => e
+    Rails.logger.error "Error deleting staff member: #{e.message}"
+    render turbo_stream: add_toast(alert: "Error deleting staff member")
   end
 
   private
