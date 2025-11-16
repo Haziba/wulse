@@ -30,7 +30,7 @@ class Staff < ApplicationRecord
   has_many :documents
   belongs_to :institution
 
-  enum :status, { active: 0, inactive: 1, away: 2 }
+  enum :status, { active: 0, inactive: 1 }
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { scope: :institution_id }

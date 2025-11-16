@@ -1,6 +1,7 @@
 class Dashboard::StaffController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
+  before_action :set_staff, only: [:show, :deactivate, :activate]
 
   def index
     staffs = Staff.all
@@ -17,7 +18,6 @@ class Dashboard::StaffController < ApplicationController
   end
 
   def show
-    @staff = Staff.find(params[:id])
     documents = @staff.documents.order(created_at: :desc)
 
     if params[:search].present?
@@ -54,9 +54,43 @@ class Dashboard::StaffController < ApplicationController
     end
   end
 
+  def deactivate
+    @staff.update(status: :inactive)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("staff_#{@staff.id}", partial: "staff_row", locals: { staff: @staff }),
+          add_toast(notice: "Staff member deactivated successfully")
+        ]
+      end
+    end
+  rescue => e
+    Rails.logger.error "Error deactivating staff member: #{e.message}"
+    render turbo_stream: add_toast(alert: "Error deactivating staff member")
+  end
+
+  def activate
+    @staff.update(status: :active)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("staff_#{@staff.id}", partial: "staff_row", locals: { staff: @staff }),
+          add_toast(notice: "Staff member activated successfully")
+        ]
+      end
+    end
+  rescue => e
+    Rails.logger.error "Error activating staff member: #{e.message}"
+    render turbo_stream: add_toast(alert: "Error activating staff member")
+  end
+
   private
 
   def staff_params
     params.require(:staff).permit(:name, :email, :status)
+  end
+
+  def set_staff
+    @staff = Staff.find(params[:id])
   end
 end

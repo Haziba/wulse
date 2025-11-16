@@ -6,7 +6,12 @@ Rails.application.routes.draw do
   get "library/:id/read", to: "library#read", as: :library_read
 
   namespace :dashboard do
-    resources :staff
+    resources :staff do
+      member do
+        patch :deactivate
+        patch :activate
+      end
+    end
     resources :documents
     resource :profile, only: [:edit, :update]
   end

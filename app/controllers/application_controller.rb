@@ -39,4 +39,12 @@ class ApplicationController < ActionController::Base
       redirect_to new_session_path, alert: "You must be signed in to access this page"
     end
   end
+
+  def add_toast(notice: nil, alert: nil)
+    flash_hash = {}
+    flash_hash[:notice] = notice if notice
+    flash_hash[:alert] = alert if alert
+
+    turbo_stream.prepend("toast-container-target", partial: "shared/toast_flash", locals: { flash: flash_hash })
+  end
 end

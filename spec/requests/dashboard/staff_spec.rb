@@ -346,4 +346,112 @@ RSpec.describe "Dashboard::Staff", type: :request do
       end
     end
   end
+
+  describe "PATCH /dashboard/staff/:id/deactivate" do
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        patch deactivate_dashboard_staff_path(staff)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      let!(:active_staff) { create(:staff, institution: institution, name: "Active User", status: :active) }
+
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "updates the staff status to inactive" do
+        expect {
+          patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to change { active_staff.reload.status }.from("active").to("inactive")
+      end
+
+      it "responds with turbo stream" do
+        patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      end
+
+      it "replaces the staff row in the DOM" do
+        patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="replace" target="staff_' + active_staff.id + '"')
+        expect(response.body).to include("Inactive")
+      end
+
+      it "includes a success toast notification" do
+        patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+        expect(response.body).to include("Staff member deactivated successfully")
+      end
+
+      it "shows activate button after deactivation" do
+        patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include("Activate")
+        expect(response.body).not_to include("Deactivate")
+      end
+    end
+  end
+
+  describe "PATCH /dashboard/staff/:id/activate" do
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        patch activate_dashboard_staff_path(staff)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      let!(:inactive_staff) { create(:staff, institution: institution, name: "Inactive User", status: :inactive) }
+
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "updates the staff status to active" do
+        expect {
+          patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to change { inactive_staff.reload.status }.from("inactive").to("active")
+      end
+
+      it "responds with turbo stream" do
+        patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      end
+
+      it "replaces the staff row in the DOM" do
+        patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="replace" target="staff_' + inactive_staff.id + '"')
+        expect(response.body).to include("Active")
+      end
+
+      it "includes a success toast notification" do
+        patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+        expect(response.body).to include("Staff member activated successfully")
+      end
+
+      it "shows deactivate button after activation" do
+        patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include("Deactivate")
+        expect(response.body).not_to include("Activate")
+      end
+    end
+  end
 end
