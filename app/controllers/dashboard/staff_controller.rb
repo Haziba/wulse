@@ -7,14 +7,22 @@ class Dashboard::StaffController < ApplicationController
     staffs = Staff.all
 
     if params[:search].present?
-      staffs = staffs.where("name LIKE ? OR email LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+      staffs = staffs.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
     end
 
     if params[:status].present? && params[:status] != "All Status"
-      staffs = staffs.where(status: params[:status].downcase)
+      @status = params[:status].downcase
+      staffs = staffs.where(status: @status)
     end
 
     @pagy, @staffs = pagy(staffs)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update("staff_list", partial: "staff_list", locals: { staffs: @staffs, pagy: @pagy })
+      end
+      format.html
+    end
   end
 
   def show
