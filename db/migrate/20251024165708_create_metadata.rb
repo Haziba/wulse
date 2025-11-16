@@ -1,7 +1,7 @@
 class CreateMetadata < ActiveRecord::Migration[8.0]
   def change
-    create_table :metadata do |t|
-      t.references :document, null: false, foreign_key: true
+    create_table :metadata, id: :uuid do |t|
+      t.references :document, null: false, foreign_key: { on_delete: :cascade }, type: :uuid
       t.string :key, null: false
       t.text :value
 

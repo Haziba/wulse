@@ -26,7 +26,7 @@ module Library
 
       scope.joins(:metadata)
            .where(metadata: { key: 'title' })
-           .where("metadata.value LIKE ?", "%#{params[:q]}%")
+           .where("metadata.value ILIKE ?", "%#{params[:q]}%")
     end
 
     def apply_metadata_filters(scope)
@@ -46,9 +46,20 @@ module Library
     end
 
     def apply_publishing_date_filter(scope, years)
+      adapter = ActiveRecord::Base.connection.adapter_name.downcase
+
+      year_expr = case adapter
+                  when /postgres/
+                    "to_char((metadata.value)::date, 'YYYY')"
+                  when /mysql/
+                    "YEAR(CAST(metadata.value AS date))"
+                  else
+                    "strftime('%Y', date(metadata.value))"
+                  end
+
       scope.where(
         id: Metadatum.where(key: 'publishing_date')
-                     .where("strftime('%Y', date(value)) IN (?)", years)
+                     .where("#{year_expr} IN (?)", years)
                      .select(:document_id)
       )
     end

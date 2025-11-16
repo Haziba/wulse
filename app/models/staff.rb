@@ -2,7 +2,7 @@
 #
 # Table name: staffs
 #
-#  id              :integer          not null, primary key
+#  id              :uuid             not null, primary key
 #  email           :string
 #  last_login      :datetime
 #  name            :string
@@ -11,7 +11,7 @@
 #  title           :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  institution_id  :integer          not null
+#  institution_id  :uuid             not null
 #
 # Indexes
 #
@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  institution_id  (institution_id => institutions.id)
+#  fk_rails_...  (institution_id => institutions.id)
 #
 class Staff < ApplicationRecord
   acts_as_tenant :institution

@@ -2,23 +2,23 @@
 #
 # Table name: documents
 #
-#  id             :integer          not null, primary key
-#  document_size  :integer          default(0), not null
+#  id             :uuid             not null, primary key
+#  file_size      :bigint           default(0), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  institution_id :integer          not null
-#  staff_id       :integer          not null
+#  institution_id :uuid             not null
+#  staff_id       :uuid             not null
 #
 # Indexes
 #
-#  index_documents_on_document_size   (document_size)
+#  index_documents_on_file_size       (file_size)
 #  index_documents_on_institution_id  (institution_id)
 #  index_documents_on_staff_id        (staff_id)
 #
 # Foreign Keys
 #
-#  institution_id  (institution_id => institutions.id)
-#  staff_id        (staff_id => staffs.id)
+#  fk_rails_...  (institution_id => institutions.id)
+#  fk_rails_...  (staff_id => staffs.id)
 #
 require 'rails_helper'
 

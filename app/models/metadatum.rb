@@ -2,12 +2,12 @@
 #
 # Table name: metadata
 #
-#  id          :integer          not null, primary key
+#  id          :uuid             not null, primary key
 #  key         :string           not null
 #  value       :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  document_id :integer          not null
+#  document_id :uuid             not null
 #
 # Indexes
 #
@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  document_id  (document_id => documents.id) ON DELETE => cascade
+#  fk_rails_...  (document_id => documents.id) ON DELETE => cascade
 #
 class Metadatum < ApplicationRecord
   belongs_to :document

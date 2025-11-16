@@ -2,12 +2,12 @@
 #
 # Table name: documents
 #
-#  id             :integer          not null, primary key
-#  file_size      :integer          default(0), not null
+#  id             :uuid             not null, primary key
+#  file_size      :bigint           default(0), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  institution_id :integer          not null
-#  staff_id       :integer          not null
+#  institution_id :uuid             not null
+#  staff_id       :uuid             not null
 #
 # Indexes
 #
@@ -17,8 +17,8 @@
 #
 # Foreign Keys
 #
-#  institution_id  (institution_id => institutions.id)
-#  staff_id        (staff_id => staffs.id)
+#  fk_rails_...  (institution_id => institutions.id)
+#  fk_rails_...  (staff_id => staffs.id)
 #
 class Document < ApplicationRecord
   include TracksStorage

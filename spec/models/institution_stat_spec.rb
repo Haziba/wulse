@@ -2,12 +2,12 @@
 #
 # Table name: institution_stats
 #
-#  id              :integer          not null, primary key
+#  id              :uuid             not null, primary key
 #  active_staff    :integer
 #  date            :date             not null
 #  storage_used    :integer
 #  total_documents :integer
-#  institution_id  :integer          not null
+#  institution_id  :uuid             not null
 #
 # Indexes
 #
@@ -15,7 +15,7 @@
 #
 # Foreign Keys
 #
-#  institution_id  (institution_id => institutions.id)
+#  fk_rails_...  (institution_id => institutions.id)
 #
 require 'rails_helper'
 
