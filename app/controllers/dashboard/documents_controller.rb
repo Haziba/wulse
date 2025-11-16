@@ -9,11 +9,18 @@ class Dashboard::DocumentsController < ApplicationController
     if params[:search].present?
       documents = documents.joins(:metadata)
                           .where(metadata: { key: 'title' })
-                          .where("metadata.value LIKE ?", "%#{params[:search]}%")
+                          .where("metadata.value ILIKE ?", "%#{params[:search]}%")
                           .distinct
     end
 
     @pagy, @documents = pagy(documents)
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
+      end
+      format.html
+    end
   end
 
   def show
