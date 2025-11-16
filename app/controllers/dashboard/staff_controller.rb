@@ -1,7 +1,7 @@
 class Dashboard::StaffController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :set_staff, only: [:show, :deactivate, :activate, :destroy]
+  before_action :set_staff, only: [:show, :deactivate, :activate, :destroy, :reset_password]
 
   def index
     staffs = Staff.all
@@ -105,6 +105,22 @@ class Dashboard::StaffController < ApplicationController
   rescue => e
     Rails.logger.error "Error deleting staff member: #{e.message}"
     render turbo_stream: add_toast(alert: "Error deleting staff member")
+  end
+
+  def reset_password
+    ResetPasswordService.new(@staff).call
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("staff_#{@staff.id}", partial: "staff_row", locals: { staff: @staff }),
+          add_toast(notice: "Password reset email sent to #{@staff.email}")
+        ]
+      end
+    end
+  rescue => e
+    Rails.logger.error "Error resetting password: #{e.message}"
+    render turbo_stream: add_toast(alert: "Error resetting password")
   end
 
   private

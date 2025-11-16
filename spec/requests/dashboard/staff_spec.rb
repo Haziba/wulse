@@ -507,4 +507,63 @@ RSpec.describe "Dashboard::Staff", type: :request do
       end
     end
   end
+
+  describe "PATCH /dashboard/staff/:id/reset_password" do
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        patch reset_password_dashboard_staff_path(staff)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      let!(:staff_to_reset) { create(:staff, institution: institution, name: "User to Reset", password: "oldpassword123") }
+
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "does not immediately update the staff password" do
+        old_password_digest = staff_to_reset.password_digest
+        patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(staff_to_reset.reload.password_digest).to eq(old_password_digest)
+      end
+
+      it "responds with turbo stream" do
+        patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:success)
+        expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      end
+
+      it "replaces the staff row in the DOM" do
+        patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="replace" target="staff_' + staff_to_reset.id + '"')
+      end
+
+      it "includes a success toast notification" do
+        patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+        expect(response.body).to include("Password reset email sent to")
+      end
+
+      it "creates a password reset record" do
+        expect {
+          patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to change(PasswordReset, :count).by(1)
+      end
+
+      it "sends a password reset email" do
+        expect {
+          patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("PasswordResetMailer", "reset_password", "deliver_now", { args: [an_instance_of(PasswordReset)] })
+      end
+    end
+  end
 end

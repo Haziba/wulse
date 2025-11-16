@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_26_152246) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_16_231854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -97,6 +97,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_152246) do
     t.index ["document_id"], name: "index_metadata_on_document_id"
   end
 
+  create_table "password_resets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "staff_id", null: false
+    t.string "token", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["staff_id"], name: "index_password_resets_on_staff_id"
+    t.index ["token"], name: "index_password_resets_on_token", unique: true
+  end
+
   create_table "staffs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -116,5 +126,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_152246) do
   add_foreign_key "documents", "staffs"
   add_foreign_key "institution_stats", "institutions"
   add_foreign_key "metadata", "documents", on_delete: :cascade
+  add_foreign_key "password_resets", "staffs"
   add_foreign_key "staffs", "institutions"
 end

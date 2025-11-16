@@ -28,6 +28,7 @@ class Staff < ApplicationRecord
 
   has_one_attached :avatar
   has_many :documents
+  has_many :password_resets, dependent: :destroy
   belongs_to :institution
 
   enum :status, { active: 0, inactive: 1 }
