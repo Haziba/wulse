@@ -16,6 +16,21 @@ class Dashboard::StaffController < ApplicationController
     @pagy, @staffs = pagy(staffs)
   end
 
+  def show
+    @staff = Staff.find(params[:id])
+    documents = @staff.documents.order(created_at: :desc)
+
+    if params[:search].present?
+      documents = documents.joins(:metadata).where("metadata.value LIKE ?", "%#{params[:search]}%")
+    end
+
+    if params[:document_type].present? && params[:document_type] != "All Types"
+      documents = documents.joins(:metadata).where(metadata: { key: 'document_type', value: params[:document_type] })
+    end
+
+    @pagy, @documents = pagy(documents.distinct)
+  end
+
   def new
     @staff = Staff.new
   end

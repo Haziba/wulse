@@ -1,0 +1,133 @@
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Staff Profile Card -->
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-xl border border-gray-200 p-8">
+        <div class="flex flex-col items-center">
+          <% if @staff.avatar.attached? %>
+            <%= image_tag @staff.avatar, class: "w-32 h-32 rounded-full object-cover mb-4" %>
+          <% else %>
+            <div class="w-32 h-32 bg-purple-500 rounded-full flex items-center justify-center mb-4">
+              <span class="text-white text-3xl font-medium"><%= @staff.name.split.map(&:first).join %></span>
+            </div>
+          <% end %>
+
+          <h2 class="font-serif text-2xl font-bold text-gray-900 mb-1"><%= @staff.name %></h2>
+          <p class="text-gray-600 mb-4"><%= @staff.title || "Staff Member" %></p>
+
+          <% if @staff.status == "active" %>
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium mb-6">Active</span>
+          <% elsif @staff.status == "inactive" %>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-6">Inactive</span>
+          <% elsif @staff.status == "away" %>
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium mb-6">Away</span>
+          <% end %>
+
+          <div class="w-full space-y-4">
+            <div class="flex items-center space-x-3 text-sm">
+              <i class="fas fa-envelope text-gray-400 w-5"></i>
+              <span class="text-gray-700"><%= @staff.email %></span>
+            </div>
+            <div class="flex items-center space-x-3 text-sm">
+              <i class="fas fa-clock text-gray-400 w-5"></i>
+              <span class="text-gray-700">
+                Last login: <%= @staff.last_login ? "#{time_ago_in_words(@staff.last_login)} ago" : "Never" %>
+              </span>
+            </div>
+            <div class="flex items-center space-x-3 text-sm">
+              <i class="fas fa-file text-gray-400 w-5"></i>
+              <span class="text-gray-700">Documents: <%= @staff.documents.count %></span>
+            </div>
+            <div class="flex items-center space-x-3 text-sm">
+              <i class="fas fa-calendar text-gray-400 w-5"></i>
+              <span class="text-gray-700">Joined: <%= @staff.created_at.strftime("%b %d, %Y") %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 mt-8 pt-8">
+          <h3 class="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div class="space-y-3">
+            <button class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
+              <i class="fas fa-key"></i>
+              <span>Reset Password</span>
+            </button>
+            <button class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2">
+              <i class="fas fa-edit"></i>
+              <span>Edit Profile</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-xl border border-gray-200">
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-serif text-xl font-semibold text-gray-900">Uploaded Documents</h3>
+          </div>
+
+          <%= form_with url: dashboard_staff_path(@staff), method: :get, class: "flex items-center space-x-4" do |f| %>
+            <div class="relative flex-1">
+              <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <%= f.text_field :search,
+                  value: params[:search],
+                  placeholder: "Search documents...",
+                  class: "pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent w-full" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="divide-y divide-gray-200">
+          <% if @documents.any? %>
+            <% @documents.each do |document| %>
+              <%= render "document_item", document: document %>
+            <% end %>
+          <% else %>
+            <div class="p-12 text-center">
+              <i class="fas fa-file-alt text-gray-300 text-5xl mb-4"></i>
+              <p class="text-gray-500">No documents found</p>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Pagination -->
+        <% if @documents.any? %>
+          <div class="border-t border-gray-200 bg-gray-50 px-6 py-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm text-gray-700">
+                Showing <%= @pagy.from %> to <%= @pagy.to %> of <%= @pagy.count %> documents
+              </p>
+              <div class="flex items-center space-x-2">
+                <% if @pagy.prev %>
+                  <%= link_to "Previous", dashboard_staff_path(@staff, page: @pagy.prev, search: params[:search], document_type: params[:document_type]), class: "px-3 py-2 text-sm text-gray-600 hover:text-brand-500" %>
+                <% else %>
+                  <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">Previous</span>
+                <% end %>
+
+                <% @pagy.series.each do |item| %>
+                  <% if item.is_a?(Integer) %>
+                    <%= link_to item, dashboard_staff_path(@staff, page: item, search: params[:search], document_type: params[:document_type]), class: "px-3 py-2 text-sm #{item == @pagy.page ? 'bg-brand-500 text-white rounded' : 'text-gray-600 hover:text-brand-500'}" %>
+                  <% elsif item.is_a?(String) %>
+                    <span class="px-3 py-2 text-sm text-gray-400"><%= item %></span>
+                  <% elsif item == :gap %>
+                    <span class="px-3 py-2 text-sm text-gray-400">...</span>
+                  <% end %>
+                <% end %>
+
+                <% if @pagy.next %>
+                  <%= link_to "Next", dashboard_staff_path(@staff, page: @pagy.next, search: params[:search], document_type: params[:document_type]), class: "px-3 py-2 text-sm text-gray-600 hover:text-brand-500" %>
+                <% else %>
+                  <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">Next</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

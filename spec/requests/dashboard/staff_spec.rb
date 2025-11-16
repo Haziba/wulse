@@ -137,6 +137,150 @@ RSpec.describe "Dashboard::Staff", type: :request do
     end
   end
 
+  describe "GET /dashboard/staff/:id" do
+    context "when not authenticated" do
+      it "redirects to sign in page" do
+        get dashboard_staff_path(staff)
+        expect(response).to redirect_to(new_session_path)
+      end
+    end
+
+    context "when authenticated" do
+      let!(:staff_member) { create(:staff, institution: institution, name: "Alice Smith") }
+      let!(:other_staff) { create(:staff, institution: institution, name: "Bob Jones") }
+
+      before do
+        post session_path, params: {
+          email: staff.email,
+          password: staff.password
+        }
+      end
+
+      it "returns http success" do
+        get dashboard_staff_path(staff_member)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays staff information" do
+        get dashboard_staff_path(staff_member)
+        expect(response.body).to include(staff_member.name)
+        expect(response.body).to include(staff_member.email)
+      end
+
+      context "with documents" do
+        let!(:doc1) { create(:document, staff: staff_member, institution: institution, title: "Climate Study") }
+        let!(:doc2) { create(:document, staff: staff_member, institution: institution, title: "Marine Research") }
+        let!(:doc3) { create(:document, staff: staff_member, institution: institution, title: "Energy Analysis") }
+        let!(:other_staff_doc) { create(:document, staff: other_staff, institution: institution, title: "Agriculture Report") }
+
+        it "displays only documents from the staff member" do
+          get dashboard_staff_path(staff_member)
+          expect(response.body).to include("Climate Study")
+          expect(response.body).to include("Marine Research")
+          expect(response.body).to include("Energy Analysis")
+          expect(response.body).not_to include("Agriculture Report")
+        end
+
+        context "with search" do
+          it "filters documents by search term in title" do
+            get dashboard_staff_path(staff_member, search: "Climate")
+            expect(response.body).to include("Climate Study")
+            expect(response.body).not_to include("Marine Research")
+            expect(response.body).not_to include("Energy Analysis")
+          end
+
+          it "filters documents by search term in other metadata" do
+            doc1.metadata.create!(key: "description", value: "Coastal ecosystems impact")
+            doc2.metadata.create!(key: "description", value: "Biodiversity in marine areas")
+
+            get dashboard_staff_path(staff_member, search: "Coastal")
+            expect(response.body).to include("Climate Study")
+            expect(response.body).not_to include("Marine Research")
+          end
+
+          it "returns no results when search doesn't match" do
+            get dashboard_staff_path(staff_member, search: "NonExistent")
+            expect(response.body).to include("No documents found")
+          end
+        end
+
+        context "with document type filter" do
+          before do
+            doc1.metadata.create!(key: "document_type", value: "Research Paper")
+            doc2.metadata.create!(key: "document_type", value: "Report")
+            doc3.metadata.create!(key: "document_type", value: "Research Paper")
+          end
+
+          it "filters documents by document type" do
+            get dashboard_staff_path(staff_member, document_type: "Research Paper")
+            expect(response.body).to include("Climate Study")
+            expect(response.body).to include("Energy Analysis")
+            expect(response.body).not_to include("Marine Research")
+          end
+
+          it "shows all documents when filter is 'All Types'" do
+            get dashboard_staff_path(staff_member, document_type: "All Types")
+            expect(response.body).to include("Climate Study")
+            expect(response.body).to include("Marine Research")
+            expect(response.body).to include("Energy Analysis")
+          end
+        end
+
+        context "with pagination" do
+          before do
+            stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 2))
+            create_list(:document, 3, staff: staff_member, institution: institution)
+          end
+
+          it "paginates documents" do
+            get dashboard_staff_path(staff_member)
+            expect(response.body).to include("Showing 1 to 2 of")
+          end
+
+          it "displays correct documents on page 1" do
+            get dashboard_staff_path(staff_member, page: 1)
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include("Showing 1 to 2 of")
+          end
+
+          it "displays correct documents on page 2" do
+            get dashboard_staff_path(staff_member, page: 2)
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include("Showing 3 to")
+          end
+
+          it "includes pagination controls" do
+            get dashboard_staff_path(staff_member)
+            expect(response.body).to include("Previous")
+            expect(response.body).to include("Next")
+          end
+        end
+
+        context "combining search and pagination" do
+          before do
+            stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 2))
+            create(:document, staff: staff_member, institution: institution, title: "Research Paper 1")
+            create(:document, staff: staff_member, institution: institution, title: "Research Paper 2")
+            create(:document, staff: staff_member, institution: institution, title: "Research Paper 3")
+            create(:document, staff: staff_member, institution: institution, title: "Other Document")
+          end
+
+          it "paginates filtered results" do
+            get dashboard_staff_path(staff_member, search: "Research")
+            expect(response.body).to include("Showing 1 to 2 of")
+          end
+        end
+      end
+
+      context "without documents" do
+        it "displays no documents message" do
+          get dashboard_staff_path(staff_member)
+          expect(response.body).to include("No documents found")
+        end
+      end
+    end
+  end
+
   describe "POST /dashboard/staff" do
     context "when authenticated" do
       before do

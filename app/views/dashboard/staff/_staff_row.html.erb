@@ -8,7 +8,7 @@
           <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
         </div>
       <% end %>
-      <span><%= staff.name %></span>
+      <%= link_to staff.name, dashboard_staff_path(staff), class: "hover:text-brand-500", data: { turbo_frame: "_top" } %>
     </div>
   </td>
   <td class="py-4 px-6 text-gray-700"><%= staff.email %></td>

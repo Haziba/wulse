@@ -1,0 +1,74 @@
+<div class="p-6 hover:bg-gray-50">
+  <div class="flex items-start space-x-4">
+    <!-- File Icon -->
+    <%
+      file_extension = document.file.attached? ? document.file.filename.extension.downcase : 'file'
+      icon_class = case file_extension
+      when 'pdf'
+        'bg-red-100 text-red-600'
+      when 'doc', 'docx'
+        'bg-blue-100 text-blue-600'
+      when 'xls', 'xlsx'
+        'bg-green-100 text-green-600'
+      when 'ppt', 'pptx'
+        'bg-orange-100 text-orange-600'
+      else
+        'bg-gray-100 text-gray-600'
+      end
+
+      icon_name = case file_extension
+      when 'pdf'
+        'fa-file-pdf'
+      when 'doc', 'docx'
+        'fa-file-word'
+      when 'xls', 'xlsx'
+        'fa-file-excel'
+      when 'ppt', 'pptx'
+        'fa-file-powerpoint'
+      else
+        'fa-file-alt'
+      end
+    %>
+    <div class="w-12 h-12 <%= icon_class %> rounded-lg flex items-center justify-center flex-shrink-0">
+      <i class="fas <%= icon_name %> text-xl"></i>
+    </div>
+
+    <!-- Document Info -->
+    <div class="flex-1">
+      <div class="flex items-start justify-between">
+        <div>
+          <h4 class="font-semibold text-gray-900 mb-1">
+            <%= link_to document.title || "Untitled Document", dashboard_document_path(document), class: "hover:text-brand-500" %>
+          </h4>
+          <% if document.metadata.find_by(key: 'description')&.value.present? %>
+            <p class="text-sm text-gray-600 mb-2">
+              <%= truncate(document.metadata.find_by(key: 'description').value, length: 120) %>
+            </p>
+          <% end %>
+          <div class="flex items-center space-x-4 text-xs text-gray-500">
+            <span>
+              <i class="fas fa-calendar mr-1"></i>Uploaded: <%= document.created_at.strftime("%b %d, %Y") %>
+            </span>
+            <% if document.file.attached? %>
+              <span>
+                <i class="fas fa-file mr-1"></i><%= file_extension.upcase %>, <%= number_to_human_size(document.file_size) %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-2">
+          <% if document.file.attached? %>
+            <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "text-gray-600 hover:text-brand-500 p-2" do %>
+              <i class="fas fa-download"></i>
+            <% end %>
+          <% end %>
+          <%= link_to library_read_path(document), class: "text-gray-600 hover:text-brand-500 p-2" do %>
+            <i class="fas fa-book-open"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
