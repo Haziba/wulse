@@ -133,6 +133,67 @@ RSpec.describe "Sessions", type: :request do
         expect(session[:staff_id]).not_to eq(other_staff.id)
       end
     end
+
+    context "with inactive account" do
+      let(:inactive_staff) { create(:staff, institution: institution, password: "password123", status: :inactive) }
+
+      it "returns unprocessable content status" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }
+
+        expect(response).to have_http_status(:unprocessable_content)
+      end
+
+      it "does not create a session" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }
+
+        expect(session[:staff_id]).to be_nil
+      end
+
+      it "displays a deactivated account message" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }
+
+        expect(response.body).to include("Your account has been deactivated")
+        expect(response.body).to include("Please contact your administrator")
+      end
+
+      it "preserves the email in the form after failed attempt" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }
+
+        expect(response.body).to include("value=\"#{inactive_staff.email}\"")
+      end
+
+      it "responds with turbo stream when Turbo-Frame header is present" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }, headers: { "Turbo-Frame" => "sign_in_form", "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.media_type).to eq Mime[:turbo_stream]
+        expect(response.body).to include("<turbo-stream action=\"replace\" target=\"sign_in_form\">")
+        expect(response.body).to include("Your account has been deactivated")
+      end
+
+      it "includes a toast notification for inactive account" do
+        post session_path, params: {
+          email: inactive_staff.email,
+          password: "password123"
+        }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+      end
+    end
   end
 
   describe "DELETE /session" do
