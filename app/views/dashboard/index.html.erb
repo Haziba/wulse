@@ -118,7 +118,7 @@
                   </div>
                   <div>
                     <h4 class="font-medium text-gray-900"><%= document.title %></h4>
-                    <p class="text-sm text-gray-500">Uploaded by <%= document.staff.name %> • <%= time_ago_in_words(document.created_at) %> ago</p>
+                    <p class="text-sm text-gray-500">Uploader: <%= document.staff.name %> • <%= time_ago_in_words(document.created_at) %> ago</p>
                   </div>
                 </div>
               <% end %>
