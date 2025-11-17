@@ -47,7 +47,7 @@
         <div class="border-t border-gray-200 mt-8 pt-8">
           <h3 class="font-semibold text-gray-900 mb-4">Quick Actions</h3>
           <div class="space-y-3" id="staff_quick_actions_<%= @staff.id %>">
-            <%= button_to reset_password_dashboard_staff_path(@staff), method: :patch, class: "w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2", data: { turbo_confirm: "Are you sure you want to reset this staff member's password?" } do %>
+            <%= button_to reset_password_dashboard_staff_path(@staff), method: :patch, class: "w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2", data: { turbo_confirm: "Are you sure you want to send this staff member a password reset email?" } do %>
               <i class="fas fa-key"></i>
               <span>Reset Password</span>
             <% end %>
