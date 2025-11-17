@@ -131,5 +131,8 @@ class Dashboard::StaffController < ApplicationController
 
   def set_staff
     @staff = Staff.find(params[:id])
+  rescue
+    Rails.logger.error "Staff not found: #{params[:id]}"
+    redirect_to dashboard_staff_index_path, alert: "Staff not found"
   end
 end
