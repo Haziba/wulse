@@ -1,11 +1,11 @@
-<%= turbo_stream.update "library_list" do %>
+<%= turbo_stream.replace "library_list" do %>
   <%= turbo_frame_tag "library_list" do %>
     <%= render "library_list", documents: @documents, pagy: @pagy, query: @query, filtered_count: @filtered_count, total_count: @total_count %>
   <% end %>
 <% end %>
 
-<%= turbo_stream.update "filters_list" do %>
-  <%= turbo_frame_tag "filters_list" do %>
+<%= turbo_stream.replace "filters_list" do %>
+  <div id="filters_list">
     <%= render "filters_list", filters: @filters %>
-  <% end %>
+  </div>
 <% end %>
