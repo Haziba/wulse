@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_institution, :current_staff, :signed_in?
 
   private
+
   def set_current_institution
     return if is_a?(ActiveAdmin::BaseController)
 
@@ -46,5 +47,9 @@ class ApplicationController < ActionController::Base
     flash_hash[:alert] = alert if alert
 
     turbo_stream.prepend("toast-container-target", partial: "shared/toast_flash", locals: { flash: flash_hash })
+  end
+
+  def full_page_if_no_frame
+    request.format = :html if request.format.turbo_stream? && request.headers["Turbo-Frame"].blank?
   end
 end

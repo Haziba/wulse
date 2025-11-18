@@ -2,6 +2,7 @@ class Dashboard::StaffController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
   before_action :set_staff, only: [:show, :deactivate, :activate, :destroy, :reset_password]
+  before_action :full_page_if_no_frame, only: [:index]
 
   def index
     staffs = Staff.all
@@ -94,6 +95,9 @@ class Dashboard::StaffController < ApplicationController
 
   def destroy
     @staff.destroy
+    if request.headers["Turbo-Frame"] == "_top"
+      return redirect_to dashboard_staff_index_path, notice: "Staff member deleted successfully", status: :see_other
+    end
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
