@@ -31,9 +31,9 @@
       <%= button_to reset_password_dashboard_staff_path(staff), method: :patch, class: "text-blue-600 hover:text-blue-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to reset staff member a reset password email?" } do %>
         <i class="fas fa-key mr-1"></i>
       <% end %>
-      <button class="text-gray-600 hover:text-gray-800 text-sm font-medium">
-        <i class="fas fa-edit mr-1"></i>
-      </button>
+      <%= link_to edit_dashboard_staff_path(staff), class: "text-gray-600 hover:text-gray-800 text-sm font-medium", title: "Edit Profile", data: { turbo_frame: "_top" } do %>
+        <i class="fas fa-edit"></i>
+      <% end %>
       <% if staff.status == 'inactive' %>
         <%= button_to activate_dashboard_staff_path(staff), method: :patch, class: "text-green-600 hover:text-green-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to activate this staff member?" } do %>
           <i class="fas fa-play mr-1"></i>
