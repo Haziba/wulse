@@ -106,16 +106,17 @@ class Dashboard::StaffController < ApplicationController
 
   def destroy
     @staff.destroy
-    if request.headers["Turbo-Frame"] == "_top"
-      return redirect_to dashboard_staff_index_path, notice: "Staff member deleted successfully", status: :see_other
-    end
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.remove("staff_#{@staff.id}"),
-          add_toast(notice: "Staff member deleted successfully")
-        ]
+    if turbo_frame_request?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.remove("staff_#{@staff.id}"),
+            add_toast(notice: "Staff member deleted successfully")
+          ]
+        end
       end
+    else
+      return redirect_to dashboard_staff_index_path, notice: "Staff member deleted successfully", status: :see_other
     end
   rescue => e
     Rails.logger.error "Error deleting staff member: #{e.message}"
