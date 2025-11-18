@@ -59,7 +59,21 @@ class Dashboard::DocumentsController < ApplicationController
 
   def destroy
     @document.destroy
-    update_document_list
+    if turbo_frame_request?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.remove("document_#{@document.id}"),
+            add_toast(notice: "Document deleted successfully")
+          ]
+        end
+      end
+    else
+      return redirect_to dashboard_documents_path, notice: "Document deleted successfully", status: :see_other
+    end
+  rescue => e
+    Rails.logger.error "Error deleting document: #{e.message}"
+    render turbo_stream: add_toast(alert: "Error deleting document")
   end
 
   private
@@ -89,6 +103,9 @@ class Dashboard::DocumentsController < ApplicationController
 
   def set_document
     @document = Document.includes(:metadata).find(params[:id])
+  rescue
+    Rails.logger.error "Document not found: #{params[:id]}"
+    redirect_to dashboard_documents_path, alert: "Document not found"
   end
 
   def document_params
