@@ -17,20 +17,25 @@
   <%= turbo_frame_tag "modal" %>
 
   <!-- Filters and Search -->
-  <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-controller="staff-search" data-staff-search-frame-value="staff_list">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-      <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+  <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+    <%= form_with url: dashboard_staff_index_path,
+                  method: :get,
+                  data: { turbo_frame: "staff_list", turbo_action: "advance", controller: "debounce-submit", action: "submit->debounce-submit#submit" },
+                  class: "flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0" do %>
+      <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4 w-full">
         <div class="relative">
           <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          <input type="text" placeholder="Search staff members..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent w-full md:w-80" data-staff-search-target="input" data-action="input->staff-search#searchDebounced">
+          <%= text_field_tag :search, params[:search],
+            placeholder: "Search staff members...",
+            class: "pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent w-full md:w-80",
+            data: { action: "input->debounce-submit#debouncedSubmit" } %>
         </div>
-        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" data-staff-search-target="select" data-action="change->staff-search#search">
-          <option>All Status</option>
-          <option>Active</option>
-          <option>Inactive</option>
-        </select>
+        <%= select_tag :status,
+            options_for_select(["All Status", "Active", "Inactive"], params[:status].presence || "All Status"),
+            class: "px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent",
+            onchange: "this.form.requestSubmit()" %>
       </div>
-    </div>
+    <% end %>
   </div>
 
   <%= turbo_frame_tag "staff_list" do %>
