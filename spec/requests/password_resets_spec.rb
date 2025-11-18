@@ -5,6 +5,10 @@ RSpec.describe "PasswordResets", type: :request do
   let(:staff) { create(:staff, institution: institution, password: "oldpassword123") }
   let!(:password_reset) { create(:password_reset, staff: staff) }
 
+  before do
+    host! "#{institution.subdomain}.example.com"
+  end
+
   describe "GET /password_resets/:token/edit" do
     context "with valid token" do
       it "renders the password reset form" do

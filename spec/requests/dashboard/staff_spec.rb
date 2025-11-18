@@ -395,8 +395,8 @@ RSpec.describe "Dashboard::Staff", type: :request do
       it "shows activate button after deactivation" do
         patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
-        expect(response.body).to include("Activate")
-        expect(response.body).not_to include("Deactivate")
+        expect(response.body).to include("fa-play") # Activate icon
+        expect(response.body).not_to include("fa-pause") # Deactivate icon
       end
     end
   end
@@ -449,8 +449,8 @@ RSpec.describe "Dashboard::Staff", type: :request do
       it "shows deactivate button after activation" do
         patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
-        expect(response.body).to include("Deactivate")
-        expect(response.body).not_to include("Activate")
+        expect(response.body).to include("fa-pause") # Deactivate icon
+        expect(response.body).not_to include("fa-play") # Activate icon
       end
     end
   end
