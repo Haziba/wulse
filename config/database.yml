@@ -79,6 +79,4 @@ test:
 #
 production:
   <<: *default
-  database: wulse_production
-  username: wulse
-  password: <%= ENV["WULSE_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
