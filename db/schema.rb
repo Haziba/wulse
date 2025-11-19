@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_16_231854) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_19_192258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -78,13 +78,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_16_231854) do
   end
 
   create_table "institutions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "subdomain"
+    t.string "name", null: false
+    t.string "subdomain", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "branding_colour"
+    t.string "branding_colour", null: false
     t.bigint "storage_used", default: 0, null: false
-    t.integer "storage_total", default: 0
+    t.integer "storage_total", default: 0, null: false
   end
 
   create_table "metadata", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -116,7 +116,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_16_231854) do
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
     t.datetime "last_login"
-    t.string "title"
     t.index ["institution_id"], name: "index_staffs_on_institution_id"
   end
 

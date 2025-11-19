@@ -8,7 +8,6 @@
 #  name            :string
 #  password_digest :string
 #  status          :integer          default("active")
-#  title           :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  institution_id  :uuid             not null
