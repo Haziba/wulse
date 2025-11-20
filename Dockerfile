@@ -57,4 +57,4 @@ RUN groupadd --system --gid 1000 rails && \
 USER 1000:1000
 
 EXPOSE 3000
-CMD ["bash", "-c", "bin/rails db:prepare db:prepare:queue && bin/rails server -b '0.0.0.0'"]
+CMD ["bash", "-c", "bin/rails db:prepare && (bin/jobs &) && bin/rails server -b '0.0.0.0'"]
