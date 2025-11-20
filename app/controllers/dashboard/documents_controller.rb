@@ -1,6 +1,7 @@
 class Dashboard::DocumentsController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
+  before_action :full_page_if_no_frame, only: [:index]
   before_action :set_document, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -37,7 +38,21 @@ class Dashboard::DocumentsController < ApplicationController
 
     if @document.save
       update_preview
-      update_document_list
+
+      total_count = Document.count
+      last_page = (total_count.to_f / Pagy::DEFAULT[:limit]).ceil
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            updated_document_list(page: last_page),
+            add_toast(notice: "Document added successfully")
+          ]
+        end
+        format.html do
+          redirect_to dashboard_documents_path(page: last_page), notice: "Document added successfully!", status: :see_other
+        end
+      end
     else
       render :new, status: :unprocessable_content
     end
@@ -63,7 +78,7 @@ class Dashboard::DocumentsController < ApplicationController
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.remove("document_#{@document.id}"),
+            updated_document_list(page: params[:page]),
             add_toast(notice: "Document deleted successfully")
           ]
         end
@@ -73,20 +88,17 @@ class Dashboard::DocumentsController < ApplicationController
     end
   rescue => e
     Rails.logger.error "Error deleting document: #{e.message}"
-    render turbo_stream: add_toast(alert: "Error deleting document")
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: add_toast(alert: "Error deleting document") }
+      format.html { redirect_to dashboard_documents_path, alert: "Error deleting document", status: :see_other }
+    end
   end
 
   private
 
-  def update_document_list
-    @pagy, @documents = pagy(Document.all)
-
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.update("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
-      end
-      format.html { redirect_to dashboard_documents_path, notice: "Document added successfully!", status: :see_other }
-    end
+  def updated_document_list(page: 1)
+    @pagy, @documents = pagy(Document.all, page: page)
+    turbo_stream.update("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
   end
 
   def update_preview

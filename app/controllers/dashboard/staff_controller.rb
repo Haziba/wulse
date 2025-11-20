@@ -50,11 +50,13 @@ class Dashboard::StaffController < ApplicationController
     if @staff.save
       total_count = Staff.count
       last_page = (total_count.to_f / Pagy::DEFAULT[:limit]).ceil
-      @pagy, @staffs = pagy(Staff.all, page: last_page)
 
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("staff_list", partial: "staff_list", locals: { staffs: @staffs, pagy: @pagy })
+          render turbo_stream: [
+            updated_staff_list(page: last_page),
+            add_toast(notice: "Staff member added successfully")
+          ]
         end
         format.html { redirect_to dashboard_staff_index_path(page: last_page), notice: "Staff member added successfully!", status: :see_other }
       end
@@ -110,7 +112,7 @@ class Dashboard::StaffController < ApplicationController
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: [
-            turbo_stream.remove("staff_#{@staff.id}"),
+            updated_staff_list(page: params[:page]),
             add_toast(notice: "Staff member deleted successfully")
           ]
         end
@@ -140,6 +142,11 @@ class Dashboard::StaffController < ApplicationController
   end
 
   private
+
+  def updated_staff_list(page: 1)
+    @pagy, @staffs = pagy(Staff.all, page: page)
+    turbo_stream.update("staff_list", partial: "staff_list", locals: { staffs: @staffs, pagy: @pagy })
+  end
 
   def staff_params
     params.require(:staff).permit(:name, :email, :status)

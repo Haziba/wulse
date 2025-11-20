@@ -21,15 +21,14 @@ module Library
         end
         [key, inner_filters]
       end
-      combined_filters.to_h.map { |key, values| [key, values.sort_by { |_, count| -count }] }
+      combined_filters.to_h.map { |key, values| [key, values.sort_by { |inner_key, count| [-count, -inner_key.to_i] }] }
     end
 
     private
 
     def get_filters(scope)
       simple_counts = Metadatum
-        .joins(:document)
-        .merge(scope)
+        .where(document_id: scope.map(&:id))
         .where(key: FILTER_KEYS)
         .group(:key, :value)
         .count
@@ -41,7 +40,8 @@ module Library
         sort_desc(pairs.to_h)
       end
 
-      facets.merge(publishing_date: tally_years(scope))
+      result = facets.merge(publishing_date: tally_years(scope))
+      result
     end
 
     def tally_years(scope)
