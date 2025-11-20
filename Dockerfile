@@ -5,9 +5,10 @@ FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 WORKDIR /rails
 
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl wget libjemalloc2 libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl wget libjemalloc2 libvips postgresql-client
 
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
@@ -17,22 +18,26 @@ ENV RAILS_ENV="production" \
 
 FROM base AS build
 
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config libyaml-dev curl && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config libyaml-dev curl
 
 # Install Node.js and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN --mount=type=cache,target=/usr/local/bundle/cache,sharing=locked \
+    bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm,sharing=locked \
+    npm install
 
 COPY . .
 
