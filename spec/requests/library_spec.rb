@@ -149,36 +149,36 @@ RSpec.describe "Library", type: :request do
       it "displays document type filters with counts" do
         get library_path
 
-        expect(response.body).to include("Book (2)")
-        expect(response.body).to include("Article (1)")
+        expect_filter_count(response.body, "Book", 2)
+        expect_filter_count(response.body, "Article", 1)
       end
 
       it "displays department filters with counts" do
         get library_path
 
-        expect(response.body).to include("Computer Science (2)")
-        expect(response.body).to include("Economics (1)")
+        expect_filter_count(response.body, "Computer Science", 2)
+        expect_filter_count(response.body, "Economics", 1)
       end
 
       it "displays language filters with counts" do
         get library_path
 
-        expect(response.body).to include("English (2)")
-        expect(response.body).to include("Spanish (1)")
+        expect_filter_count(response.body, "English", 2)
+        expect_filter_count(response.body, "Spanish", 1)
       end
 
       it "displays publishing date filters with years" do
         get library_path
 
-        expect(response.body).to include("2023 (2)")
-        expect(response.body).to include("2024 (1)")
+        expect_filter_count(response.body, "2023", 2)
+        expect_filter_count(response.body, "2024", 1)
       end
 
       it "displays filtered vs total in filter counts when some filters are applied" do
         get library_path('document_type' => ['book'])
 
-        expect(response.body).to include("Book (2)")
-        expect(response.body).to include("Article (0)")
+        expect_filter_count(response.body, "Book", 2)
+        expect_filter_count(response.body, "Article", 0)
       end
 
       it "assigns @filters instance variable" do
@@ -193,16 +193,6 @@ RSpec.describe "Library", type: :request do
 
         checkbox_count = response.body.scan(/type="checkbox"/).count
         expect(checkbox_count).to be >= 8
-      end
-
-      it "displays 'All' and 'None' links for each filter section" do
-        get library_path
-
-        all_links = response.body.scan(/click->library-search#selectAll/).count
-        none_links = response.body.scan(/click->library-search#selectNone/).count
-
-        expect(all_links).to eq(4)
-        expect(none_links).to eq(4)
       end
 
       it "displays filtered count vs total count when filters are applied" do

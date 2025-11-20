@@ -150,7 +150,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "redirects on html request" do
           post dashboard_documents_path, params: valid_params
-          expect(response).to redirect_to(dashboard_documents_path)
+          expect(response).to redirect_to("#{dashboard_documents_path}?page=1")
         end
       end
 
@@ -213,7 +213,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
       it "cannot view other institution's documents" do
         get dashboard_document_path(other_institution_document)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to redirect_to(dashboard_documents_path)
       end
     end
   end
@@ -284,7 +284,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
       it "cannot edit other institution's documents" do
         get edit_dashboard_document_path(other_institution_document)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to redirect_to(dashboard_documents_path)
       end
 
       context "required metadata" do
@@ -528,7 +528,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       context "multi-tenancy" do
         it "cannot update other institution's documents" do
           patch dashboard_document_path(other_institution_document), params: { document: { metadata_attributes: { "0" => { key: "title", value: "Hacked" } } } }
-          expect(response).to have_http_status(:not_found)
+          expect(response).to redirect_to(dashboard_documents_path)
         end
       end
     end
@@ -552,7 +552,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       end
 
       it "responds with turbo stream that updates the document list" do
-        delete dashboard_document_path(document), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        delete dashboard_document_path(document), headers: { "Accept" => "text/vnd.turbo-stream.html", "Turbo-Frame" => "document_list" }
 
         expect(response).to have_http_status(:success)
         expect(response.media_type).to eq("text/vnd.turbo-stream.html")

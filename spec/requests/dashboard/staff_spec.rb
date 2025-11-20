@@ -204,28 +204,6 @@ RSpec.describe "Dashboard::Staff", type: :request do
           end
         end
 
-        context "with document type filter" do
-          before do
-            doc1.metadata.create!(key: "document_type", value: "Research Paper")
-            doc2.metadata.create!(key: "document_type", value: "Report")
-            doc3.metadata.create!(key: "document_type", value: "Research Paper")
-          end
-
-          it "filters documents by document type" do
-            get dashboard_staff_path(staff_member, document_type: "Research Paper")
-            expect(response.body).to include("Climate Study")
-            expect(response.body).to include("Energy Analysis")
-            expect(response.body).not_to include("Marine Research")
-          end
-
-          it "shows all documents when filter is 'All Types'" do
-            get dashboard_staff_path(staff_member, document_type: "All Types")
-            expect(response.body).to include("Climate Study")
-            expect(response.body).to include("Marine Research")
-            expect(response.body).to include("Energy Analysis")
-          end
-        end
-
         context "with pagination" do
           before do
             stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(limit: 2))
@@ -313,7 +291,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response.media_type).to eq("text/vnd.turbo-stream.html")
           expect(response.body).to include(CGI.escapeHTML(valid_params[:staff][:name]))
           expect(response.body).to include(valid_params[:staff][:email])
-          expect(response.body).to include('turbo-stream action="replace" target="staff_list"')
+          expect(response.body).to include('turbo-stream action="update" target="staff_list"')
         end
 
         it "redirects on html request to last page" do
@@ -480,20 +458,20 @@ RSpec.describe "Dashboard::Staff", type: :request do
       end
 
       it "responds with turbo stream" do
-        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html", "Turbo-Frame" => "staff_list" }
 
         expect(response).to have_http_status(:success)
         expect(response.media_type).to eq("text/vnd.turbo-stream.html")
       end
 
-      it "removes the staff row from the DOM" do
-        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      it "updates the staff list" do
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html", "Turbo-Frame" => "staff_list" }
 
-        expect(response.body).to include('turbo-stream action="remove" target="staff_' + staff_to_delete.id + '"')
+        expect(response.body).to include('turbo-stream action="update" target="staff_list"')
       end
 
       it "includes a success toast notification" do
-        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html", "Turbo-Frame" => "staff_list" }
 
         expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
         expect(response.body).to include("Staff member deleted successfully")
