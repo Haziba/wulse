@@ -1,38 +1,40 @@
-<div class="grid grid-cols-2 gap-4" data-metadata-fields-target="row">
+<div class="pb-4 border-b border-gray-200 last:border-b-0 last:pb-0" data-metadata-fields-target="row">
   <% if local_assigns[:id] %>
     <input type="hidden" name="document[metadata_attributes][<%= index %>][id]" value="<%= id %>">
   <% end %>
-  <div>
-    <input type="text"
-           name="document[metadata_attributes][<%= index %>][key]"
-           value="<%= key %>"
-           placeholder="Enter key"
-           list="metadata-key-suggestions"
-           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent <%= 'bg-gray-100 cursor-not-allowed' if required %>"
-           <%= 'disabled' if !editable || required %>>
-    <datalist id="metadata-key-suggestions">
-      <% metadata_key_suggestions.each do |suggestion| %>
-        <option value="<%= suggestion %>"></option>
+  <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+    <div class="md:w-1/3">
+      <input type="text"
+             name="document[metadata_attributes][<%= index %>][key]"
+             value="<%= key %>"
+             placeholder="Enter key"
+             list="metadata-key-suggestions"
+             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent <%= 'bg-gray-100 cursor-not-allowed' if required %>"
+             <%= 'disabled' if !editable || required %>>
+      <datalist id="metadata-key-suggestions">
+        <% metadata_key_suggestions.each do |suggestion| %>
+          <option value="<%= suggestion %>"></option>
+        <% end %>
+      </datalist>
+      <% if required %>
+        <input type="hidden" name="document[metadata_attributes][<%= index %>][key]" value="<%= key %>">
       <% end %>
-    </datalist>
-    <% if required %>
-      <input type="hidden" name="document[metadata_attributes][<%= index %>][key]" value="<%= key %>">
-    <% end %>
-  </div>
-  <div class="flex gap-2">
-    <input type="text"
-           name="document[metadata_attributes][<%= index %>][value]"
-           value="<%= value %>"
-           placeholder="Enter value"
-           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-           <%= 'disabled' unless editable %>>
-    <% if editable && !required %>
-      <button type="button"
-              class="text-red-600 hover:text-red-800 px-2"
-              data-action="click->metadata-fields#removeRow">
-        <i class="fas fa-trash"></i>
-      </button>
-    <% end %>
+    </div>
+    <div class="flex gap-2 md:flex-1">
+      <input type="text"
+             name="document[metadata_attributes][<%= index %>][value]"
+             value="<%= value %>"
+             placeholder="Enter value"
+             class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+             <%= 'disabled' unless editable %>>
+      <% if editable && !required %>
+        <button type="button"
+                class="text-red-600 hover:text-red-800 px-2"
+                data-action="click->metadata-fields#removeRow">
+          <i class="fas fa-trash"></i>
+        </button>
+      <% end %>
+    </div>
   </div>
   <input type="hidden" name="document[metadata_attributes][<%= index %>][_destroy]" value="<%= destroy_value %>">
 </div>
