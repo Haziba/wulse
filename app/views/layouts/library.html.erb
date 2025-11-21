@@ -67,6 +67,11 @@
 
     <%= render "shared/library_header" %>
 
+    <!-- Flash Messages -->
+    <div id="toast-container-target" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+      <%= render 'shared/toast_flash' %>
+    </div>
+
     <%= yield %>
   </body>
 </html>
