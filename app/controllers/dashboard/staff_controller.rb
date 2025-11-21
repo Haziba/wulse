@@ -157,7 +157,17 @@ class Dashboard::StaffController < ApplicationController
   private
 
   def updated_staff_list(page: 1)
-    @pagy, @staffs = pagy(Staff.all.order(created_at: :desc), page: page)
+    staffs = Staff.all.order(created_at: :desc)
+
+    if params[:search].present?
+      staffs = staffs.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+
+    if params[:status].present? && params[:status] != "All Status"
+      staffs = staffs.where(status: params[:status].downcase)
+    end
+
+    @pagy, @staffs = pagy(staffs, page: page)
     turbo_stream.update("staff_list", partial: "staff_list", locals: { staffs: @staffs, pagy: @pagy })
   end
 
