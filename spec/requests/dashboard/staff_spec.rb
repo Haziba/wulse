@@ -299,6 +299,11 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response).to redirect_to(dashboard_staff_index_path(page: 1))
         end
 
+        it "sends a welcome email" do
+          expect {
+            post dashboard_staff_index_path, params: valid_params
+          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "welcome_email", "deliver_now", { args: [an_instance_of(Staff), an_instance_of(PasswordReset)] })
+        end
       end
 
       context "with invalid parameters" do

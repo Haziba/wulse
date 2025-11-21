@@ -1,0 +1,39 @@
+<h2 style="margin: 0 0 24px 0; font-size: 28px; font-weight: bold; color: #333333; font-family: Georgia, 'Times New Roman', serif;">Welcome to the <%= @institution.name %> Digital Library!</h2>
+
+<p style="margin: 0 0 16px 0; font-size: 18px; color: #333333;">Dear <%= @staff.name %>,</p>
+
+<p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #555555;">We're excited to welcome you to the <%= @institution.name %> Digital Library community! Your account has been successfully created, and you now have access to our extensive collection of academic resources.</p>
+
+<!-- Account Setup Box -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5; border-radius: 8px;">
+  <tr>
+    <td style="padding: 24px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td style="width: 48px; vertical-align: top; padding-right: 16px;">
+            <div style="width: 48px; height: 48px; background-color: <%= "#{@institution.branding_colour || '#800020'}1A" %>; border-radius: 8px; text-align: center; line-height: 48px;">
+              <span style="font-size: 20px; color: <%= @institution.branding_colour || '#800020' %>;">&#128273;</span>
+            </div>
+          </td>
+          <td style="vertical-align: top;">
+            <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #333333;">Complete Your Account Setup</h3>
+            <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.5; color: #555555;">To secure your account and start exploring our digital library, please set up your password by clicking the button below.</p>
+
+            <!-- Button Placeholder -->
+            <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+              <tr>
+                <td style="background-color: <%= @institution.branding_colour || '#800020' %>; border-radius: 8px; text-align: center;">
+                  <a href="<%= @set_password_url %>" style="display: inline-block; padding: 16px 32px; font-size: 16px; font-weight: 600; color: #ffffff; text-decoration: none;">
+                    &#128274; Set Your Password
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin: 16px 0 0 0; font-size: 13px; color: #888888; text-align: center;">This link will expire in 48 hours for security purposes.</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

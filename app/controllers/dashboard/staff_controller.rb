@@ -48,6 +48,9 @@ class Dashboard::StaffController < ApplicationController
     @staff = Staff.new(staff_params)
 
     if @staff.save
+      password_reset = PasswordReset.create(staff: @staff)
+      StaffMailer.welcome_email(@staff, password_reset).deliver_later
+
       total_count = Staff.count
       last_page = (total_count.to_f / Pagy::DEFAULT[:limit]).ceil
 
