@@ -122,7 +122,11 @@ RSpec.describe "Dashboard::Documents", type: :request do
         let(:valid_params) do
           {
             document: {
-              metadata_attributes: { "0" => { key: "title", value: "Test Document" } },
+              metadata_attributes: {
+                "0" => { key: "title", value: "Test Document" },
+                "1" => { key: "author", value: "Test Author" },
+                "2" => { key: "publishing_date", value: "2024-01-01" }
+              },
               file: fixture_file_upload('test_document.pdf', 'application/pdf')
             }
           }
@@ -253,13 +257,13 @@ RSpec.describe "Dashboard::Documents", type: :request do
       end
 
       it "loads document with metadata" do
-        create(:metadatum, document: document, key: 'author', value: 'John Doe')
+        create(:metadatum, document: document, key: 'isbn', value: '123-456')
         create(:metadatum, document: document, key: 'year', value: '2024')
 
         get edit_dashboard_document_path(document)
 
         expect(assigns(:document).metadata.loaded?).to be true
-        expect(assigns(:document).metadata.count).to eq(3) # 3 because of the title metadata
+        expect(assigns(:document).metadata.count).to eq(5) # 5 because factory creates title, author, publishing_date + 2 above
       end
 
       it "displays file upload UI" do
@@ -294,9 +298,9 @@ RSpec.describe "Dashboard::Documents", type: :request do
           metadata = assigns(:metadata)
           metadata_keys = metadata.map(&:key)
 
-          expect(metadata_keys).to include('isbn')
           expect(metadata_keys).to include('author')
           expect(metadata_keys).to include('title')
+          expect(metadata_keys).to include('publishing_date')
         end
 
         it "shows required metadata first in order" do
@@ -308,23 +312,21 @@ RSpec.describe "Dashboard::Documents", type: :request do
           metadata = assigns(:metadata)
           metadata_keys = metadata.map(&:key)
 
-          # Required metadata should appear first
-          expect(metadata_keys[0..2]).to eq(['isbn', 'author', 'title'])
+          # Required metadata should appear first (factory creates these, order matches REQUIRED_METADATA)
+          expect(metadata_keys[0..2]).to eq(['publishing_date', 'author', 'title'])
           # Custom metadata should appear after
           expect(metadata_keys[3..4]).to match_array(['publisher', 'year'])
         end
 
         it "uses existing required metadata when they exist" do
-          existing_author = create(:metadatum, document: document, key: 'author', value: 'Jane Doe')
-
+          # Factory already creates author, so we just verify it exists
           get edit_dashboard_document_path(document)
 
           metadata = assigns(:metadata)
           author_metadata = metadata.find { |m| m.key == 'author' }
 
-          expect(author_metadata).to eq(existing_author)
+          expect(author_metadata).not_to be_nil
           expect(author_metadata.new_record?).to be false
-          expect(author_metadata.value).to eq('Jane Doe')
         end
       end
     end
@@ -398,7 +400,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
       end
 
       context "updating metadata" do
-        let!(:existing_metadata) { create(:metadatum, document: document, key: 'author', value: 'John Doe') }
+        let!(:existing_metadata) { create(:metadatum, document: document, key: 'isbn', value: '123-456') }
 
         it "creates new metadata" do
           params = {
@@ -421,19 +423,19 @@ RSpec.describe "Dashboard::Documents", type: :request do
             document: {
               metadata_attributes: {
                 "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title },
-                "1" => { id: existing_metadata.id, key: "author", value: "Jane Smith" }
+                "1" => { id: existing_metadata.id, key: "isbn", value: "999-999" }
               }
             }
           }
 
           patch dashboard_document_path(document), params: params
-          expect(existing_metadata.reload.value).to eq("Jane Smith")
+          expect(existing_metadata.reload.value).to eq("999-999")
         end
 
         it "deletes metadata when _destroy is set" do
           params = {
             document: {
-              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "John Doe", _destroy: "1" } }
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "isbn", value: "123-456", _destroy: "1" } }
             }
           }
 
@@ -445,7 +447,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
         it "rejects blank metadata" do
           params = {
             document: {
-              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "author", value: "" } }
+              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "isbn", value: "" } }
             }
           }
 

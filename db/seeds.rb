@@ -47,6 +47,7 @@ institutions.each do |institution|
       title = book_titles.sample
       metadata_attributes = [
         { key: "title", value: title },
+        { key: "author", value: Faker::Name.name },
         { key: "document_type", value: document_types.sample },
         { key: "department", value: departments.sample },
         { key: "language", value: languages.sample },

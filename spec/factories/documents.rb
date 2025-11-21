@@ -27,10 +27,14 @@ FactoryBot.define do
 
     transient do
       title { nil }
+      author { nil }
+      publishing_date { nil }
     end
 
     after(:build) do |document, evaluator|
       document.metadata.build(key: 'title', value: evaluator.title || Faker::Book.title)
+      document.metadata.build(key: 'author', value: evaluator.author || Faker::Name.name)
+      document.metadata.build(key: 'publishing_date', value: evaluator.publishing_date || Faker::Date.between(from: '1900-01-01', to: '2025-12-31'))
     end
   end
 end

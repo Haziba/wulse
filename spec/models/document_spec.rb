@@ -39,7 +39,7 @@ RSpec.describe Document, type: :model do
 
     it 'has many metadata' do
       document = create(:document, institution: institution, staff: staff)
-      create(:metadatum, document: document, key: 'author', value: 'John Doe')
+      create(:metadatum, document: document, key: 'isbn', value: '123-456')
       create(:metadatum, document: document, key: 'year', value: '2024')
 
       expect(document.metadata.count).to be >= 2
@@ -53,17 +53,10 @@ RSpec.describe Document, type: :model do
     end
   end
 
-  describe 'authors' do
-    it 'returns the authors metadata value' do
-      document = create(:document, institution: institution, staff: staff)
-      create(:metadatum, document: document, key: 'authors', value: 'John Doe, Jane Doe')
-      expect(document.authors).to eq('John Doe, Jane Doe')
-    end
-
-    it 'returns the author metadata values when authors metadata is not present' do
-      document = create(:document, institution: institution, staff: staff)
-      create(:metadatum, document: document, key: 'author', value: 'John Doe')
-      expect(document.authors).to eq('John Doe')
+  describe 'author' do
+    it 'returns the author metadata value' do
+      document = create(:document, institution: institution, staff: staff, author: 'John Doe')
+      expect(document.author).to eq('John Doe')
     end
   end
 end

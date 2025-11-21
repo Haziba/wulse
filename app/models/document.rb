@@ -23,8 +23,8 @@
 class Document < ApplicationRecord
   include TracksStorage
 
-  REQUIRED_METADATA = %w[isbn author title]
-  SUGGESTED_METADATA = %w[description publishing_date document_type language department]
+  REQUIRED_METADATA = %w[publishing_date author title]
+  SUGGESTED_METADATA = %w[document_type language department]
 
   acts_as_tenant :institution
 
@@ -38,6 +38,8 @@ class Document < ApplicationRecord
   has_one_attached :preview_image, dependent: :purge_later
 
   validate :title_metadata_present
+  validate :author_metadata_present
+  validate :publishing_date_metadata_present
 
   def self.ransackable_attributes(auth_object = nil)
     ['staff', 'institution']
@@ -51,16 +53,32 @@ class Document < ApplicationRecord
     metadata.find_by(key: 'title')&.value
   end
 
-  def authors
-    metadata.find_by(key: 'authors')&.value || metadata.find_by(key: 'author')&.value
+  def author
+    metadata.find_by(key: 'author')&.value
+  end
+
+  def publishing_date
+    metadata.find_by(key: 'publishing_date')&.value
   end
 
   private
 
   def title_metadata_present
-    title_meta = metadata.detect { |m| m.key == 'title' && !m.marked_for_destruction? }
-    if title_meta.nil? || title_meta.value.blank?
-      errors.add(:base, "Title can't be blank")
+    metadata_present?('title')
+  end
+
+  def author_metadata_present
+    metadata_present?('author')
+  end
+
+  def publishing_date_metadata_present
+    metadata_present?('publishing_date')
+  end
+
+  def metadata_present?(key)
+    metadata_meta = metadata.detect { |m| m.key == key && !m.marked_for_destruction? }
+    if metadata_meta.nil? || metadata_meta.value.blank?
+      errors.add(:base, "#{key} can't be blank")
     end
   end
 end

@@ -27,14 +27,14 @@ RSpec.describe Metadatum, type: :model do
 
   describe 'associations' do
     it 'belongs to a document' do
-      metadatum = create(:metadatum, document: document)
+      metadatum = create(:metadatum, document: document, key: 'isbn', value: '123-456')
       expect(metadatum.document).to eq(document)
     end
   end
 
   describe 'validations' do
     it 'is valid with valid attributes' do
-      metadatum = build(:metadatum, document: document, key: 'author', value: 'John Doe')
+      metadatum = build(:metadatum, document: document, key: 'isbn', value: '123-456')
       expect(metadatum).to be_valid
     end
 
@@ -56,17 +56,17 @@ RSpec.describe Metadatum, type: :model do
   end
 
   describe 'uniqueness validation' do
-    let!(:existing_metadatum) { create(:metadatum, document: document, key: 'author', value: 'Jane Smith') }
+    let!(:existing_metadatum) { create(:metadatum, document: document, key: 'isbn', value: '123-456') }
 
     it 'does not allow duplicate keys for the same Document' do
-      duplicate_metadatum = build(:metadatum, document: document, key: 'author', value: 'Different Author')
+      duplicate_metadatum = build(:metadatum, document: document, key: 'isbn', value: 'Different ISBN')
       expect(duplicate_metadatum).not_to be_valid
       expect(duplicate_metadatum.errors[:key]).to include('has already been taken')
     end
 
     it 'allows the same key for different Documents' do
       other_document = create(:document, institution: institution, staff: staff)
-      metadatum = build(:metadatum, document: other_document, key: 'author', value: 'Different Author')
+      metadatum = build(:metadatum, document: other_document, key: 'isbn', value: 'Different ISBN')
       expect(metadatum).to be_valid
     end
 
@@ -78,27 +78,27 @@ RSpec.describe Metadatum, type: :model do
 
   describe 'Document association' do
     it 'is deleted when the Document is deleted' do
-      metadatum = create(:metadatum, document: document, key: 'author', value: 'John Doe')
+      metadatum = create(:metadatum, document: document, key: 'isbn', value: '123-456')
 
       expect {
         document.destroy
-      }.to change(Metadatum, :count).by(-2)  # -2 because factory creates title metadata
+      }.to change(Metadatum, :count).by(-4)  # -4 because factory creates title, author, publishing_date + 1 created above
     end
 
     it 'deletes multiple metadata when Document is deleted' do
-      create(:metadatum, document: document, key: 'author', value: 'John Doe')
+      create(:metadatum, document: document, key: 'isbn', value: '123-456')
       create(:metadatum, document: document, key: 'publisher', value: 'ABC Publishing')
       create(:metadatum, document: document, key: 'year', value: '2024')
 
       expect {
         document.destroy
-      }.to change(Metadatum, :count).by(-4)  # -4 because factory creates title metadata + 3 created above
+      }.to change(Metadatum, :count).by(-6)  # -6 because factory creates title, author, publishing_date + 3 created above
     end
   end
 
   describe 'multiple metadata per Document' do
     it 'allows a Document to have multiple metadata with different keys' do
-      create(:metadatum, document: document, key: 'author', value: 'John Doe')
+      create(:metadatum, document: document, key: 'isbn', value: '123-456')
       create(:metadatum, document: document, key: 'publisher', value: 'ABC Publishing')
       create(:metadatum, document: document, key: 'year', value: '2024')
 
@@ -106,10 +106,9 @@ RSpec.describe Metadatum, type: :model do
     end
 
     it 'can retrieve metadata by key' do
-      create(:metadatum, document: document, key: 'author', value: 'John Doe')
-      create(:metadatum, document: document, key: 'publisher', value: 'ABC Publishing')
+      document_with_author = create(:document, institution: institution, staff: staff, author: 'John Doe')
 
-      author_metadata = document.metadata.find_by(key: 'author')
+      author_metadata = document_with_author.metadata.find_by(key: 'author')
       expect(author_metadata.value).to eq('John Doe')
     end
   end

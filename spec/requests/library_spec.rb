@@ -111,29 +111,26 @@ RSpec.describe "Library", type: :request do
 
     context "with filters" do
       let!(:book1) do
-        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024")
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024", publishing_date: '2024-01-15')
         create(:metadatum, document: document, key: 'document_type', value: 'book')
         create(:metadatum, document: document, key: 'department', value: 'computer science')
         create(:metadatum, document: document, key: 'language', value: 'english')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-15')
         document
       end
 
       let!(:book2) do
-        document = create(:document, institution: institution, staff: staff, title: "CS Book 2023")
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2023", publishing_date: '2023-06-20')
         create(:metadatum, document: document, key: 'document_type', value: 'book')
         create(:metadatum, document: document, key: 'department', value: 'computer science')
         create(:metadatum, document: document, key: 'language', value: 'english')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-06-20')
         document
       end
 
       let!(:article1) do
-        document = create(:document, institution: institution, staff: staff, title: "Economics Article")
+        document = create(:document, institution: institution, staff: staff, title: "Economics Article", publishing_date: '2023-12-01')
         create(:metadatum, document: document, key: 'document_type', value: 'article')
         create(:metadatum, document: document, key: 'department', value: 'economics')
         create(:metadatum, document: document, key: 'language', value: 'spanish')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-12-01')
         document
       end
 

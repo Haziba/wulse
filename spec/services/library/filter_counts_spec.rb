@@ -26,29 +26,26 @@ RSpec.describe Library::FilterCounts do
 
     context "with documents" do
       let!(:document1) do
-        document = create(:document, institution: institution, staff: staff, title: "Book One")
+        document = create(:document, institution: institution, staff: staff, title: "Book One", publishing_date: '2024-01-15')
         create(:metadatum, document: document, key: 'document_type',  value: 'book')
         create(:metadatum, document: document, key: 'department',     value: 'computer science')
         create(:metadatum, document: document, key: 'language',       value: 'english')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-15')
         document
       end
 
       let!(:document2) do
-        document = create(:document, institution: institution, staff: staff, title: "Book Two")
+        document = create(:document, institution: institution, staff: staff, title: "Book Two", publishing_date: '2024-06-20')
         create(:metadatum, document: document, key: 'document_type',  value: 'book')
         create(:metadatum, document: document, key: 'department',     value: 'economics')
         create(:metadatum, document: document, key: 'language',       value: 'english')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-06-20')
         document
       end
 
       let!(:document3) do
-        document = create(:document, institution: institution, staff: staff, title: "Article One")
+        document = create(:document, institution: institution, staff: staff, title: "Article One", publishing_date: '2023-03-10')
         create(:metadatum, document: document, key: 'document_type',  value: 'article')
         create(:metadatum, document: document, key: 'department',     value: 'computer science')
         create(:metadatum, document: document, key: 'language',       value: 'spanish')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-03-10')
         document
       end
 
@@ -84,23 +81,20 @@ RSpec.describe Library::FilterCounts do
 
     context "with a restrictive scope" do
       let!(:document1) do
-        document = create(:document, institution: institution, staff: staff, title: "2024 CS Book")
-        create(:metadatum, document: document, key: 'department',      value: 'computer science')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
+        document = create(:document, institution: institution, staff: staff, title: "2024 CS Book", publishing_date: '2024-01-01')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
         document
       end
 
       let!(:document2) do
-        document = create(:document, institution: institution, staff: staff, title: "2023 CS Article")
-        create(:metadatum, document: document, key: 'department',      value: 'computer science')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-01-01')
+        document = create(:document, institution: institution, staff: staff, title: "2023 CS Article", publishing_date: '2023-01-01')
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
         document
       end
 
       let!(:document3) do
-        document = create(:document, institution: institution, staff: staff, title: "2023 Economics")
-        create(:metadatum, document: document, key: 'department',      value: 'economics')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-06-01')
+        document = create(:document, institution: institution, staff: staff, title: "2023 Economics", publishing_date: '2023-06-01')
+        create(:metadatum, document: document, key: 'department', value: 'economics')
         document
       end
 
@@ -127,15 +121,11 @@ RSpec.describe Library::FilterCounts do
 
     context "with multiple scopes (filtering one year only)" do
       let!(:doc2024) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc 2024")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc 2024", publishing_date: '2024-01-01')
       end
 
       let!(:doc2023) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc 2023")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-01-01')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc 2023", publishing_date: '2023-01-01')
       end
 
       it "shows only the scoped year with count>0, and other years with count=0" do
@@ -151,21 +141,15 @@ RSpec.describe Library::FilterCounts do
 
     context "with various date formats" do
       let!(:document1) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc 1")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-12-25')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc 1", publishing_date: '2024-12-25')
       end
 
       let!(:document2) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc 2")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-06-15')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc 2", publishing_date: '2023-06-15')
       end
 
       let!(:document3) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc 3")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-01-01')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc 3", publishing_date: '2023-01-01')
       end
 
       it "handles ISO YYYY-MM-DD and aggregates by year with the filtered count" do
@@ -179,21 +163,19 @@ RSpec.describe Library::FilterCounts do
 
     context "with blank or nil publishing dates" do
       let!(:document1) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc with date")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
-        document
+        create(:document, institution: institution, staff: staff, title: "Doc with date", publishing_date: '2024-01-01')
       end
 
       let!(:document2) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc without date")
-        create(:metadatum, document: document, key: 'publishing_date', value: '')
-        document
+        doc = create(:document, institution: institution, staff: staff, title: "Doc without date", publishing_date: '2020-01-01')
+        doc.metadata.find_by(key: 'publishing_date').update!(value: '')
+        doc
       end
 
       let!(:document3) do
-        document = create(:document, institution: institution, staff: staff, title: "Doc with nil date")
-        create(:metadatum, document: document, key: 'publishing_date', value: nil)
-        document
+        doc = create(:document, institution: institution, staff: staff, title: "Doc with nil date", publishing_date: '2020-01-01')
+        doc.metadata.find_by(key: 'publishing_date').update!(value: nil)
+        doc
       end
 
       it "excludes blank and nil dates from both filtered and total counts" do

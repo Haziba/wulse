@@ -122,15 +122,11 @@ RSpec.describe Library::DocumentFilter do
 
     context "with publishing_date filter" do
       let!(:doc_2024) do
-        document = create(:document, institution: institution, staff: staff, title: "2024 Doc")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-06-15')
-        document
+        create(:document, institution: institution, staff: staff, title: "2024 Doc", publishing_date: '2024-06-15')
       end
 
       let!(:doc_2023) do
-        document = create(:document, institution: institution, staff: staff, title: "2023 Doc")
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-03-20')
-        document
+        create(:document, institution: institution, staff: staff, title: "2023 Doc", publishing_date: '2023-03-20')
       end
 
       it "filters by publishing year" do
@@ -155,26 +151,23 @@ RSpec.describe Library::DocumentFilter do
 
     context "with multiple filters combined" do
       let!(:cs_book_2024) do
-        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024")
+        document = create(:document, institution: institution, staff: staff, title: "CS Book 2024", publishing_date: '2024-01-01')
         create(:metadatum, document: document, key: 'document_type', value: 'book')
         create(:metadatum, document: document, key: 'department', value: 'computer science')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
         document
       end
 
       let!(:cs_article_2023) do
-        document = create(:document, institution: institution, staff: staff, title: "CS Article 2023")
+        document = create(:document, institution: institution, staff: staff, title: "CS Article 2023", publishing_date: '2023-01-01')
         create(:metadatum, document: document, key: 'document_type', value: 'article')
         create(:metadatum, document: document, key: 'department', value: 'computer science')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2023-01-01')
         document
       end
 
       let!(:econ_book_2024) do
-        document = create(:document, institution: institution, staff: staff, title: "Econ Book 2024")
+        document = create(:document, institution: institution, staff: staff, title: "Econ Book 2024", publishing_date: '2024-01-01')
         create(:metadatum, document: document, key: 'document_type', value: 'book')
         create(:metadatum, document: document, key: 'department', value: 'economics')
-        create(:metadatum, document: document, key: 'publishing_date', value: '2024-01-01')
         document
       end
 
