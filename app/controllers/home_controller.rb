@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  layout "library"
+
   def index
     if !current_institution.present?
       redirect_to admin_root_path

@@ -5,8 +5,8 @@
         <%= image_tag document.preview_image, class: "w-full h-full object-cover rounded shadow-sm" %>
       </div>
     <% else %>
-      <div class="flex-shrink-0 w-12 h-16 sm:w-16 sm:h-20 bg-gray-100 rounded shadow-sm flex items-center justify-center">
-        <i class="fas fa-file-alt text-gray-400 text-lg sm:text-xl"></i>
+      <div class="flex-shrink-0 w-12 h-16 sm:w-16 sm:h-20 bg-gray-200 rounded shadow-sm flex items-center justify-center">
+        <i class="fas fa-file-alt text-gray-500 text-lg sm:text-xl"></i>
       </div>
     <% end %>
     <div class="flex-1 min-w-0">
@@ -16,9 +16,8 @@
       <p class="text-gray-600 text-sm"><%= document.author %> · <%= document.publishing_date %></p>
     </div>
     <div class="flex flex-col gap-2 flex-shrink-0">
-      <%= link_to library_read_path(document), class: "p-2 sm:px-6 sm:py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" } do %>
-        <i class="fas fa-book-open sm:hidden"></i>
-        <span class="hidden sm:inline">Read</span>
+      <%= link_to library_read_path(document), class: "p-2 sm:px-4 sm:py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" } do %>
+        <i class="fas fa-book-open"></i>
       <% end %>
       <% if document.file.attached? %>
         <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center" do %>
