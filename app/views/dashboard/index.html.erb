@@ -113,9 +113,13 @@
             <% @recent_documents.each do |document| %>
               <%= link_to dashboard_document_path(document), class: "flex items-center justify-between hover:bg-gray-50 p-2 rounded-lg transition-colors" do %>
                 <div class="flex items-center space-x-4">
-                  <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-file-alt text-green-500"></i>
-                  </div>
+                  <% if document.preview_image.attached? %>
+                    <%= image_tag document.preview_image, class: "w-10 h-14 object-cover rounded shadow-sm" %>
+                  <% else %>
+                    <div class="w-10 h-14 bg-gray-200 rounded shadow-sm flex items-center justify-center">
+                      <i class="fas fa-file-alt text-gray-500"></i>
+                    </div>
+                  <% end %>
                   <div>
                     <h4 class="font-medium text-gray-900"><%= document.title %></h4>
                     <p class="text-sm text-gray-500">Uploader: <%= document.staff.name %> • <%= time_ago_in_words(document.created_at) %> ago</p>
