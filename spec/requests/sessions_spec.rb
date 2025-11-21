@@ -8,6 +8,11 @@ RSpec.describe "Sessions", type: :request do
     host! "#{institution.subdomain}.lvh.me"
   end
 
+  def signed_cookie(name)
+    jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
+    jar.signed[name]
+  end
+
   describe "GET /session/new" do
     it "renders the sign-in page successfully" do
       get new_session_path
@@ -34,8 +39,31 @@ RSpec.describe "Sessions", type: :request do
         }
 
         expect(response).to redirect_to(dashboard_path)
-        expect(session[:staff_id]).to eq(staff.id)
+        expect(signed_cookie(:staff_id)).to eq(staff.id)
         expect(staff.reload.last_login).to be_within(1.minute).of(Time.current)
+      end
+
+      context "without remember me" do
+        it "sets a session cookie (no explicit expiry)" do
+          post session_path, params: {
+            email: staff.email,
+            password: "password123"
+          }
+
+          expect(signed_cookie(:staff_id)).to eq(staff.id)
+        end
+      end
+
+      context "with remember me" do
+        it "sets a persistent cookie" do
+          post session_path, params: {
+            email: staff.email,
+            password: "password123",
+            remember_me: "1"
+          }
+
+          expect(signed_cookie(:staff_id)).to eq(staff.id)
+        end
       end
 
       it "sets a welcome flash message" do
@@ -59,13 +87,13 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
 
-      it "does not create a session" do
+      it "does not set a cookie" do
         post session_path, params: {
           email: "wrong@email.com",
           password: "password123"
         }
 
-        expect(session[:staff_id]).to be_nil
+        expect(signed_cookie(:staff_id)).to be_nil
       end
 
       it "displays an error message" do
@@ -107,13 +135,13 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
 
-      it "does not create a session" do
+      it "does not set a cookie" do
         post session_path, params: {
           email: staff.email,
           password: "wrongpassword"
         }
 
-        expect(session[:staff_id]).to be_nil
+        expect(signed_cookie(:staff_id)).to be_nil
       end
     end
 
@@ -129,8 +157,8 @@ RSpec.describe "Sessions", type: :request do
           password: "password123"
         }
 
-        expect(session[:staff_id]).to eq(staff.id)
-        expect(session[:staff_id]).not_to eq(other_staff.id)
+        expect(signed_cookie(:staff_id)).to eq(staff.id)
+        expect(signed_cookie(:staff_id)).not_to eq(other_staff.id)
       end
     end
 
@@ -146,13 +174,13 @@ RSpec.describe "Sessions", type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
 
-      it "does not create a session" do
+      it "does not set a cookie" do
         post session_path, params: {
           email: inactive_staff.email,
           password: "password123"
         }
 
-        expect(session[:staff_id]).to be_nil
+        expect(signed_cookie(:staff_id)).to be_nil
       end
 
       it "displays a deactivated account message" do
@@ -204,10 +232,10 @@ RSpec.describe "Sessions", type: :request do
       }
     end
 
-    it "destroys the session" do
+    it "clears the cookie" do
       delete session_path
 
-      expect(session[:staff_id]).to be_nil
+      expect(signed_cookie(:staff_id)).to be_nil
     end
 
     it "redirects to root path" do

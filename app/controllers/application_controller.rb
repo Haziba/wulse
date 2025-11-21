@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_staff
-    @current_staff ||= Staff.find_by(id: session[:staff_id]) if session[:staff_id]
+    @current_staff ||= Staff.find_by(id: cookies.signed[:staff_id])
   end
 
   def signed_in?

@@ -10,7 +10,8 @@ class SessionsController < ApplicationController
       if staff.status == 'inactive'
         render_turbo_stream_for_error("Your account has been deactivated. Please contact your administrator.")
       else
-        session[:staff_id] = staff.id
+        expires = params[:remember_me] == "1" ? 2.weeks.from_now : nil
+        cookies.signed[:staff_id] = { value: staff.id, expires: expires, httponly: true }
         staff.update(last_login: Time.current)
         redirect_to dashboard_path, notice: "Welcome back, #{staff.name}!", status: :see_other
       end
@@ -20,7 +21,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:staff_id] = nil
+    cookies.delete(:staff_id)
     redirect_to root_path, notice: "You have been signed out"
   end
 
