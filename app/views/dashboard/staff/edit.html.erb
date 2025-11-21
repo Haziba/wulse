@@ -36,15 +36,17 @@
         <%= f.select :status, [['Active', 'active'], ['Inactive', 'inactive']], {}, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
       </div>
 
-      <div class="border-t border-gray-200 pt-6">
-        <%= button_to reset_password_dashboard_staff_path(@staff), method: :patch, class: "bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center space-x-2", data: { turbo_confirm: "Are you sure you want to send this staff member a password reset email?" } do %>
+      <div class="border-t border-gray-200 flex items-center justify-between pt-6">
+        <%= link_to reset_password_dashboard_staff_path(@staff),
+                    data: {
+                      turbo_method: :patch,
+                      turbo_confirm: "Are you sure you want to send this staff member a password reset email?"
+                    },
+                    class: "bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center space-x-2" do %>
+
           <i class="fas fa-key"></i>
           <span>Send Password Reset</span>
         <% end %>
-      </div>
-
-      <div class="flex items-center justify-between pt-6">
-        <%= link_to "Cancel", dashboard_staff_path(@staff), class: "text-gray-600 hover:text-gray-800 font-medium" %>
         <%= f.submit "Save Changes", class: "bg-brand-500 text-white px-6 py-2 rounded-lg hover:bg-brand-600 transition-colors font-medium" %>
       </div>
     <% end %>
