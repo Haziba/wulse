@@ -9,40 +9,7 @@
 <!-- Search Results List -->
 <div class="space-y-6">
   <% documents.each do |document| %>
-    <div class="flex items-start justify-between mb-4 bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow gap-4">
-      <div class="w-16 flex-shrink text-center">
-        <%= image_tag document.preview_image, class: "rounded-lg object-cover" if document.preview_image.attached? %>
-      </div>
-      <div class="flex-grow">
-        <div class="flex items-center justify-between">
-        <div>
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex items-center space-x-3">
-              <span class="text-sm text-gray-500"><%= document.author %></span>
-              <span class="text-sm text-gray-500">•</span>
-              <span class="text-sm text-gray-500"><%= document.publishing_date.to_date.year %></span>
-            </div>
-          </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">
-            <%= link_to document.title, library_read_path(document), class: "hover:text-brand-500", data: { turbo_frame: "_top" } %>
-          </h3>
-          <p class="text-gray-600 mb-3">
-            <%= truncate(document.title, length: 200) %>
-          </p>
-        </div>
-          <div class="flex gap-2">
-            <%= link_to library_read_path(document), class: "bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm", data: { turbo_frame: "_top" } do %>
-              <i class="fas fa-book-open mr-2"></i>Read
-            <% end %>
-            <% if document.file.attached? %>
-              <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm" do %>
-                <i class="fas fa-download"></i>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= render "library/document_card", document: document %>
   <% end %>
 </div>
 

@@ -26,83 +26,15 @@
         <h2 class="font-serif text-4xl font-bold text-gray-900 mb-2">Recently Added</h2>
         <p class="text-xl text-gray-600">Latest research and publications</p>
       </div>
-      <a href="/recent" class="text-brand-900 font-semibold hover:text-brand-700 transition-colors hidden md:block">
+      <%= link_to library_path, class: "text-brand-900 font-semibold hover:text-brand-700 transition-colors hidden md:block" do %>
         View All →
-      </a>
+      <% end %>
     </div>
 
     <div class="space-y-6">
-      <!-- Document 1 -->
-      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div class="flex-1">
-            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-brand-900 transition-colors">
-              <a href="/publications/1">Machine Learning Approaches to Climate Prediction Models</a>
-            </h3>
-            <p class="text-gray-600 text-sm mb-3">Dr. Sarah Chen, Computer Science • 2 days ago</p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Machine Learning</span>
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Climate Science</span>
-            </div>
-          </div>
-          <div class="flex gap-2">
-            <a href="/publications/1" class="px-6 py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center">
-              Read
-            </a>
-            <a href="/publications/1/download" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center">
-              <i class="fas fa-download"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Document 2 -->
-      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div class="flex-1">
-            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-brand-900 transition-colors">
-              <a href="/publications/2">Sustainable Urban Development in the 21st Century</a>
-            </h3>
-            <p class="text-gray-600 text-sm mb-3">Prof. Michael Torres, Urban Planning • 5 days ago</p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Urban Planning</span>
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Sustainability</span>
-            </div>
-          </div>
-          <div class="flex gap-2">
-            <a href="/publications/2" class="px-6 py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center">
-              Read
-            </a>
-            <a href="/publications/2/download" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center">
-              <i class="fas fa-download"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Document 3 -->
-      <div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div class="flex-1">
-            <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-brand-900 transition-colors">
-              <a href="/publications/3">Novel Therapeutic Approaches in Cancer Treatment</a>
-            </h3>
-            <p class="text-gray-600 text-sm mb-3">Dr. Emily Rodriguez, Medical School • 1 week ago</p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Medicine</span>
-              <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Oncology</span>
-            </div>
-          </div>
-          <div class="flex gap-2">
-            <a href="/publications/3" class="px-6 py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center">
-              Read
-            </a>
-            <a href="/publications/3/download" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center">
-              <i class="fas fa-download"></i>
-            </a>
-          </div>
-        </div>
-      </div>
+      <% @recent_documents.each do |document| %>
+        <%= render "library/document_card", document: document %>
+      <% end %>
     </div>
   </div>
 </section>
