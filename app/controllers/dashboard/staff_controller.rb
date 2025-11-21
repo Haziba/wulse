@@ -59,7 +59,7 @@ class Dashboard::StaffController < ApplicationController
             add_toast(notice: "Staff member added successfully")
           ]
         end
-        format.html { redirect_to dashboard_staff_index_path(page: last_page), notice: "Staff member added successfully!", status: :see_other }
+        format.html { redirect_to dashboard_staff_index_path, notice: "Staff member added successfully!", status: :see_other }
       end
     else
       render :new, status: :unprocessable_content
@@ -157,7 +157,7 @@ class Dashboard::StaffController < ApplicationController
   private
 
   def updated_staff_list(page: 1)
-    @pagy, @staffs = pagy(Staff.all, page: page)
+    @pagy, @staffs = pagy(Staff.all.order(created_at: :desc), page: page)
     turbo_stream.update("staff_list", partial: "staff_list", locals: { staffs: @staffs, pagy: @pagy })
   end
 

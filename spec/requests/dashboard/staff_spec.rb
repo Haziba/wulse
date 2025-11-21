@@ -294,9 +294,9 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response.body).to include('turbo-stream action="update" target="staff_list"')
         end
 
-        it "redirects on html request to last page" do
+        it "redirects on html request" do
           post dashboard_staff_index_path, params: valid_params
-          expect(response).to redirect_to(dashboard_staff_index_path(page: 1))
+          expect(response).to redirect_to(dashboard_staff_index_path)
         end
 
         it "sends a welcome email" do
