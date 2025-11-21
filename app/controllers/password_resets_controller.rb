@@ -1,6 +1,22 @@
 class PasswordResetsController < ApplicationController
+  layout "library"
+
   before_action :set_password_reset_and_institution, only: [:edit, :update]
   before_action :check_expiration, only: [:edit, :update]
+
+  def new
+  end
+
+  def create
+    staff = Staff.find_by(email: params[:email], institution: current_institution)
+
+    if staff
+      ResetPasswordService.new(staff).call
+    end
+
+    # Always show success message to prevent email enumeration
+    redirect_to new_session_path, notice: "If an account exists with that email, you will receive password reset instructions."
+  end
 
   def edit
   end

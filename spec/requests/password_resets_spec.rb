@@ -9,6 +9,68 @@ RSpec.describe "PasswordResets", type: :request do
     host! "#{institution.subdomain}.example.com"
   end
 
+  describe "GET /password_resets/new" do
+    it "renders the forgot password form" do
+      get new_password_reset_path
+      expect(response).to have_http_status(:success)
+    end
+
+    it "displays the forgot password heading" do
+      get new_password_reset_path
+      expect(response.body).to include("Forgot Password")
+    end
+  end
+
+  describe "POST /password_resets" do
+    context "with existing email" do
+      it "creates a password reset token" do
+        expect {
+          post password_resets_path, params: { email: staff.email }
+        }.to change(PasswordReset, :count).by(1)
+      end
+
+      it "enqueues a password reset email" do
+        expect {
+          post password_resets_path, params: { email: staff.email }
+        }.to have_enqueued_mail(PasswordResetMailer, :reset_password)
+      end
+
+      it "redirects to sign in page" do
+        post password_resets_path, params: { email: staff.email }
+        expect(response).to redirect_to(new_session_path)
+      end
+
+      it "sets a success flash message" do
+        post password_resets_path, params: { email: staff.email }
+        expect(flash[:notice]).to eq("If an account exists with that email, you will receive password reset instructions.")
+      end
+    end
+
+    context "with non-existing email" do
+      it "does not create a password reset token" do
+        expect {
+          post password_resets_path, params: { email: "nonexistent@example.com" }
+        }.not_to change(PasswordReset, :count)
+      end
+
+      it "does not enqueue a password reset email" do
+        expect {
+          post password_resets_path, params: { email: "nonexistent@example.com" }
+        }.not_to have_enqueued_mail(PasswordResetMailer, :reset_password)
+      end
+
+      it "still redirects to sign in page (prevents email enumeration)" do
+        post password_resets_path, params: { email: "nonexistent@example.com" }
+        expect(response).to redirect_to(new_session_path)
+      end
+
+      it "still shows the same success message (prevents email enumeration)" do
+        post password_resets_path, params: { email: "nonexistent@example.com" }
+        expect(flash[:notice]).to eq("If an account exists with that email, you will receive password reset instructions.")
+      end
+    end
+  end
+
   describe "GET /password_resets/:token/edit" do
     context "with valid token" do
       it "renders the password reset form" do

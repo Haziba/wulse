@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
-  resources :password_resets, only: [:edit, :update], param: :token
+  resources :password_resets, only: [:new, :create, :edit, :update], param: :token
 
   get "dashboard", to: "dashboard#index", as: :dashboard
   get "library", to: "library#index", as: :library
