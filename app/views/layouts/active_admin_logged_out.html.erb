@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title><%= content_for(:title) || "Admin Login" %> | Wulse Admin</title>
+  <%= stylesheet_link_tag "active_admin", media: "all" %>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+</head>
+<body class="active_admin logged_out login">
+  <div id="wrapper">
+    <div id="content_wrapper">
+      <div class="flashes">
+        <% flash.each do |type, message| %>
+          <%= content_tag :div, message, class: "flash flash_#{type}" %>
+        <% end %>
+      </div>
+      <div id="active_admin_content">
+        <div id="login">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

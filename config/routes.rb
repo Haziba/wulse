@@ -22,6 +22,12 @@ Rails.application.routes.draw do
     get "admin", to: redirect("/dashboard")
   end
 
+  scope :admin, as: :admin do
+    get "login", to: "admin/sessions#new"
+    post "login", to: "admin/sessions#create"
+    delete "logout", to: "admin/sessions#destroy"
+  end
+
   ActiveAdmin.routes(self)
 
   get "up" => "rails/health#show", as: :rails_health_check

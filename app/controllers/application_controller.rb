@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
   before_action :set_current_institution
 
-  helper_method :current_institution, :current_staff, :signed_in?
+  helper_method :current_institution, :current_staff, :signed_in?, :current_admin
 
   private
 
@@ -38,6 +38,16 @@ class ApplicationController < ActionController::Base
   def require_signed_in
     unless signed_in?
       redirect_to new_session_path, alert: "You must be signed in to access this page"
+    end
+  end
+
+  def current_admin
+    @current_admin ||= Admin.find_by(id: session[:admin_id])
+  end
+
+  def authenticate_admin!
+    unless current_admin
+      redirect_to admin_login_path, alert: "You must be signed in to access this page"
     end
   end
 
