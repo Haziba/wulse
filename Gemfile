@@ -62,6 +62,9 @@ group :development do
 
   # Annotate models with schema information
   gem "annotaterb"
+
+  # Preview emails in the browser
+  gem "letter_opener"
 end
 
 group :test do
