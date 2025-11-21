@@ -110,6 +110,16 @@ class Dashboard::StaffController < ApplicationController
   end
 
   def destroy
+    if @staff.documents.any?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: add_toast(alert: "Unable to delete staff who has documents")
+        end
+        format.html { redirect_to dashboard_staff_index_path, alert: "Unable to delete staff who has documents", status: :see_other }
+      end
+      return
+    end
+
     @staff.destroy
     if turbo_frame_request?
       respond_to do |format|

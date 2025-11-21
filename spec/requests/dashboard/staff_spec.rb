@@ -500,6 +500,23 @@ RSpec.describe "Dashboard::Staff", type: :request do
 
         expect(Staff.find_by(id: staff_id)).to be_nil
       end
+
+      context "when staff has documents" do
+        let!(:document) { create(:document, staff: staff_to_delete, institution: institution) }
+
+        it "does not delete the staff member" do
+          expect {
+            delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          }.not_to change(Staff, :count)
+        end
+
+        it "shows an error toast" do
+          delete dashboard_staff_path(staff_to_delete), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+          expect(response.body).to include('turbo-stream action="prepend" target="toast-container-target"')
+          expect(response.body).to include("Unable to delete staff who has documents")
+        end
+      end
     end
   end
 
