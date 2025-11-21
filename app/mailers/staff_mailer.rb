@@ -16,4 +16,12 @@ class StaffMailer < ApplicationMailer
     mail to: @staff.email,
          subject: "Your Account Has Been Deactivated"
   end
+
+  def activation_email(staff)
+    @staff = staff
+    @institution = staff.institution
+
+    mail to: @staff.email,
+         subject: "Your Account Has Been Reactivated"
+  end
 end

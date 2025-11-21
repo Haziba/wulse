@@ -97,6 +97,7 @@ class Dashboard::StaffController < ApplicationController
 
   def activate
     @staff.update(status: :active)
+    StaffMailer.activation_email(@staff).deliver_later
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [

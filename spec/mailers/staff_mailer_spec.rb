@@ -35,4 +35,21 @@ RSpec.describe StaffMailer, type: :mailer do
       expect(mail.body.encoded).to include("Please contact your administrator for more information")
     end
   end
+
+  describe "activation_email" do
+    let(:institution) { create(:institution) }
+    let(:staff) { create(:staff, institution: institution) }
+    let(:mail) { StaffMailer.activation_email(staff) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("Your Account Has Been Reactivated")
+      expect(mail.to).to eq([staff.email])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("Dear #{staff.name}")
+      expect(mail.body.encoded).to include("Your account has been reactivated")
+      expect(mail.body.encoded).to include("You can now log in and access the digital library")
+    end
+  end
 end

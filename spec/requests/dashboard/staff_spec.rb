@@ -441,6 +441,12 @@ RSpec.describe "Dashboard::Staff", type: :request do
         expect(response.body).to include("fa-pause") # Deactivate icon
         expect(response.body).not_to include("fa-play") # Activate icon
       end
+
+      it "sends an activation email" do
+        expect {
+          patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "activation_email", "deliver_now", { args: [inactive_staff] })
+      end
     end
   end
 
