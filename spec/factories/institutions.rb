@@ -11,6 +11,10 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
+# Indexes
+#
+#  index_institutions_on_subdomain  (subdomain) UNIQUE
+#
 FactoryBot.define do
   factory :institution do
     name { Faker::University.name }
