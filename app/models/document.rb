@@ -42,7 +42,7 @@ class Document < ApplicationRecord
   validate :publishing_date_metadata_present
 
   def self.ransackable_attributes(auth_object = nil)
-    ['staff', 'institution']
+    %w[staff_id institution_id created_at updated_at]
   end
 
   def self.ransackable_associations(auth_object = nil)

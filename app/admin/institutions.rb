@@ -51,7 +51,7 @@ ActiveAdmin.register Institution do
     panel "Documents" do
       paginated_collection(institution.documents.page(params[:page]).per(10), download_links: false) do
         table_for collection do
-          column :name
+          column :title
           column :created_at
           column "Actions" do |document|
             link_to "View", admin_document_path(document)
