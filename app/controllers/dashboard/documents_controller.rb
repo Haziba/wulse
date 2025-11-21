@@ -6,6 +6,7 @@ class Dashboard::DocumentsController < ApplicationController
 
   def index
     documents = Document.all
+      .order(created_at: :desc)
 
     if params[:search].present?
       documents = documents.joins(:metadata)
@@ -39,13 +40,10 @@ class Dashboard::DocumentsController < ApplicationController
     if @document.save
       update_preview
 
-      total_count = Document.count
-      last_page = (total_count.to_f / Pagy::DEFAULT[:limit]).ceil
-
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: [
-            updated_document_list(page: last_page),
+            updated_document_list,
             add_toast(notice: "Document added successfully")
           ]
         end
@@ -97,7 +95,16 @@ class Dashboard::DocumentsController < ApplicationController
   private
 
   def updated_document_list(page: 1)
-    @pagy, @documents = pagy(Document.all, page: page)
+    documents = Document.all.order(created_at: :desc)
+
+    if params[:search].present?
+      documents = documents.joins(:metadata)
+                          .where(metadata: { key: 'title' })
+                          .where("metadata.value ILIKE ?", "%#{params[:search]}%")
+                          .distinct
+    end
+
+    @pagy, @documents = pagy(documents, page: page)
     turbo_stream.update("document_list", partial: "document_list", locals: { documents: @documents, pagy: @pagy })
   end
 

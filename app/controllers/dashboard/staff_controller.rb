@@ -6,6 +6,7 @@ class Dashboard::StaffController < ApplicationController
 
   def index
     staffs = Staff.all
+      .order(created_at: :desc)
 
     if params[:search].present?
       staffs = staffs.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
@@ -51,13 +52,10 @@ class Dashboard::StaffController < ApplicationController
       password_reset = PasswordReset.create(staff: @staff)
       StaffMailer.welcome_email(@staff, password_reset).deliver_later
 
-      total_count = Staff.count
-      last_page = (total_count.to_f / Pagy::DEFAULT[:limit]).ceil
-
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: [
-            updated_staff_list(page: last_page),
+            updated_staff_list,
             add_toast(notice: "Staff member added successfully")
           ]
         end
