@@ -1,7 +1,7 @@
 <!-- Main Content with Search Form -->
 <%= form_with url: library_path,
               method: :get,
-              data: { turbo_action: "advance", turbo_stream: true, controller: "debounce-submit" },
+              data: { turbo_frame: "_top", controller: "debounce-submit" },
               class: "space-y-0" do %>
 
   <!-- Search Header -->
