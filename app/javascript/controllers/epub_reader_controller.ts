@@ -65,8 +65,12 @@ export default class EpubReaderController extends ReaderController {
 
       this.rendition.on("relocated", (location: any) => {
         const currentLocation = this.book.locations.locationFromCfi(location.start.cfi);
+
+        // Check if we're on the cover page (first spine item at the start)
+        const isCoverPage = location.start.index === 0 && currentLocation === 0;
+
         if (currentLocation != null) {
-          const newPage = currentLocation + 1;
+          const newPage = isCoverPage ? 0 : currentLocation + 1;
 
           if (this.lastRelocatedPage !== newPage) {
             this.lastRelocatedPage = newPage;
@@ -76,8 +80,8 @@ export default class EpubReaderController extends ReaderController {
         }
       });
 
-      this.currentPage = 1;
-      this.lastRelocatedPage = 1;
+      this.currentPage = 0;
+      this.lastRelocatedPage = 0;
       this.updatePageInfo();
 
       this.loadingTarget.classList.add("hidden");
@@ -254,7 +258,7 @@ export default class EpubReaderController extends ReaderController {
 
     this.pageJumpInputTarget.value = String(page);
 
-    this.prevButtonTarget.disabled = page <= 1;
+    this.prevButtonTarget.disabled = page <= 0;
     this.nextButtonTarget.disabled = page >= total;
   }
 
