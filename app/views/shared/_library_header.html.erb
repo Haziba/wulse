@@ -14,9 +14,6 @@
             <h1 class="font-serif font-bold text-xl text-gray-900"><%= current_institution&.name&.titleize || "University of Wulse" %></h1>
           </div>
         <% end %>
-        <nav class="hidden md:flex space-x-6">
-          <%= link_to "Browse", library_path, class: "text-gray-700 hover:text-brand-500 font-medium cursor-pointer" %>
-        </nav>
       </div>
       <div class="flex items-center space-x-4">
         <%= link_to new_session_path, class: "p-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors" do %>
