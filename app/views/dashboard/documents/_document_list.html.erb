@@ -13,8 +13,19 @@
       <tbody class="divide-y divide-gray-200">
         <% documents.each do |document| %>
         <tr class="hover:bg-gray-50" id="document_<%= document.id %>">
-          <td class="py-6 px-6">
-            <%= link_to document.title, dashboard_document_path(document), class: "text-brand-500 hover:text-brand-600 font-medium block truncate", data: { turbo_frame: "_top" } %>
+          <td class="py-4 px-6">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-14 rounded flex-shrink-0 overflow-hidden">
+                <% if document.preview_image.attached? %>
+                  <%= image_tag document.preview_image, class: "w-full h-full object-cover" %>
+                <% else %>
+                  <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-file-alt text-gray-400"></i>
+                  </div>
+                <% end %>
+              </div>
+              <%= link_to document.title, dashboard_document_path(document), class: "text-brand-500 hover:text-brand-600 font-medium block truncate", data: { turbo_frame: "_top" } %>
+            </div>
           </td>
           <td class="py-6 px-6 hidden md:table-cell">
             <%= link_to document.staff.name, dashboard_staff_path(document.staff), class: "text-brand-500 hover:text-brand-600 block truncate", data: { turbo_frame: "_top" } %>
