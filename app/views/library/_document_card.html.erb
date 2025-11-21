@@ -1,14 +1,24 @@
-<div class="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div class="flex-1">
-      <h3 class="text-xl font-semibold text-gray-900 mb-2 hover:text-brand-900 transition-colors">
-        <%= link_to document.title, library_read_path(document), data: { turbo_frame: "_top" } %>
+<div class="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+  <div class="flex items-center gap-3 sm:gap-4">
+    <% if document.preview_image.attached? %>
+      <div class="flex-shrink-0 w-12 h-16 sm:w-16 sm:h-20">
+        <%= image_tag document.preview_image, class: "w-full h-full object-cover rounded shadow-sm" %>
+      </div>
+    <% else %>
+      <div class="flex-shrink-0 w-12 h-16 sm:w-16 sm:h-20 bg-gray-100 rounded shadow-sm flex items-center justify-center">
+        <i class="fas fa-file-alt text-gray-400 text-lg sm:text-xl"></i>
+      </div>
+    <% end %>
+    <div class="flex-1 min-w-0">
+      <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-1 hover:text-brand-900 transition-colors">
+        <%= link_to document.title, library_read_path(document), class: "line-clamp-2", data: { turbo_frame: "_top" } %>
       </h3>
-      <p class="text-gray-600 text-sm mb-3"><%= document.author %>, <%= time_ago_in_words(document.created_at) %> ago</p>
+      <p class="text-gray-600 text-sm"><%= document.author %> · <%= document.publishing_date %></p>
     </div>
-    <div class="flex gap-2">
-      <%= link_to library_read_path(document), class: "px-6 py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" } do %>
-        Read
+    <div class="flex flex-col gap-2 flex-shrink-0">
+      <%= link_to library_read_path(document), class: "p-2 sm:px-6 sm:py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" } do %>
+        <i class="fas fa-book-open sm:hidden"></i>
+        <span class="hidden sm:inline">Read</span>
       <% end %>
       <% if document.file.attached? %>
         <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center" do %>

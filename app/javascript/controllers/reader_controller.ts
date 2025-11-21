@@ -117,9 +117,13 @@ export default abstract class ReaderController<
   }
 
   protected applySidebarWidth(open: boolean): void {
-    const px = open ? this.remToPx(this.SIDEBAR_WIDTH_REM) : 0;
-    this.sidebarTarget.style.width = `${px}px`;
-    this.sidebarTarget.style.minWidth = `${px}px`;
+    if (open) {
+      this.sidebarTarget.classList.remove("-translate-x-full");
+      this.sidebarTarget.classList.add("translate-x-0");
+    } else {
+      this.sidebarTarget.classList.remove("translate-x-0");
+      this.sidebarTarget.classList.add("-translate-x-full");
+    }
   }
 
   prevPage(event: Event): void {

@@ -29,13 +29,10 @@
                     <button data-action="click-><%= reader_type %>#toggleDarkMode" class="text-gray-600 hover:text-burgundy-500">
                         <i class="fas fa-adjust"></i>
                     </button>
-                    <button data-action="click-><%= reader_type %>#toggleFullscreen" class="text-gray-600 hover:text-burgundy-500">
-                        <i class="fas fa-expand"></i>
-                    </button>
                 </div>
             </div>
 
-            <aside data-<%= reader_type %>-target="sidebar" class="flex-shrink-0 bg-gray-50 border-r border-gray-200 transition-all duration-300 ease-in-out overflow-hidden w-0 fixed left-0 z-10">
+            <aside data-<%= reader_type %>-target="sidebar" class="flex-shrink-0 bg-gray-50 border-r border-gray-200 transition-transform duration-300 ease-in-out overflow-hidden w-80 fixed left-0 z-10 -translate-x-full">
                 <div class="w-80 h-full flex flex-col min-w-0">
                     <div id="sidebar-header" class="p-6 border-b border-gray-200">
                     <div class="flex items-center justify-between mb-4">
@@ -102,21 +99,21 @@
                 </div>
             </div>
 
-            <div id="page-navigation" class="flex-shrink-0 flex items-center justify-between p-4 bg-gray-50 border-t border-gray-200">
-                <button data-<%= reader_type %>-target="prevButton" data-action="click-><%= reader_type %>#prevPage" class="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-burgundy-500 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <div id="page-navigation" class="flex-shrink-0 flex items-center justify-between p-2 sm:p-4 bg-gray-50 border-t border-gray-200">
+                <button data-<%= reader_type %>-target="prevButton" data-action="click-><%= reader_type %>#prevPage" class="flex items-center space-x-2 p-2 sm:px-4 sm:py-2 text-gray-600 hover:text-burgundy-500 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="fas fa-chevron-left"></i>
-                    <span>Previous Page</span>
+                    <span class="hidden sm:inline">Previous</span>
                 </button>
 
-                <div class="flex items-center space-x-4">
-                    <span data-<%= reader_type %>-target="pageIndicator" class="text-sm text-gray-600">1 / 1</span>
-                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                <div class="flex items-center space-x-2 sm:space-x-4 flex-1 justify-center">
+                    <span data-<%= reader_type %>-target="pageIndicator" class="text-xs sm:text-sm text-gray-600 whitespace-nowrap">1 / 1</span>
+                    <div class="hidden sm:block w-48 bg-gray-200 rounded-full h-2">
                         <div data-<%= reader_type %>-target="progressBar" class="bg-brand-500 h-2 rounded-full transition-all" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <button data-<%= reader_type %>-target="nextButton" data-action="click-><%= reader_type %>#nextPage" class="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-burgundy-500 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span>Next Page</span>
+                <button data-<%= reader_type %>-target="nextButton" data-action="click-><%= reader_type %>#nextPage" class="flex items-center space-x-2 p-2 sm:px-4 sm:py-2 text-gray-600 hover:text-burgundy-500 hover:bg-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span class="hidden sm:inline">Next</span>
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
