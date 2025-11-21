@@ -174,6 +174,7 @@ export default abstract class ReaderController<
     switch (event.key) {
       case "ArrowLeft":
       case "ArrowUp":
+        if (event.metaKey || event.ctrlKey) break;
         event.preventDefault();
         this.prevPage(event);
         break;
