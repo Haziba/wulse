@@ -31,6 +31,8 @@ class Dashboard::DocumentsController < ApplicationController
   def new
     @document = Document.new
     @document.metadata.build(key: 'title')
+    @document.metadata.build(key: 'author')
+    @document.metadata.build(key: 'publishing_date')
   end
 
   def create
@@ -48,7 +50,7 @@ class Dashboard::DocumentsController < ApplicationController
           ]
         end
         format.html do
-          redirect_to dashboard_documents_path(page: last_page), notice: "Document added successfully!", status: :see_other
+          redirect_to dashboard_documents_path, notice: "Document added successfully!", status: :see_other
         end
       end
     else

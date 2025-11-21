@@ -154,7 +154,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
 
         it "redirects on html request" do
           post dashboard_documents_path, params: valid_params
-          expect(response).to redirect_to("#{dashboard_documents_path}?page=1")
+          expect(response).to redirect_to(dashboard_documents_path)
         end
       end
 
