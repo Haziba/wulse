@@ -8,7 +8,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    staff = Staff.find_by(email: params[:email], institution: current_institution)
+    staff = Staff.find_by(email: params[:email], institution: Current.institution)
 
     if staff
       ResetPasswordService.new(staff).call

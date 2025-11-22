@@ -5,6 +5,6 @@ module DocumentsHelper
   end
 
   def metadata_keys
-    @metadata_keys ||= Metadata.joins(:document).where(document: { institution_id: current_institution.id }).pluck(:key)
+    @metadata_keys ||= Metadata.joins(:document).where(document: { institution_id: Current.institution.id }).pluck(:key)
   end
 end

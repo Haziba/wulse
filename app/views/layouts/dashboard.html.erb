@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Dashboard - #{current_institution.name.titleize}" %></title>
+    <title><%= content_for(:title) || "Dashboard - #{Current.institution.name.titleize}" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -31,7 +31,7 @@
     </style>
     <script>
       <%
-        branding_colour = current_institution&.branding_colour || "#8B4513"
+        branding_colour = Current.institution&.branding_colour || "#8B4513"
         color_shades = generate_color_shades(branding_colour)
       %>
       tailwind.config = {

@@ -4,8 +4,8 @@
     <!-- Card -->
     <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
       <div class="text-center mb-6">
-        <% if current_institution.logo.attached? %>
-          <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "w-20 h-20 mx-auto mb-4 object-contain" %>
+        <% if Current.institution.logo.attached? %>
+          <%= image_tag Current.institution.logo, alt: "#{Current.institution.name.titleize} Logo", class: "w-20 h-20 mx-auto mb-4 object-contain" %>
         <% else %>
           <div class="w-20 h-20 bg-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <i class="fas fa-user-graduate text-white text-3xl"></i>
@@ -22,7 +22,7 @@
           <div class="relative">
             <%= f.email_field :email, required: true,
                 class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors pl-11",
-                placeholder: "your.email@#{current_institution.subdomain}.edu" %>
+                placeholder: "your.email@#{Current.institution.subdomain}.edu" %>
             <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
         </div>

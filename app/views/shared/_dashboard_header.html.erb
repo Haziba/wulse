@@ -4,11 +4,11 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-8">
         <%= link_to "/", class: "flex items-center space-x-3" do %>
-          <% if current_institution.logo.attached? %>
-            <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+          <% if Current.institution.logo.attached? %>
+            <%= image_tag Current.institution.logo, alt: "#{Current.institution.name.titleize} Logo", class: "h-10 w-10" %>
           <% end %>
           <div>
-            <h1 class="font-serif font-bold text-xl text-gray-900"><%= current_institution.name.titleize %></h1>
+            <h1 class="font-serif font-bold text-xl text-gray-900"><%= Current.institution.name.titleize %></h1>
           </div>
         <% end %>
         <nav class="hidden md:flex space-x-6">
@@ -21,7 +21,7 @@
         <button data-action="click->mobile-menu#toggle" class="md:hidden text-gray-700 hover:text-brand-500 p-2">
           <i class="fas fa-bars text-xl"></i>
         </button>
-        <%= render "shared/user_profile_menu", staff: current_staff %>
+        <%= render "shared/user_profile_menu", staff: Current.staff %>
       </div>
     </div>
   </div>

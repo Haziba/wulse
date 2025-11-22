@@ -37,7 +37,7 @@ class Dashboard::DocumentsController < ApplicationController
 
   def create
     @document = Document.new(document_params)
-    @document.staff = current_staff
+    @document.staff = Current.staff
 
     if @document.save
       update_preview

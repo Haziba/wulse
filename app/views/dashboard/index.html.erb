@@ -75,7 +75,7 @@
           <div class="flex-1 text-center">
             <p class="text-sm text-gray-600 mb-1">Storage Used</p>
             <p class="text-2xl font-bold text-gray-900"><%= number_to_human_size(@stats[:storage_used]) %></p>
-            <p class="text-sm text-gray-500">of <%= number_to_human_size(current_institution.storage_total) %></p>
+            <p class="text-sm text-gray-500">of <%= number_to_human_size(Current.institution.storage_total) %></p>
           </div>
           <div class="hidden lg:flex w-12 h-12 bg-purple-100 rounded-lg items-center justify-center flex-shrink-0">
             <i class="fas fa-database text-purple-500 text-xl"></i>

@@ -6,10 +6,6 @@ class ApplicationMailer < ActionMailer::Base
   layout "mailer"
 
   def default_url_options
-    puts "HARRYLOG"*50
-    puts Current.inspect
-    puts Current.host
-    puts "HARRYLOG"*50
     {
       host: Current.host || ENV.fetch("APP_HOST", "wulse.org"),
       protocol: "https"

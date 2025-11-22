@@ -27,7 +27,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       <%
-        branding_colour = current_institution&.branding_colour || "#e0486d"
+        branding_colour = Current.institution&.branding_colour || "#e0486d"
         color_shades = generate_color_shades(branding_colour)
       %>
       tailwind.config = {
@@ -67,10 +67,10 @@
         <div class="flex items-center justify-between gap-8">
           <!-- Logo -->
           <%= link_to "/", class: "flex items-center gap-3 flex-shrink-0" do %>
-            <% if current_institution.logo.attached? %>
-              <%= image_tag current_institution.logo, alt: "#{current_institution.name.titleize} Logo", class: "h-10 w-10" %>
+            <% if Current.institution.logo.attached? %>
+              <%= image_tag Current.institution.logo, alt: "#{Current.institution.name.titleize} Logo", class: "h-10 w-10" %>
             <% end %>
-            <span class="font-serif text-xl font-bold text-brand-900"><%= current_institution.name.titleize %></span>
+            <span class="font-serif text-xl font-bold text-brand-900"><%= Current.institution.name.titleize %></span>
           <% end %>
 
           <!-- Search Bar (Desktop) -->
@@ -113,7 +113,7 @@
     <footer class="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 text-white mt-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="text-center">
-          <p class="text-brand-200 text-sm">© <%= Time.current.year %> <%= current_institution.name.titleize %> Research Library. All rights reserved.</p>
+          <p class="text-brand-200 text-sm">© <%= Time.current.year %> <%= Current.institution.name.titleize %> Research Library. All rights reserved.</p>
         </div>
       </div>
     </footer>

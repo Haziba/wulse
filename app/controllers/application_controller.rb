@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_request_info
 
-  helper_method :current_institution, :current_staff, :signed_in?, :current_admin
+  helper_method :signed_in?, :current_admin
 
   private
 
@@ -25,22 +25,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_institution
-    ActsAsTenant.current_tenant
-  end
-
-  def current_staff
-    @current_staff ||= Staff.find_by(id: cookies.signed[:staff_id])
-  end
-
   def set_current_request_info
-    Current.host   = request.host
-    Current.institution = current_institution
-    Current.staff   = current_staff
+    Current.host = request.host
+    Current.institution = ActsAsTenant.current_tenant
+    Current.staff = Staff.find_by(id: cookies.signed[:staff_id])
   end
 
   def signed_in?
-    current_staff.present?
+    Current.staff.present?
   end
 
   def require_signed_in

@@ -3,11 +3,11 @@ class Dashboard::ProfilesController < ApplicationController
   before_action :require_signed_in
 
   def edit
-    @staff = current_staff
+    @staff = Current.staff
   end
 
   def update
-    @staff = current_staff
+    @staff = Current.staff
 
     # If changing password, verify current password first
     if profile_params[:password].present?

@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    staff = Staff.find_by(email: params[:email], institution: current_institution)
+    staff = Staff.find_by(email: params[:email], institution: Current.institution)
 
     if staff&.authenticate(params[:password])
       if staff.status == 'inactive'

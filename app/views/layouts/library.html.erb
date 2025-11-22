@@ -31,7 +31,7 @@
     </style>
     <script>
       <%
-        branding_colour = current_institution&.branding_colour || "#8B4513"
+        branding_colour = Current.institution&.branding_colour || "#8B4513"
         color_shades = generate_color_shades(branding_colour)
       %>
       tailwind.config = {
