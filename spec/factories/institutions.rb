@@ -18,7 +18,7 @@
 FactoryBot.define do
   factory :institution do
     name { Faker::University.name }
-    subdomain { Faker::Internet.domain_word }
+    sequence(:subdomain) { |n| "#{Faker::Internet.domain_word}#{n}" }
     branding_colour { Faker::Color.hex_color }
 
     trait :with_logo do
