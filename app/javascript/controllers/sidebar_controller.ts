@@ -6,12 +6,26 @@ export default class SidebarController extends Controller<HTMLElement> {
   declare readonly sidebarTarget: HTMLElement;
   declare readonly overlayTarget: HTMLElement;
 
-  private isOpen = false;
+  private static readonly STORAGE_KEY = "sidebar_open";
+
+  private get isOpen(): boolean {
+    const stored = localStorage.getItem(SidebarController.STORAGE_KEY);
+    if (stored !== null) {
+      return stored === "true";
+    }
+    return this.shouldDefaultToOpen();
+  }
+
+  private set isOpen(value: boolean) {
+    localStorage.setItem(SidebarController.STORAGE_KEY, String(value));
+  }
+
+  private shouldDefaultToOpen(): boolean {
+    return window.innerWidth >= 900;
+  }
 
   connect(): void {
-    if (window.innerWidth >= 900) {
-      this.isOpen = true;
-    }
+    this.updateSidebar();
   }
 
   toggle(event: Event): void {
