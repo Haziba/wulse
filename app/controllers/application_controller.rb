@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
   before_action :set_current_institution
 
+  before_action :set_current_request_info
+
   helper_method :current_institution, :current_staff, :signed_in?, :current_admin
 
   private
@@ -29,6 +31,12 @@ class ApplicationController < ActionController::Base
 
   def current_staff
     @current_staff ||= Staff.find_by(id: cookies.signed[:staff_id])
+  end
+
+  def set_current_request_info
+    Current.host   = request.host
+    Current.institution = current_institution
+    Current.staff   = current_staff
   end
 
   def signed_in?
