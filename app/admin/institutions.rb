@@ -1,5 +1,5 @@
 ActiveAdmin.register Institution do
-  permit_params :name, :subdomain, :logo
+  permit_params :name, :subdomain, :logo, :branding_colour
 
   filter :name
   filter :subdomain
@@ -19,6 +19,7 @@ ActiveAdmin.register Institution do
       f.input :name
       f.input :subdomain
       f.input :logo
+      f.input :branding_colour, as: :color
     end
     f.actions
   end
@@ -70,7 +71,7 @@ ActiveAdmin.register Institution do
 
     private
     def institution_params
-      params.require(:institution).permit(:name, :subdomain, :logo)
+      params.require(:institution).permit(:name, :subdomain, :logo, :branding_colour)
     end
   end
 end
