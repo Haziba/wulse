@@ -68,6 +68,23 @@ export default class extends Controller<HTMLElement> {
     this.updateVisibility();
   }
 
+  selectOnly(event: Event): void {
+    event.preventDefault();
+    const target = event.currentTarget as HTMLElement;
+    const item = target.closest("[data-filter-list-target='item']");
+    if (!item) return;
+
+    const targetCheckbox = item.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    if (!targetCheckbox) return;
+
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = checkbox === targetCheckbox;
+    });
+
+    this.element.closest("form")?.requestSubmit();
+  }
+
   get isExpanded(): boolean {
     const key = this.storageKey;
     if (!key) return false;

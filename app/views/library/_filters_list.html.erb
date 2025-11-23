@@ -12,14 +12,17 @@
             filter_param_key = filter_key.to_s
             is_checked = params[filter_param_key].nil? || Array(params[filter_param_key]).include?(value)
           %>
-          <label class="flex items-center cursor-pointer hover:text-gray-900" data-filter-list-target="item">
+          <label class="group flex items-center cursor-pointer hover:text-gray-900" data-filter-list-target="item">
             <%= check_box_tag "#{filter_param_key}[]",
                               value,
                               is_checked,
                               data: { action: "change->debounce-submit#submit" },
                               class: "text-brand-500 rounded border-gray-300 focus:ring-brand-500" %>
             <span class="ml-2 text-sm text-gray-600 flex-1"><%= value.titleize %></span>
-            <span class="text-xs text-gray-500"><%= number_with_delimiter(count) %></span>
+            <button type="button"
+                    class="text-xs text-brand-500 hover:text-brand-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    data-action="click->filter-list#selectOnly">only</button>
+            <span class="text-xs text-gray-500 ml-2"><%= number_with_delimiter(count) %></span>
           </label>
         <% end %>
       </div>
