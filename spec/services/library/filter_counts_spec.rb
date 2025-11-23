@@ -201,4 +201,85 @@ RSpec.describe Library::FilterCounts do
       expect(result['document_type']).to eq([['book', 1]])
     end
   end
+
+  describe "(Unknown) counts" do
+    context "when documents are missing metadata keys" do
+      let!(:doc_with_dept) do
+        document = create(:document, institution: institution, staff: staff, title: "Doc with department")
+        create(:metadatum, document: document, key: 'department', value: 'computer science')
+        create(:metadatum, document: document, key: 'language', value: 'english')
+        document
+      end
+
+      let!(:doc_without_dept) do
+        document = create(:document, institution: institution, staff: staff, title: "Doc without department")
+        create(:metadatum, document: document, key: 'language', value: 'english')
+        document
+      end
+
+      let!(:doc_without_lang) do
+        document = create(:document, institution: institution, staff: staff, title: "Doc without language")
+        create(:metadatum, document: document, key: 'department', value: 'economics')
+        document
+      end
+
+      it "includes (Unknown) count for documents missing department metadata" do
+        result = result_hash_for(Document.all)
+
+        unknown_entry = result['department'].find { |k, _| k == '(Unknown)' }
+        expect(unknown_entry).to eq(['(Unknown)', 1])
+      end
+
+      it "includes (Unknown) count for documents missing language metadata" do
+        result = result_hash_for(Document.all)
+
+        unknown_entry = result['language'].find { |k, _| k == '(Unknown)' }
+        expect(unknown_entry).to eq(['(Unknown)', 1])
+      end
+
+      it "shows (Unknown) with zero count when scope excludes unknowns but they exist overall" do
+        result = result_hash_for(Document.where(id: doc_with_dept.id))
+
+        unknown_entry = result['department'].find { |k, _| k == '(Unknown)' }
+        expect(unknown_entry).to eq(['(Unknown)', 0])
+      end
+    end
+
+    context "when multiple documents are missing metadata" do
+      let!(:doc1) do
+        create(:document, institution: institution, staff: staff, title: "Doc 1")
+      end
+
+      let!(:doc2) do
+        create(:document, institution: institution, staff: staff, title: "Doc 2")
+      end
+
+      let!(:doc3) do
+        document = create(:document, institution: institution, staff: staff, title: "Doc 3")
+        create(:metadatum, document: document, key: 'document_type', value: 'book')
+        document
+      end
+
+      it "counts all documents missing the metadata key" do
+        result = result_hash_for(Document.all)
+
+        unknown_entry = result['document_type'].find { |k, _| k == '(Unknown)' }
+        expect(unknown_entry).to eq(['(Unknown)', 2])
+      end
+    end
+
+    context "when the only option is (Unknown)" do
+      let!(:doc_without_any_metadata) do
+        create(:document, institution: institution, staff: staff, title: "Doc without metadata")
+      end
+
+      it "hides the filter category entirely" do
+        result = result_hash_for(Document.all)
+
+        expect(result).not_to have_key('document_type')
+        expect(result).not_to have_key('department')
+        expect(result).not_to have_key('language')
+      end
+    end
+  end
 end

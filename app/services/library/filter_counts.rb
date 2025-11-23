@@ -21,14 +21,18 @@ module Library
         end
         [key, inner_filters]
       end
-      combined_filters.to_h.map { |key, values| [key, values.sort_by { |inner_key, count| [-count, -inner_key.to_i] }] }
+      combined_filters.to_h
+        .map { |key, values| [key, values.sort_by { |inner_key, count| [-count, -inner_key.to_i] }] }
+        .reject { |_, values| values.size == 1 && values.first.first == "(Unknown)" }
     end
 
     private
 
     def get_filters(scope)
+      document_ids = scope.map(&:id)
+
       simple_counts = Metadatum
-        .where(document_id: scope.map(&:id))
+        .where(document_id: document_ids)
         .where(key: FILTER_KEYS)
         .group(:key, :value)
         .count
@@ -37,11 +41,22 @@ module Library
         pairs = simple_counts
           .select { |(k, _), _| k == key }
           .map    { |((_, v), c)| [v, c] }
+
+        unknown_count = count_unknown(document_ids, key)
+        pairs << ["(Unknown)", unknown_count] if unknown_count > 0
+
         sort_desc(pairs.to_h)
       end
 
       result = facets.merge(publishing_date: tally_years(scope))
       result
+    end
+
+    def count_unknown(document_ids, key)
+      return 0 if document_ids.empty?
+
+      documents_with_key = Metadatum.where(document_id: document_ids, key: key).distinct.pluck(:document_id)
+      (document_ids - documents_with_key).count
     end
 
     def tally_years(scope)

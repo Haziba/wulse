@@ -65,9 +65,30 @@ module Library
     end
 
     def apply_standard_filter(scope, key, values)
-      scope.where(
-        id: Metadatum.where(key: key, value: values).select(:document_id)
-      )
+      values = Array(values)
+
+      include_unknown = values.delete("(Unknown)")
+      known_values    = values
+
+      metadatum_scope = Metadatum.where(key: key)
+
+      filters = []
+
+      if known_values.present?
+        filters << scope.where(
+          id: metadatum_scope.where(value: known_values).select(:document_id)
+        )
+      end
+
+      if include_unknown
+        filters << scope.where.not(
+          id: metadatum_scope.select(:document_id)
+        )
+      end
+
+      return scope if filters.empty?
+
+      filters.reduce { |combined, relation| combined.or(relation) }
     end
   end
 end

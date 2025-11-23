@@ -248,4 +248,58 @@ RSpec.describe Library::DocumentFilter do
       expect(filter.call).to be_a(ActiveRecord::Relation)
     end
   end
+
+  describe "(Unknown) filter" do
+    let!(:doc_with_dept) do
+      document = create(:document, institution: institution, staff: staff, title: "Doc with department")
+      create(:metadatum, document: document, key: 'department', value: 'computer science')
+      document
+    end
+
+    let!(:doc_without_dept) do
+      create(:document, institution: institution, staff: staff, title: "Doc without department")
+    end
+
+    let!(:doc_with_other_dept) do
+      document = create(:document, institution: institution, staff: staff, title: "Doc with other department")
+      create(:metadatum, document: document, key: 'department', value: 'economics')
+      document
+    end
+
+    it "filters to only documents missing the metadata key when (Unknown) is selected alone" do
+      result = described_class.call('department' => ['(Unknown)'])
+
+      expect(result).to include(doc_without_dept)
+      expect(result).not_to include(doc_with_dept, doc_with_other_dept)
+    end
+
+    it "includes both known values and unknown when combined" do
+      result = described_class.call('department' => ['computer science', '(Unknown)'])
+
+      expect(result).to include(doc_with_dept, doc_without_dept)
+      expect(result).not_to include(doc_with_other_dept)
+    end
+
+    it "works with document_type filter" do
+      doc_with_type = create(:document, institution: institution, staff: staff, title: "Doc with type")
+      create(:metadatum, document: doc_with_type, key: 'document_type', value: 'book')
+
+      doc_without_type = create(:document, institution: institution, staff: staff, title: "Doc without type")
+
+      result = described_class.call('document_type' => ['(Unknown)'])
+
+      expect(result).to include(doc_without_type, doc_without_dept, doc_with_dept, doc_with_other_dept)
+      expect(result).not_to include(doc_with_type)
+    end
+
+    it "works with language filter" do
+      doc_with_lang = create(:document, institution: institution, staff: staff, title: "Doc with language")
+      create(:metadatum, document: doc_with_lang, key: 'language', value: 'english')
+
+      result = described_class.call('language' => ['(Unknown)'])
+
+      expect(result).to include(doc_without_dept, doc_with_dept, doc_with_other_dept)
+      expect(result).not_to include(doc_with_lang)
+    end
+  end
 end
