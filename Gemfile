@@ -87,7 +87,7 @@ gem "acts_as_tenant", "~> 1.0"
 
 gem "bcrypt", "~> 3.1"
 
-gem "activeadmin", "~> 3.3"
+gem "activeadmin", "~> 3.4"
 gem "sassc-rails"
 
 gem "pagy", "~> 9.0"
