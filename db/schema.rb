@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_21_205548) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_221329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -92,7 +92,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_21_205548) do
     t.datetime "updated_at", null: false
     t.string "branding_colour", null: false
     t.bigint "storage_used", default: 0, null: false
-    t.integer "storage_total", default: 0, null: false
+    t.bigint "storage_total", default: 0, null: false
     t.index ["subdomain"], name: "index_institutions_on_subdomain", unique: true
   end
 
