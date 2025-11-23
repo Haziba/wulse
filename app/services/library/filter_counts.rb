@@ -2,12 +2,13 @@ module Library
   class FilterCounts
     FILTER_KEYS = %w[document_type department language].freeze
 
-    def self.for(scope)
-      new(scope).call
+    def self.for(scope, selected_filters: {})
+      new(scope, selected_filters:).call
     end
 
-    def initialize(scope)
+    def initialize(scope, selected_filters: {})
       @scope = scope
+      @selected_filters = selected_filters
     end
 
     def call
@@ -19,11 +20,17 @@ module Library
         inner_filters = filter_values.map do |inner_key, value|
           [inner_key, filtered_filters_hash[inner_key] || 0]
         end
-        [key, inner_filters]
+        [key, sort_filter_values(key, inner_filters)]
       end
-      combined_filters.to_h
-        .map { |key, values| [key, values.sort_by { |inner_key, count| [-count, -inner_key.to_i] }] }
-        .reject { |_, values| values.size == 1 && values.first.first == "(Unknown)" }
+      combined_filters.reject { |_, values| values.size == 1 && values.first.first == "(Unknown)" }
+    end
+
+    def sort_filter_values(key, values)
+      selected = Array(@selected_filters[key.to_s])
+      values.sort_by do |inner_key, count|
+        is_checked = selected.empty? || selected.include?(inner_key)
+        [is_checked ? 0 : 1, -count, -inner_key.to_i]
+      end
     end
 
     private

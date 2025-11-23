@@ -282,4 +282,62 @@ RSpec.describe Library::FilterCounts do
       end
     end
   end
+
+  describe "sorting by checked state" do
+    let!(:document1) do
+      document = create(:document, institution: institution, staff: staff, title: "English Book")
+      create(:metadatum, document: document, key: 'language', value: 'english')
+      document
+    end
+
+    let!(:document2) do
+      document = create(:document, institution: institution, staff: staff, title: "Another English Book")
+      create(:metadatum, document: document, key: 'language', value: 'english')
+      document
+    end
+
+    let!(:document3) do
+      document = create(:document, institution: institution, staff: staff, title: "Spanish Book")
+      create(:metadatum, document: document, key: 'language', value: 'spanish')
+      document
+    end
+
+    let!(:document4) do
+      document = create(:document, institution: institution, staff: staff, title: "French Book")
+      create(:metadatum, document: document, key: 'language', value: 'french')
+      document
+    end
+
+    it "places unchecked items at the bottom" do
+      result = described_class.new(Document.all, selected_filters: { 'language' => ['spanish', 'french'] }).call.to_h
+      languages = result['language'].map(&:first)
+
+      expect(languages.last).to eq('english')
+      expect(languages[0..1]).to match_array(['spanish', 'french'])
+    end
+
+    it "maintains count-based ordering within checked items" do
+      result = described_class.new(Document.all, selected_filters: { 'language' => ['spanish', 'english'] }).call.to_h
+      languages = result['language'].map(&:first)
+
+      expect(languages.first).to eq('english')
+      expect(languages.last).to eq('french')
+    end
+
+    it "maintains count-based ordering within unchecked items" do
+      result = described_class.new(Document.all, selected_filters: { 'language' => ['french'] }).call.to_h
+      languages = result['language'].map(&:first)
+
+      expect(languages.first).to eq('french')
+      expect(languages.last(2)).to match_array(['english', 'spanish'])
+    end
+
+    it "keeps all items in count order when no filters are selected" do
+      result = described_class.new(Document.all, selected_filters: {}).call.to_h
+      languages = result['language'].map(&:first)
+
+      expect(languages.first).to eq('english')
+      expect(languages.last(2)).to match_array(['spanish', 'french'])
+    end
+  end
 end
