@@ -18,7 +18,8 @@ class LibraryController < ApplicationController
   end
 
   def read
-    @document = Document.find(params[:id])
+    @document = Document.find_by(id: params[:id])
+    redirect_to library_path unless @document
   end
 
   private
