@@ -65,14 +65,14 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "filters by single document type" do
-        result = described_class.call('document_type' => ['book'])
+        result = described_class.call('document_type' => [ 'book' ])
 
         expect(result).to include(book)
         expect(result).not_to include(article)
       end
 
       it "filters by multiple document types" do
-        result = described_class.call('document_type' => ['book', 'article'])
+        result = described_class.call('document_type' => [ 'book', 'article' ])
 
         expect(result).to include(book, article)
       end
@@ -92,7 +92,7 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "filters by department" do
-        result = described_class.call('department' => ['computer science'])
+        result = described_class.call('department' => [ 'computer science' ])
 
         expect(result).to include(cs_doc)
         expect(result).not_to include(econ_doc)
@@ -113,7 +113,7 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "filters by language" do
-        result = described_class.call('language' => ['spanish'])
+        result = described_class.call('language' => [ 'spanish' ])
 
         expect(result).to include(spanish_doc)
         expect(result).not_to include(english_doc)
@@ -130,20 +130,20 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "filters by publishing year" do
-        result = described_class.call('publishing_date' => ['2024'])
+        result = described_class.call('publishing_date' => [ '2024' ])
 
         expect(result).to include(doc_2024)
         expect(result).not_to include(doc_2023)
       end
 
       it "filters by multiple years" do
-        result = described_class.call('publishing_date' => ['2023', '2024'])
+        result = described_class.call('publishing_date' => [ '2023', '2024' ])
 
         expect(result).to include(doc_2024, doc_2023)
       end
 
       it "extracts year from full date format" do
-        result = described_class.call('publishing_date' => ['2024'])
+        result = described_class.call('publishing_date' => [ '2024' ])
 
         expect(result).to include(doc_2024)
       end
@@ -173,9 +173,9 @@ RSpec.describe Library::DocumentFilter do
 
       it "applies all filters together" do
         result = described_class.call(
-          'document_type' => ['book'],
-          'department' => ['computer science'],
-          'publishing_date' => ['2024']
+          'document_type' => [ 'book' ],
+          'department' => [ 'computer science' ],
+          'publishing_date' => [ '2024' ]
         )
 
         expect(result).to include(cs_book_2024)
@@ -185,7 +185,7 @@ RSpec.describe Library::DocumentFilter do
       it "combines search with metadata filters" do
         result = described_class.call(
           q: 'CS',
-          'document_type' => ['book']
+          'document_type' => [ 'book' ]
         )
 
         expect(result).to include(cs_book_2024)
@@ -219,7 +219,7 @@ RSpec.describe Library::DocumentFilter do
       end
 
       it "only returns documents matching the filter criteria" do
-        result = described_class.call('document_type' => ['book'])
+        result = described_class.call('document_type' => [ 'book' ])
 
         expect(result).to include(doc_with_metadata)
         expect(result).not_to include(doc_without_metadata)
@@ -231,8 +231,8 @@ RSpec.describe Library::DocumentFilter do
         create(:metadatum, document: document, key: 'department', value: 'computer science')
 
         result = described_class.call(
-          'document_type' => ['book'],
-          'department' => ['computer science']
+          'document_type' => [ 'book' ],
+          'department' => [ 'computer science' ]
         )
 
         expect(result.to_a.count(document)).to eq(1)
@@ -267,14 +267,14 @@ RSpec.describe Library::DocumentFilter do
     end
 
     it "filters to only documents missing the metadata key when (Unknown) is selected alone" do
-      result = described_class.call('department' => ['(Unknown)'])
+      result = described_class.call('department' => [ '(Unknown)' ])
 
       expect(result).to include(doc_without_dept)
       expect(result).not_to include(doc_with_dept, doc_with_other_dept)
     end
 
     it "includes both known values and unknown when combined" do
-      result = described_class.call('department' => ['computer science', '(Unknown)'])
+      result = described_class.call('department' => [ 'computer science', '(Unknown)' ])
 
       expect(result).to include(doc_with_dept, doc_without_dept)
       expect(result).not_to include(doc_with_other_dept)
@@ -286,7 +286,7 @@ RSpec.describe Library::DocumentFilter do
 
       doc_without_type = create(:document, institution: institution, staff: staff, title: "Doc without type")
 
-      result = described_class.call('document_type' => ['(Unknown)'])
+      result = described_class.call('document_type' => [ '(Unknown)' ])
 
       expect(result).to include(doc_without_type, doc_without_dept, doc_with_dept, doc_with_other_dept)
       expect(result).not_to include(doc_with_type)
@@ -296,7 +296,7 @@ RSpec.describe Library::DocumentFilter do
       doc_with_lang = create(:document, institution: institution, staff: staff, title: "Doc with language")
       create(:metadatum, document: doc_with_lang, key: 'language', value: 'english')
 
-      result = described_class.call('language' => ['(Unknown)'])
+      result = described_class.call('language' => [ '(Unknown)' ])
 
       expect(result).to include(doc_without_dept, doc_with_dept, doc_with_other_dept)
       expect(result).not_to include(doc_with_lang)

@@ -1,16 +1,16 @@
-institutions = [{
+institutions = [ {
   name: "Wulse Academy",
   subdomain: "wulse-academy",
   logo: File.open(Rails.root.join("db", "seeds", "images", "wulse-academy-logo.png")),
   branding_colour: "#1B2A41",
   storage_total: 1000000000
-},{
+}, {
   name: "University of Wulse",
   subdomain: "uow",
   logo: File.open(Rails.root.join("db", "seeds", "images", "uow-logo.png")),
   branding_colour: "#800020",
   storage_total: 2000000000
-}]
+} ]
 
 book_titles = [
   "Introduction to Computer Science", "Advanced Mathematics for Engineers", "Modern Physics Principles",
@@ -25,11 +25,11 @@ book_titles = [
   "Creative Writing Workshop", "Art History: Renaissance to Modern", "Music Theory Fundamentals"
 ]
 
-document_types = ["Textbook", "Research Paper", "Manual", "Guide", "Reference Book", "Study Guide"]
-departments = ["Computer Science", "Mathematics", "Physics", "Chemistry", "History", "Literature",
+document_types = [ "Textbook", "Research Paper", "Manual", "Guide", "Reference Book", "Study Guide" ]
+departments = [ "Computer Science", "Mathematics", "Physics", "Chemistry", "History", "Literature",
                "Business", "Finance", "Marketing", "Biology", "Environmental Science", "Psychology",
-               "Political Science", "Sociology", "Philosophy", "Engineering", "Economics", "Art", "Music"]
-languages = ["English", "Spanish", "French", "German", "Mandarin", "Japanese"]
+               "Political Science", "Sociology", "Philosophy", "Engineering", "Economics", "Art", "Music" ]
+languages = [ "English", "Spanish", "French", "German", "Mandarin", "Japanese" ]
 
 institutions.each do |institution|
   institution = Institution.create(institution)

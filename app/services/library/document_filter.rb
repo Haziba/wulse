@@ -37,9 +37,9 @@ module Library
 
         scope = if key == 'publishing_date'
                   apply_publishing_date_filter(scope, values)
-                else
+        else
                   apply_standard_filter(scope, key, values)
-                end
+        end
       end
 
       scope
@@ -49,13 +49,13 @@ module Library
       adapter = ActiveRecord::Base.connection.adapter_name.downcase
 
       year_expr = case adapter
-                  when /postgres/
+      when /postgres/
                     "to_char((metadata.value)::date, 'YYYY')"
-                  when /mysql/
+      when /mysql/
                     "YEAR(CAST(metadata.value AS date))"
-                  else
+      else
                     "strftime('%Y', date(metadata.value))"
-                  end
+      end
 
       scope.where(
         id: Metadatum.where(key: 'publishing_date')

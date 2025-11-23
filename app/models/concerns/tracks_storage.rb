@@ -2,7 +2,7 @@ module TracksStorage
   extend ActiveSupport::Concern
 
   included do
-    after_commit :sync_document_size, on: [:create, :update]
+    after_commit :sync_document_size, on: [ :create, :update ]
     before_destroy :prepare_storage_cleanup
     after_commit :cleanup_storage, on: :destroy
   end

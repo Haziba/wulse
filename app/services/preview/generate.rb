@@ -31,7 +31,7 @@ module Preview
     def attach_pdf_preview
       # Prefer Active Storage previewer if available (Poppler/MuPDF installed)
       if @attachment.variable? || @blob.previewable?
-        variant = @attachment.preview(resize_to_limit: [600, 800]).processed
+        variant = @attachment.preview(resize_to_limit: [ 600, 800 ]).processed
         io      = StringIO.new(variant.image.download)
         @preview_attach.attach(
           io: io,
@@ -42,7 +42,7 @@ module Preview
       end
 
       # Fallback using pdftoppm (Poppler). Safer and faster than Ghostscript via ImageMagick.
-      Tempfile.create(["pdfthumb", ".jpg"]) do |outfile|
+      Tempfile.create([ "pdfthumb", ".jpg" ]) do |outfile|
         @attachment.open do |file|
           cmd = [
             "pdftoppm", "-jpeg", "-singlefile", "-f", "1", "-l", "1",

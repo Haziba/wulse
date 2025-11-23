@@ -13,7 +13,7 @@ ActiveAdmin.register Institution do
     column :created_at
     actions
   end
-  
+
   form do |f|
     f.inputs do
       f.input :name
@@ -23,7 +23,7 @@ ActiveAdmin.register Institution do
     end
     f.actions
   end
-  
+
   show do
     attributes_table do
       row :name
@@ -61,7 +61,7 @@ ActiveAdmin.register Institution do
       end
     end
   end
-  
+
   controller do
     def create
       @institution = Institution.new(institution_params)

@@ -1,8 +1,8 @@
 class Dashboard::DocumentsController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :full_page_if_no_frame, only: [:index]
-  before_action :set_document, only: [:show, :edit, :update, :destroy]
+  before_action :full_page_if_no_frame, only: [ :index ]
+  before_action :set_document, only: [ :show, :edit, :update, :destroy ]
 
   def index
     documents = Document.all
@@ -130,6 +130,6 @@ class Dashboard::DocumentsController < ApplicationController
   end
 
   def document_params
-    params.require(:document).permit(:file, :preview_image, metadata_attributes: [:id, :key, :value, :_destroy])
+    params.require(:document).permit(:file, :preview_image, metadata_attributes: [ :id, :key, :value, :_destroy ])
   end
 end

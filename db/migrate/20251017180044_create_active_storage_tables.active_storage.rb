@@ -48,6 +48,6 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
 
   private
     def primary_and_foreign_key_types
-      [:uuid, :uuid]
+      [ :uuid, :uuid ]
     end
 end

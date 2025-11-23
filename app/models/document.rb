@@ -46,7 +46,7 @@ class Document < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['staff', 'institution', 'metadata']
+    [ 'staff', 'institution', 'metadata' ]
   end
 
   def title

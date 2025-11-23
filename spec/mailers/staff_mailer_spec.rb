@@ -9,7 +9,7 @@ RSpec.describe StaffMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("Welcome to the #{institution.name} Digital Library!")
-      expect(mail.to).to eq([staff.email])
+      expect(mail.to).to eq([ staff.email ])
     end
 
     it "renders the body" do
@@ -26,7 +26,7 @@ RSpec.describe StaffMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("Your Account Has Been Deactivated")
-      expect(mail.to).to eq([staff.email])
+      expect(mail.to).to eq([ staff.email ])
     end
 
     it "renders the body" do
@@ -43,7 +43,7 @@ RSpec.describe StaffMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("Your Account Has Been Reactivated")
-      expect(mail.to).to eq([staff.email])
+      expect(mail.to).to eq([ staff.email ])
     end
 
     it "renders the body" do

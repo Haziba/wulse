@@ -51,22 +51,22 @@ RSpec.describe Library::FilterCounts do
 
       it "returns all filter categories" do
         result = described_class.new(Document.all).call
-        expect(result.map(&:first)).to match_array(['document_type', 'department', 'language', :publishing_date])
+        expect(result.map(&:first)).to match_array([ 'document_type', 'department', 'language', :publishing_date ])
       end
 
       it "returns the filtered count for languages with filtered=total when scope is all" do
         result = result_hash_for(Document.all)
         expect(result['language']).to eq([
-          ['english', 2],
-          ['spanish', 1]
+          [ 'english', 2 ],
+          [ 'spanish', 1 ]
         ])
       end
 
       it "extracts publishing years and returns the filtered count for publishing_date with filtered=total when scope is all" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2024', 2],
-          ['2023', 1]
+          [ '2024', 2 ],
+          [ '2023', 1 ]
         ])
       end
 
@@ -103,8 +103,8 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(scope)
 
         expect(result['department']).to eq([
-          ['computer science', 1],
-          ['economics',        0]
+          [ 'computer science', 1 ],
+          [ 'economics',        0 ]
         ])
       end
 
@@ -113,8 +113,8 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(scope)
 
         expect(result[:publishing_date]).to eq([
-          ['2023', 1],
-          ['2024', 0]
+          [ '2023', 1 ],
+          [ '2024', 0 ]
         ])
       end
     end
@@ -133,8 +133,8 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(scope)
 
         expect(result[:publishing_date]).to eq([
-          ['2024', 1],
-          ['2023', 0]
+          [ '2024', 1 ],
+          [ '2023', 0 ]
         ])
       end
     end
@@ -155,8 +155,8 @@ RSpec.describe Library::FilterCounts do
       it "handles ISO YYYY-MM-DD and aggregates by year with the filtered count" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2023', 2],
-          ['2024', 1]
+          [ '2023', 2 ],
+          [ '2024', 1 ]
         ])
       end
     end
@@ -181,7 +181,7 @@ RSpec.describe Library::FilterCounts do
       it "excludes blank and nil dates from both filtered and total counts" do
         result = result_hash_for(Document.all)
         expect(result[:publishing_date]).to eq([
-          ['2024', 1]
+          [ '2024', 1 ]
         ])
       end
     end
@@ -198,7 +198,7 @@ RSpec.describe Library::FilterCounts do
       result = described_class.for(Document.all).to_h
 
       expect(result).to have_key('document_type')
-      expect(result['document_type']).to eq([['book', 1]])
+      expect(result['document_type']).to eq([ [ 'book', 1 ] ])
     end
   end
 
@@ -227,21 +227,21 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(Document.all)
 
         unknown_entry = result['department'].find { |k, _| k == '(Unknown)' }
-        expect(unknown_entry).to eq(['(Unknown)', 1])
+        expect(unknown_entry).to eq([ '(Unknown)', 1 ])
       end
 
       it "includes (Unknown) count for documents missing language metadata" do
         result = result_hash_for(Document.all)
 
         unknown_entry = result['language'].find { |k, _| k == '(Unknown)' }
-        expect(unknown_entry).to eq(['(Unknown)', 1])
+        expect(unknown_entry).to eq([ '(Unknown)', 1 ])
       end
 
       it "shows (Unknown) with zero count when scope excludes unknowns but they exist overall" do
         result = result_hash_for(Document.where(id: doc_with_dept.id))
 
         unknown_entry = result['department'].find { |k, _| k == '(Unknown)' }
-        expect(unknown_entry).to eq(['(Unknown)', 0])
+        expect(unknown_entry).to eq([ '(Unknown)', 0 ])
       end
     end
 
@@ -264,7 +264,7 @@ RSpec.describe Library::FilterCounts do
         result = result_hash_for(Document.all)
 
         unknown_entry = result['document_type'].find { |k, _| k == '(Unknown)' }
-        expect(unknown_entry).to eq(['(Unknown)', 2])
+        expect(unknown_entry).to eq([ '(Unknown)', 2 ])
       end
     end
 
@@ -309,15 +309,15 @@ RSpec.describe Library::FilterCounts do
     end
 
     it "places unchecked items at the bottom" do
-      result = described_class.new(Document.all, selected_filters: { 'language' => ['spanish', 'french'] }).call.to_h
+      result = described_class.new(Document.all, selected_filters: { 'language' => [ 'spanish', 'french' ] }).call.to_h
       languages = result['language'].map(&:first)
 
       expect(languages.last).to eq('english')
-      expect(languages[0..1]).to match_array(['spanish', 'french'])
+      expect(languages[0..1]).to match_array([ 'spanish', 'french' ])
     end
 
     it "maintains count-based ordering within checked items" do
-      result = described_class.new(Document.all, selected_filters: { 'language' => ['spanish', 'english'] }).call.to_h
+      result = described_class.new(Document.all, selected_filters: { 'language' => [ 'spanish', 'english' ] }).call.to_h
       languages = result['language'].map(&:first)
 
       expect(languages.first).to eq('english')
@@ -325,11 +325,11 @@ RSpec.describe Library::FilterCounts do
     end
 
     it "maintains count-based ordering within unchecked items" do
-      result = described_class.new(Document.all, selected_filters: { 'language' => ['french'] }).call.to_h
+      result = described_class.new(Document.all, selected_filters: { 'language' => [ 'french' ] }).call.to_h
       languages = result['language'].map(&:first)
 
       expect(languages.first).to eq('french')
-      expect(languages.last(2)).to match_array(['english', 'spanish'])
+      expect(languages.last(2)).to match_array([ 'english', 'spanish' ])
     end
 
     it "keeps all items in count order when no filters are selected" do
@@ -337,7 +337,7 @@ RSpec.describe Library::FilterCounts do
       languages = result['language'].map(&:first)
 
       expect(languages.first).to eq('english')
-      expect(languages.last(2)).to match_array(['spanish', 'french'])
+      expect(languages.last(2)).to match_array([ 'spanish', 'french' ])
     end
   end
 end

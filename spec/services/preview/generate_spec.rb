@@ -27,7 +27,7 @@ RSpec.describe Preview::Generate do
           allow(mock_variant).to receive(:processed).and_return(mock_variant)
 
           # Expect preview to be called with correct dimensions
-          expect(document.file).to receive(:preview).with(resize_to_limit: [600, 800]).and_return(mock_variant)
+          expect(document.file).to receive(:preview).with(resize_to_limit: [ 600, 800 ]).and_return(mock_variant)
 
           described_class.call(document)
 
@@ -43,10 +43,10 @@ RSpec.describe Preview::Generate do
 
         it "uses pdftoppm (Poppler) and sizes to 600x800" do
           # Mock the pdftoppm command
-          allow(Open3).to receive(:capture3).and_return(['', '', double(success?: true)])
+          allow(Open3).to receive(:capture3).and_return([ '', '', double(success?: true) ])
 
           # Create a real tempfile for the mock image
-          temp_image_file = Tempfile.new(['test_image', '.jpg'])
+          temp_image_file = Tempfile.new([ 'test_image', '.jpg' ])
           temp_image_file.write('fake image data')
           temp_image_file.rewind
 
@@ -70,7 +70,7 @@ RSpec.describe Preview::Generate do
 
         it "calls pdftoppm with correct arguments" do
           # Create a real tempfile for the mock image
-          temp_image_file = Tempfile.new(['test_image', '.jpg'])
+          temp_image_file = Tempfile.new([ 'test_image', '.jpg' ])
           temp_image_file.write('fake image data')
           temp_image_file.rewind
 
@@ -81,7 +81,7 @@ RSpec.describe Preview::Generate do
           expect(Open3).to receive(:capture3) do |*args|
             expect(args[0]).to eq('pdftoppm')
             expect(args).to include('-jpeg', '-singlefile', '-f', '1', '-l', '1', '-scale-to', '1000')
-            ['', '', double(success?: true)]
+            [ '', '', double(success?: true) ]
           end
 
           described_class.call(document)

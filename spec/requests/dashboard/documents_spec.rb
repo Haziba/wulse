@@ -313,9 +313,9 @@ RSpec.describe "Dashboard::Documents", type: :request do
           metadata_keys = metadata.map(&:key)
 
           # Required metadata should appear first (factory creates these, order matches REQUIRED_METADATA)
-          expect(metadata_keys[0..2]).to eq(['publishing_date', 'author', 'title'])
+          expect(metadata_keys[0..2]).to eq([ 'publishing_date', 'author', 'title' ])
           # Custom metadata should appear after
-          expect(metadata_keys[3..4]).to match_array(['publisher', 'year'])
+          expect(metadata_keys[3..4]).to match_array([ 'publisher', 'year' ])
         end
 
         it "uses existing required metadata when they exist" do

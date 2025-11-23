@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resource :session, only: [:new, :create, :destroy]
-  resources :password_resets, only: [:new, :create, :edit, :update], param: :token
+  resource :session, only: [ :new, :create, :destroy ]
+  resources :password_resets, only: [ :new, :create, :edit, :update ], param: :token
 
   get "dashboard", to: "dashboard#index", as: :dashboard
   get "library", to: "library#index", as: :library
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       end
     end
     resources :documents
-    resource :profile, only: [:edit, :update]
+    resource :profile, only: [ :edit, :update ]
   end
 
   constraints subdomain: /.+/ do

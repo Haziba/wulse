@@ -9,7 +9,7 @@ RSpec.describe PasswordResetMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("Password Reset Request")
-      expect(mail.to).to eq([staff.email])
+      expect(mail.to).to eq([ staff.email ])
     end
 
     it "renders the body" do
@@ -18,5 +18,4 @@ RSpec.describe PasswordResetMailer, type: :mailer do
       expect(mail.body.encoded).to include(password_reset.token)
     end
   end
-
 end
