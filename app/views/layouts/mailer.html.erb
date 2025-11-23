@@ -9,6 +9,13 @@
       <tr>
         <td align="center">
           <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; max-width: 600px;">
+            <!-- Brand Line -->
+            <tr>
+              <td style="height: 8px; background-color: <%= @institution.branding_colour || '#800020' %>;"></td>
+            </tr>
+            <tr>
+              <td style="height: 3px; background-color: #2d2d2d;"></td>
+            </tr>
             <!-- Header -->
             <tr>
               <td style="background-color: #ffffff; padding: 24px 32px;">
@@ -32,10 +39,6 @@
                   </tr>
                 </table>
               </td>
-            </tr>
-            <!-- Brand Line -->
-            <tr>
-              <td style="height: 4px; background-color: <%= @institution.branding_colour || '#800020' %>;"></td>
             </tr>
 
             <!-- Main Content -->
