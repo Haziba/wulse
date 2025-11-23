@@ -1,36 +1,38 @@
 <div class="bg-white rounded-lg border border-gray-200 p-6">
-  <h3 class="font-semibold text-gray-900 mb-4">Refine Results</h3>
+  <h2 class="font-semibold text-gray-900 mb-4">Refine Results</h2>
 
   <% filters.each do |filter_key, filter_values| %>
     <div id="filter-category-<%= filter_key %>" class="mb-6" data-controller="filter-list">
       <div class="flex items-center justify-between mb-3">
-        <h4 class="font-medium text-gray-700"><%= filter_key.to_s.humanize %></h4>
+        <h3 class="font-medium text-gray-700"><%= filter_key.to_s.humanize %></h3>
         <button type="button"
-                class="text-xs text-brand-500 hover:text-brand-600"
+                class="text-xs text-brand-700 hover:text-brand-800"
                 data-action="click->filter-list#selectAll">all</button>
       </div>
-      <div class="space-y-2">
+      <ul class="space-y-2" role="list">
         <% filter_values.each do |value, count| %>
           <%
             filter_param_key = filter_key.to_s
             is_checked = params[filter_param_key].nil? || Array(params[filter_param_key]).include?(value)
           %>
-          <label class="group flex items-center cursor-pointer hover:text-gray-900" data-filter-list-target="item">
-            <%= check_box_tag "#{filter_param_key}[]",
-                              value,
-                              is_checked,
-                              data: { action: "change->filter-form#submit" },
-                              class: "text-brand-500 rounded border-gray-300 focus:ring-brand-500" %>
-            <span class="ml-2 text-sm text-gray-600 flex-1"><%= value.titleize %></span>
-            <button type="button"
-                    class="text-xs text-brand-500 hover:text-brand-600"
-                    data-action="click->filter-list#selectOnly">only</button>
-            <span class="text-xs text-gray-500 ml-2"><%= number_with_delimiter(count) %></span>
-          </label>
+          <li class="list-none" data-filter-list-target="item">
+            <label class="group flex items-center cursor-pointer hover:text-gray-900">
+              <%= check_box_tag "#{filter_param_key}[]",
+                                value,
+                                is_checked,
+                                data: { action: "change->filter-form#submit" },
+                                class: "text-brand-500 rounded border-gray-300 focus:ring-brand-500" %>
+              <span class="ml-2 text-sm text-gray-600 flex-1"><%= value.titleize %></span>
+              <button type="button"
+                      class="text-xs text-brand-700 hover:text-brand-800"
+                      data-action="click->filter-list#selectOnly">only</button>
+              <span class="text-xs text-gray-500 ml-2"><%= number_with_delimiter(count) %></span>
+            </label>
+          </li>
         <% end %>
-      </div>
+      </ul>
       <button type="button"
-              class="mt-2 text-sm text-brand-500 hover:text-brand-600 font-medium hidden"
+              class="mt-2 text-sm text-brand-700 hover:text-brand-800 font-medium hidden"
               data-filter-list-target="toggle"
               data-action="click->filter-list#toggle">
         Show all

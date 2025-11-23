@@ -13,8 +13,8 @@
             placeholder: "Search...",
             class: "flex-1 px-4 py-3 text-base border-2 border-gray-300 border-r-0 rounded-l-lg focus:border-brand-500 focus:outline-none focus:z-10",
             data: { controller: "sync-search-with-query", action: "input->filter-form#debouncedSubmit" } %>
-          <button type="submit" class="px-4 py-3 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors cursor-pointer border-2 border-brand-500">
-            <i class="fas fa-search"></i>
+          <button type="submit" class="px-4 py-3 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors cursor-pointer border-2 border-brand-500" aria-label="Search">
+            <i class="fas fa-search" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -29,18 +29,19 @@
     <div class="flex gap-8">
       <!-- Sidebar Filters -->
       <aside class="w-80 flex-shrink-0 fixed lg:static top-0 left-0 h-full lg:h-auto bg-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto"
-             data-sidebar-target="sidebar">
+             data-sidebar-target="sidebar"
+             aria-label="Filter options">
         <div id="filters_list">
           <%= render "filters_list", filters: @filters %>
         </div>
       </aside>
 
       <!-- Results Content -->
-      <main class="flex-1">
+      <section class="flex-1" aria-label="Search results">
         <%= turbo_frame_tag "library_list" do %>
           <%= render "library_list", documents: @documents, pagy: @pagy, query: @query, filtered_count: @filtered_count, total_count: @total_count %>
         <% end %>
-      </main>
+      </section>
     </div>
   </div>
 <% end %>

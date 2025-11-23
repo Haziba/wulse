@@ -150,7 +150,7 @@
                   <% if staff.avatar.attached? %>
                     <%= image_tag staff.avatar, class: "w-10 h-10 rounded-full object-cover" %>
                   <% else %>
-                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                    <div class="w-10 h-10 bg-purple-700 rounded-full flex items-center justify-center">
                       <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
                     </div>
                   <% end %>

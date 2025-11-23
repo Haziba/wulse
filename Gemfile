@@ -75,6 +75,9 @@ group :test do
 
   # Code coverage reports
   gem "simplecov", require: false
+
+  # Accessibility testing
+  gem "axe-core-rspec"
 end
 
 gem "acts_as_tenant", "~> 1.0"

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "University Research Library" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -58,11 +58,16 @@
   </head>
 
   <body class="bg-white font-sans">
+    <!-- Skip Link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-brand-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+      Skip to main content
+    </a>
+
     <!-- Brand Strip -->
-    <div class="h-2 bg-gradient-to-r from-brand-900 via-brand-700 to-brand-900"></div>
+    <div class="h-2 bg-gradient-to-r from-brand-900 via-brand-700 to-brand-900" aria-hidden="true"></div>
 
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm" role="banner">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex items-center justify-between gap-8">
           <!-- Logo -->
@@ -76,15 +81,15 @@
           <!-- Search Bar (Desktop) -->
           <form action="/library" method="get" class="hidden md:flex flex-1 max-w-xl">
             <input type="text" name="q" placeholder="Search..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent">
-            <button type="submit" class="px-4 py-2 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors">
-              <i class="fas fa-search"></i>
+            <button type="submit" class="px-4 py-2 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors" aria-label="Search">
+              <i class="fas fa-search" aria-hidden="true"></i>
             </button>
           </form>
 
           <!-- Navigation -->
-          <nav class="flex items-center gap-4">
-            <%= link_to new_session_path, class: "p-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors" do %>
-              <i class="fas fa-user"></i>
+          <nav class="flex items-center gap-4" aria-label="User menu">
+            <%= link_to new_session_path, class: "p-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors", aria: { label: "Sign in" } do %>
+              <i class="fas fa-user" aria-hidden="true"></i>
             <% end %>
           </nav>
         </div>
@@ -92,8 +97,8 @@
         <!-- Mobile Search -->
         <form action="/library" method="get" class="md:hidden mt-4 flex">
           <input type="text" name="q" placeholder="Search..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-brand-600">
-          <button type="submit" class="px-4 py-2 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors">
-            <i class="fas fa-search"></i>
+          <button type="submit" class="px-4 py-2 bg-brand-500 text-white rounded-r-lg hover:bg-brand-600 transition-colors" aria-label="Search">
+            <i class="fas fa-search" aria-hidden="true"></i>
           </button>
         </form>
       </div>
@@ -105,7 +110,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="bg-white">
+    <main id="main-content" class="bg-white" role="main">
       <%= yield %>
     </main>
 

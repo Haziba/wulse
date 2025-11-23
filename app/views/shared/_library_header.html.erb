@@ -1,4 +1,4 @@
-<header class="bg-white shadow-sm border-b border-gray-200">
+<header class="bg-white shadow-sm border-b border-gray-200" role="banner">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     <div class="flex items-center justify-between">
       <div class="flex items-center space-x-8">
@@ -15,11 +15,11 @@
           </div>
         <% end %>
       </div>
-      <div class="flex items-center space-x-4">
-        <%= link_to new_session_path, class: "p-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors" do %>
-          <i class="fas fa-cog"></i>
+      <nav class="flex items-center space-x-4" aria-label="User menu">
+        <%= link_to new_session_path, class: "p-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors", aria: { label: "Settings" } do %>
+          <i class="fas fa-cog" aria-hidden="true"></i>
         <% end %>
-      </div>
+      </nav>
     </div>
   </div>
 </header>

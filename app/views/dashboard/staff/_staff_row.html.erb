@@ -4,7 +4,7 @@
       <% if staff.avatar.attached? %>
         <%= image_tag staff.avatar, class: "w-10 h-10 rounded-full object-cover flex-shrink-0" %>
       <% else %>
-        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+        <div class="w-10 h-10 bg-purple-700 rounded-full flex items-center justify-center flex-shrink-0">
           <span class="text-white text-sm font-medium"><%= staff.name.split.map(&:first).join %></span>
         </div>
       <% end %>
@@ -28,23 +28,23 @@
   <td class="py-4 px-6 text-gray-700 hidden lg:table-cell whitespace-nowrap overflow-hidden text-ellipsis"><%= time_ago_in_words(staff.last_login) + " ago" if staff.last_login %></td>
   <td class="py-4 px-2 md:px-6">
     <div class="flex items-center space-x-2">
-      <%= button_to reset_password_dashboard_staff_path(staff), method: :patch, class: "text-blue-600 hover:text-blue-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to reset staff member a reset password email?" } do %>
-        <i class="fas fa-key mr-1"></i>
+      <%= button_to reset_password_dashboard_staff_path(staff), method: :patch, class: "text-blue-600 hover:text-blue-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to reset staff member a reset password email?" }, aria: { label: "Reset password for #{staff.name}" } do %>
+        <i class="fas fa-key mr-1" aria-hidden="true"></i>
       <% end %>
-      <%= link_to edit_dashboard_staff_path(staff), class: "text-gray-600 hover:text-gray-800 text-sm font-medium", title: "Edit Profile", data: { turbo_frame: "_top" } do %>
-        <i class="fas fa-edit"></i>
+      <%= link_to edit_dashboard_staff_path(staff), class: "text-gray-600 hover:text-gray-800 text-sm font-medium", data: { turbo_frame: "_top" }, aria: { label: "Edit #{staff.name}" } do %>
+        <i class="fas fa-edit" aria-hidden="true"></i>
       <% end %>
       <% if staff.status == 'inactive' %>
-        <%= button_to activate_dashboard_staff_path(staff), method: :patch, class: "text-green-600 hover:text-green-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to activate this staff member?" } do %>
-          <i class="fas fa-play mr-1"></i>
+        <%= button_to activate_dashboard_staff_path(staff), method: :patch, class: "text-green-600 hover:text-green-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to activate this staff member?" }, aria: { label: "Activate #{staff.name}" } do %>
+          <i class="fas fa-play mr-1" aria-hidden="true"></i>
         <% end %>
       <% else %>
-        <%= button_to deactivate_dashboard_staff_path(staff), method: :patch, class: "text-orange-600 hover:text-orange-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to deactivate this staff member?" } do %>
-          <i class="fas fa-pause mr-1"></i>
+        <%= button_to deactivate_dashboard_staff_path(staff), method: :patch, class: "text-orange-600 hover:text-orange-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to deactivate this staff member?" }, aria: { label: "Deactivate #{staff.name}" } do %>
+          <i class="fas fa-pause mr-1" aria-hidden="true"></i>
         <% end %>
       <% end %>
-      <%= button_to dashboard_staff_path(staff, request.query_parameters), method: :delete, class: "text-red-600 hover:text-red-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to delete this staff member? This action cannot be undone." } do %>
-        <i class="fas fa-trash mr-1"></i>
+      <%= button_to dashboard_staff_path(staff, request.query_parameters), method: :delete, class: "text-red-600 hover:text-red-800 text-sm font-medium", data: { turbo_confirm: "Are you sure you want to delete this staff member? This action cannot be undone." }, aria: { label: "Delete #{staff.name}" } do %>
+        <i class="fas fa-trash mr-1" aria-hidden="true"></i>
       <% end %>
     </div>
   </td>
