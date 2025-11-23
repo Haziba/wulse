@@ -9,9 +9,9 @@ RSpec.describe "Library", type: :request do
   end
 
   describe "GET /library" do
-    let!(:document_1) { create(:document, institution: institution, staff: staff, title: "Introduction to Machine Learning", created_at: 1.day.ago) }
-    let!(:document_2) { create(:document, institution: institution, staff: staff, title: "Advanced Ruby Programming", created_at: 2.days.ago) }
-    let!(:document_3) { create(:document, institution: institution, staff: staff, title: "Data Science Fundamentals", created_at: 3.days.ago) }
+    let!(:document_1) { create(:document, institution: institution, staff: staff, title: "Introduction to Machine Learning", created_at: 1.day.ago, publishing_date: '2020-01-01') }
+    let!(:document_2) { create(:document, institution: institution, staff: staff, title: "Advanced Ruby Programming", created_at: 2.days.ago, publishing_date: '2020-02-01') }
+    let!(:document_3) { create(:document, institution: institution, staff: staff, title: "Data Science Fundamentals", created_at: 3.days.ago, publishing_date: '2020-03-01') }
 
     it "returns http success" do
       get library_path
