@@ -1,8 +1,8 @@
 class PasswordResetsController < ApplicationController
   layout "library"
 
-  before_action :set_password_reset_and_institution, only: [:edit, :update]
-  before_action :check_expiration, only: [:edit, :update]
+  before_action :set_password_reset_and_institution, only: [ :edit, :update ]
+  before_action :check_expiration, only: [ :edit, :update ]
 
   def new
   end

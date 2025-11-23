@@ -8,7 +8,7 @@ module Library
     class << self
       def encode(params)
         filter_hash = params.slice(*FILTERABLE_KEYS).to_h do |key, values|
-          [key, Array(values)]
+          [ key, Array(values) ]
         end.compact_blank
 
         return nil if filter_hash.empty?

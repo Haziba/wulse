@@ -15,29 +15,29 @@ module Preview
       @attached_epub.open do |file|
         Zip::File.open(file.path) do |zip|
           opf_path = read_container_for_opf(zip)
-          return [nil, nil] unless opf_path
+          return [ nil, nil ] unless opf_path
 
           opf_xml = read_zip_text(zip, opf_path)
-          return [nil, nil] unless opf_xml
+          return [ nil, nil ] unless opf_xml
 
           opf = Nokogiri::XML(opf_xml)
           cover_item = find_cover_item(opf)
-          return [nil, nil] unless cover_item
+          return [ nil, nil ] unless cover_item
 
           href = cover_item["href"]
           mime = cover_item["media-type"] || guess_mime(href)
 
           img_path = normalize_path(File.dirname(opf_path), href)
           entry = zip.find_entry(img_path) || zip.find_entry(href) || best_effort_find(zip, href)
-          return [nil, nil] unless entry
+          return [ nil, nil ] unless entry
 
           bytes = entry.get_input_stream.read
-          [bytes, mime]
+          [ bytes, mime ]
         end
       end
     rescue => e
       Rails.logger.warn "[Preview][EPUB] cover extraction failed: #{e.class}: #{e.message}"
-      [nil, nil]
+      [ nil, nil ]
     end
 
     private

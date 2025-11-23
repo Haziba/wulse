@@ -18,9 +18,9 @@ module Library
       combined_filters = all_filters.map do |key, filter_values|
         filtered_filters_hash = filtered_filters[key].to_h
         inner_filters = filter_values.map do |inner_key, value|
-          [inner_key, filtered_filters_hash[inner_key] || 0]
+          [ inner_key, filtered_filters_hash[inner_key] || 0 ]
         end
-        [key, sort_filter_values(key, inner_filters)]
+        [ key, sort_filter_values(key, inner_filters) ]
       end
       combined_filters.reject { |_, values| values.size == 1 && values.first.first == "(Unknown)" }
     end
@@ -29,7 +29,7 @@ module Library
       selected = Array(@selected_filters[key.to_s])
       values.sort_by do |inner_key, count|
         is_checked = selected.empty? || selected.include?(inner_key)
-        [is_checked ? 0 : 1, -count, -inner_key.to_i]
+        [ is_checked ? 0 : 1, -count, -inner_key.to_i ]
       end
     end
 
@@ -47,10 +47,10 @@ module Library
       facets = FILTER_KEYS.excluding('publishing_date').index_with do |key|
         pairs = simple_counts
           .select { |(k, _), _| k == key }
-          .map    { |((_, v), c)| [v, c] }
+          .map    { |((_, v), c)| [ v, c ] }
 
         unknown_count = count_unknown(document_ids, key)
-        pairs << ["(Unknown)", unknown_count] if unknown_count > 0
+        pairs << [ "(Unknown)", unknown_count ] if unknown_count > 0
 
         sort_desc(pairs.to_h)
       end
@@ -73,7 +73,7 @@ module Library
         .joins(:document)
         .merge(scope)
         .where(key: "publishing_date")
-        .where.not(value: [nil, ""])
+        .where.not(value: [ nil, "" ])
 
       year_expr =
         case adapter

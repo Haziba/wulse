@@ -1,8 +1,8 @@
 class Dashboard::StaffController < ApplicationController
   layout "dashboard"
   before_action :require_signed_in
-  before_action :full_page_if_no_frame, only: [:index]
-  before_action :set_staff, only: [:show, :edit, :update, :deactivate, :activate, :destroy, :reset_password]
+  before_action :full_page_if_no_frame, only: [ :index ]
+  before_action :set_staff, only: [ :show, :edit, :update, :deactivate, :activate, :destroy, :reset_password ]
 
   def index
     staffs = Staff.all

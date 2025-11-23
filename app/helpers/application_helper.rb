@@ -43,6 +43,6 @@ module ApplicationHelper
     g = (g1 + (g2 - g1) * ratio).round.clamp(0, 255)
     b = (b1 + (b2 - b1) * ratio).round.clamp(0, 255)
 
-    "#%02x%02x%02x" % [r, g, b]
+    "#%02x%02x%02x" % [ r, g, b ]
   end
 end

@@ -38,10 +38,10 @@ class Staff < ApplicationRecord
   validates :password, confirmation: true, if: :password_digest_changed?
 
   def self.ransackable_attributes(auth_object = nil)
-    ['name', 'email']
+    [ 'name', 'email' ]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['institution', 'documents']
+    [ 'institution', 'documents' ]
   end
 end

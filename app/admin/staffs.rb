@@ -1,6 +1,6 @@
 ActiveAdmin.register Staff do
   permit_params :name, :email, :institution_id, :password, :password_confirmation
-  
+
   filter :name
   filter :email
   filter :created_at

@@ -302,7 +302,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
         it "sends a welcome email" do
           expect {
             post dashboard_staff_index_path, params: valid_params
-          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "welcome_email", "deliver_now", { args: [an_instance_of(Staff), an_instance_of(PasswordReset)] })
+          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "welcome_email", "deliver_now", { args: [ an_instance_of(Staff), an_instance_of(PasswordReset) ] })
         end
       end
 
@@ -385,7 +385,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
       it "sends a deactivation email" do
         expect {
           patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "deactivation_email", "deliver_now", { args: [active_staff] })
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "deactivation_email", "deliver_now", { args: [ active_staff ] })
       end
     end
   end
@@ -445,7 +445,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
       it "sends an activation email" do
         expect {
           patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "activation_email", "deliver_now", { args: [inactive_staff] })
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "activation_email", "deliver_now", { args: [ inactive_staff ] })
       end
     end
   end
@@ -574,7 +574,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
       it "sends a password reset email" do
         expect {
           patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("PasswordResetMailer", "reset_password", "deliver_now", { args: [an_instance_of(PasswordReset)] })
+        }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("PasswordResetMailer", "reset_password", "deliver_now", { args: [ an_instance_of(PasswordReset) ] })
       end
     end
   end

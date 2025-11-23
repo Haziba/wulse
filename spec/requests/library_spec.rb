@@ -172,7 +172,7 @@ RSpec.describe "Library", type: :request do
       end
 
       it "displays filtered vs total in filter counts when some filters are applied" do
-        get library_path('document_type' => ['book'])
+        get library_path('document_type' => [ 'book' ])
 
         expect_filter_count(response.body, "Book", 2)
         expect_filter_count(response.body, "Article", 0)
@@ -193,7 +193,7 @@ RSpec.describe "Library", type: :request do
       end
 
       it "displays filtered count vs total count when filters are applied" do
-        get library_path('document_type' => ['book'])
+        get library_path('document_type' => [ 'book' ])
 
         expect(response.body).to include("2/6 documents found")
       end

@@ -23,11 +23,11 @@ class Institution < ApplicationRecord
   has_one_attached :logo
 
   def self.ransackable_attributes(auth_object = nil)
-    ['name', 'subdomain']
+    [ 'name', 'subdomain' ]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ['staffs', 'documents']
+    [ 'staffs', 'documents' ]
   end
 
   # Recalculate storage_used from scratch (useful for backfilling or fixing drift)
