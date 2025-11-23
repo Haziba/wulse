@@ -25,7 +25,7 @@ module Library
       return scope if params[:q].blank?
 
       scope.joins(:metadata)
-           .where(metadata: { key: 'title' })
+           .where(metadata: { key: "title" })
            .where("metadata.value ILIKE ?", "%#{params[:q]}%")
     end
 
@@ -35,7 +35,7 @@ module Library
       filter_params.each do |key, values|
         next if values.blank?
 
-        scope = if key == 'publishing_date'
+        scope = if key == "publishing_date"
                   apply_publishing_date_filter(scope, values)
         else
                   apply_standard_filter(scope, key, values)
@@ -58,7 +58,7 @@ module Library
       end
 
       scope.where(
-        id: Metadatum.where(key: 'publishing_date')
+        id: Metadatum.where(key: "publishing_date")
                      .where("#{year_expr} IN (?)", years)
                      .select(:document_id)
       )

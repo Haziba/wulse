@@ -7,7 +7,7 @@ module ApplicationHelper
 
   def generate_color_shades(hex_color)
     # Remove # if present
-    hex = hex_color.gsub('#', '')
+    hex = hex_color.gsub("#", "")
 
     # Convert hex to RGB
     r = hex[0..1].to_i(16)

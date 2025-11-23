@@ -27,7 +27,7 @@ class InstitutionStat < ApplicationRecord
     institution.institution_stats.create(
       date: Date.current.to_date,
       total_documents: institution.documents.count,
-      active_staff: institution.staffs.where(status: 'active').count,
+      active_staff: institution.staffs.where(status: "active").count,
       storage_used: institution.storage_used
     )
   end

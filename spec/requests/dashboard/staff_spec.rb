@@ -273,7 +273,7 @@ RSpec.describe "Dashboard::Staff", type: :request do
           {
             staff: {
               name: Faker::Name.name,
-              email: Faker::Internet.email,
+              email: Faker::Internet.email
             }
           }
         end

@@ -10,7 +10,7 @@ class Dashboard::DocumentsController < ApplicationController
 
     if params[:search].present?
       documents = documents.joins(:metadata)
-                          .where(metadata: { key: 'title' })
+                          .where(metadata: { key: "title" })
                           .where("metadata.value ILIKE ?", "%#{params[:search]}%")
                           .distinct
     end
@@ -30,9 +30,9 @@ class Dashboard::DocumentsController < ApplicationController
 
   def new
     @document = Document.new
-    @document.metadata.build(key: 'title')
-    @document.metadata.build(key: 'author')
-    @document.metadata.build(key: 'publishing_date')
+    @document.metadata.build(key: "title")
+    @document.metadata.build(key: "author")
+    @document.metadata.build(key: "publishing_date")
   end
 
   def create
@@ -84,7 +84,7 @@ class Dashboard::DocumentsController < ApplicationController
         end
       end
     else
-      return redirect_to dashboard_documents_path, notice: "Document deleted successfully", status: :see_other
+      redirect_to dashboard_documents_path, notice: "Document deleted successfully", status: :see_other
     end
   rescue => e
     Rails.logger.error "Error deleting document: #{e.message}"
@@ -101,7 +101,7 @@ class Dashboard::DocumentsController < ApplicationController
 
     if params[:search].present?
       documents = documents.joins(:metadata)
-                          .where(metadata: { key: 'title' })
+                          .where(metadata: { key: "title" })
                           .where("metadata.value ILIKE ?", "%#{params[:search]}%")
                           .distinct
     end

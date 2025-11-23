@@ -44,7 +44,7 @@ module Library
         .group(:key, :value)
         .count
 
-      facets = FILTER_KEYS.excluding('publishing_date').index_with do |key|
+      facets = FILTER_KEYS.excluding("publishing_date").index_with do |key|
         pairs = simple_counts
           .select { |(k, _), _| k == key }
           .map    { |((_, v), c)| [ v, c ] }

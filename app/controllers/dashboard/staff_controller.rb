@@ -35,7 +35,7 @@ class Dashboard::StaffController < ApplicationController
     end
 
     if params[:document_type].present? && params[:document_type] != "All Types"
-      documents = documents.joins(:metadata).where(metadata: { key: 'document_type', value: params[:document_type] })
+      documents = documents.joins(:metadata).where(metadata: { key: "document_type", value: params[:document_type] })
     end
 
     @pagy, @documents = pagy(documents.distinct)
@@ -131,7 +131,7 @@ class Dashboard::StaffController < ApplicationController
         end
       end
     else
-      return redirect_to dashboard_staff_index_path, notice: "Staff member deleted successfully", status: :see_other
+      redirect_to dashboard_staff_index_path, notice: "Staff member deleted successfully", status: :see_other
     end
   rescue => e
     Rails.logger.error "Error deleting staff member: #{e.message}"

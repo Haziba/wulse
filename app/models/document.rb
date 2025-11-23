@@ -46,33 +46,33 @@ class Document < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    [ 'staff', 'institution', 'metadata' ]
+    [ "staff", "institution", "metadata" ]
   end
 
   def title
-    metadata.find_by(key: 'title')&.value
+    metadata.find_by(key: "title")&.value
   end
 
   def author
-    metadata.find_by(key: 'author')&.value
+    metadata.find_by(key: "author")&.value
   end
 
   def publishing_date
-    metadata.find_by(key: 'publishing_date')&.value
+    metadata.find_by(key: "publishing_date")&.value
   end
 
   private
 
   def title_metadata_present
-    metadata_present?('title')
+    metadata_present?("title")
   end
 
   def author_metadata_present
-    metadata_present?('author')
+    metadata_present?("author")
   end
 
   def publishing_date_metadata_present
-    metadata_present?('publishing_date')
+    metadata_present?("publishing_date")
   end
 
   def metadata_present?(key)

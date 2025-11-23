@@ -79,7 +79,7 @@ module Preview
       n = name.to_s.downcase
       return "image/png"  if n.end_with?(".png")
       return "image/webp" if n.end_with?(".webp")
-      return "image/jpeg"
+      "image/jpeg"
     end
   end
 end
