@@ -9,8 +9,32 @@ export default class extends Controller<HTMLElement> {
   declare readonly hasToggleTarget: boolean;
   declare readonly limitValue: number;
 
+  private boundSyncCheckboxes!: () => void;
+
   connect(): void {
     this.updateVisibility();
+    this.boundSyncCheckboxes = this.syncCheckboxesFromUrl.bind(this);
+    document.addEventListener("turbo:render", this.boundSyncCheckboxes);
+  }
+
+  disconnect(): void {
+    document.removeEventListener("turbo:render", this.boundSyncCheckboxes);
+  }
+
+  private syncCheckboxesFromUrl(): void {
+    const url = new URL(window.location.href);
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+
+    checkboxes.forEach((checkbox) => {
+      const name = checkbox.name;
+      const urlValues = url.searchParams.getAll(name);
+
+      if (urlValues.length === 0) {
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = urlValues.includes(checkbox.value);
+      }
+    });
   }
 
   updateVisibility(): void {
