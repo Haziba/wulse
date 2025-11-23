@@ -8,7 +8,7 @@
           <% if @staff.avatar.attached? %>
             <%= image_tag @staff.avatar, class: "w-32 h-32 rounded-full object-cover mb-4" %>
           <% else %>
-            <div class="w-32 h-32 bg-purple-500 rounded-full flex items-center justify-center mb-4">
+            <div class="w-32 h-32 bg-purple-700 rounded-full flex items-center justify-center mb-4">
               <span class="text-white text-3xl font-medium"><%= @staff.name.split.map(&:first).join %></span>
             </div>
           <% end %>
