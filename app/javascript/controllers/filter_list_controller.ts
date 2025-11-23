@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import { decompressFilters } from "../utils/filter_compression";
 
 export default class extends Controller<HTMLElement> {
   static targets = ["item", "toggle"];
@@ -21,18 +22,24 @@ export default class extends Controller<HTMLElement> {
     document.removeEventListener("turbo:render", this.boundSyncCheckboxes);
   }
 
-  private syncCheckboxesFromUrl(): void {
+  private async syncCheckboxesFromUrl(): Promise<void> {
     const url = new URL(window.location.href);
-    const checkboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    const f = url.searchParams.get("f");
+
+    const filters = f ? await decompressFilters(f) : {};
+
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
 
     checkboxes.forEach((checkbox) => {
-      const name = checkbox.name;
-      const urlValues = url.searchParams.getAll(name);
+      const name = checkbox.name.replace("[]", "");
+      const filterValues = filters[name];
 
-      if (urlValues.length === 0) {
+      if (!filterValues || filterValues.length === 0) {
         checkbox.checked = true;
       } else {
-        checkbox.checked = urlValues.includes(checkbox.value);
+        checkbox.checked = filterValues.includes(checkbox.value);
       }
     });
   }
@@ -42,23 +49,22 @@ export default class extends Controller<HTMLElement> {
     const totalItems = items.length;
 
     if (totalItems <= this.limitValue) {
-      // Hide toggle if there aren't enough items
       if (this.hasToggleTarget) {
         this.toggleTarget.classList.add("hidden");
       }
       return;
     }
 
-    // Show/hide items based on expanded state
     items.forEach((item, index) => {
       if (index >= this.limitValue) {
         item.classList.toggle("hidden", !this.isExpanded);
       }
     });
 
-    // Update toggle text
     if (this.hasToggleTarget) {
-      this.toggleTarget.textContent = this.isExpanded ? "Show less" : "Show all";
+      this.toggleTarget.textContent = this.isExpanded
+        ? "Show less"
+        : "Show all";
       this.toggleTarget.classList.remove("hidden");
     }
   }

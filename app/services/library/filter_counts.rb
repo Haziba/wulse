@@ -1,6 +1,6 @@
 module Library
   class FilterCounts
-    FILTER_KEYS = %w[document_type department language].freeze
+    FILTER_KEYS = %w[document_type department language publishing_date].freeze
 
     def self.for(scope, selected_filters: {})
       new(scope, selected_filters:).call
@@ -44,7 +44,7 @@ module Library
         .group(:key, :value)
         .count
 
-      facets = FILTER_KEYS.index_with do |key|
+      facets = FILTER_KEYS.excluding('publishing_date').index_with do |key|
         pairs = simple_counts
           .select { |(k, _), _| k == key }
           .map    { |((_, v), c)| [v, c] }
