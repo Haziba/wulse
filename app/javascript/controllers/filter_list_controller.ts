@@ -70,6 +70,7 @@ export default class extends Controller<HTMLElement> {
 
   selectOnly(event: Event): void {
     event.preventDefault();
+    event.stopPropagation();
     const target = event.currentTarget as HTMLElement;
     const item = target.closest("[data-filter-list-target='item']");
     if (!item) return;
