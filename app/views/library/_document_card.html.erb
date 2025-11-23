@@ -1,4 +1,4 @@
-<div class="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
+<li class="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow list-none">
   <div class="flex items-center gap-3 sm:gap-4">
     <% if document.preview_image.attached? %>
       <div class="flex-shrink-0 w-12 h-16 sm:w-16 sm:h-20">
@@ -16,14 +16,14 @@
       <p class="text-gray-600 text-sm"><%= document.author %> · <%= document.publishing_date %></p>
     </div>
     <div class="flex flex-col gap-2 flex-shrink-0">
-      <%= link_to library_read_path(document), class: "p-2 sm:px-4 sm:py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" } do %>
-        <i class="fas fa-book-open"></i>
+      <%= link_to library_read_path(document), class: "p-2 sm:px-4 sm:py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors font-medium text-center", data: { turbo_frame: "_top" }, aria: { label: "Read #{document.title}" } do %>
+        <i class="fas fa-book-open" aria-hidden="true"></i>
       <% end %>
       <% if document.file.attached? %>
-        <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center" do %>
-          <i class="fas fa-download"></i>
+        <%= link_to rails_blob_path(document.file, disposition: "attachment"), class: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center", aria: { label: "Download #{document.title}" } do %>
+          <i class="fas fa-download" aria-hidden="true"></i>
         <% end %>
       <% end %>
     </div>
   </div>
-</div>
+</li>

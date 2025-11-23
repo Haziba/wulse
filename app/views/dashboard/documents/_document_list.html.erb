@@ -24,11 +24,11 @@
                   </div>
                 <% end %>
               </div>
-              <%= link_to document.title, dashboard_document_path(document), class: "text-brand-500 hover:text-brand-600 font-medium block truncate", data: { turbo_frame: "_top" } %>
+              <%= link_to document.title, dashboard_document_path(document), class: "text-brand-700 hover:text-brand-800 font-medium block truncate", data: { turbo_frame: "_top" } %>
             </div>
           </td>
           <td class="py-6 px-6 hidden md:table-cell">
-            <%= link_to document.staff.name, dashboard_staff_path(document.staff), class: "text-brand-500 hover:text-brand-600 block truncate", data: { turbo_frame: "_top" } %>
+            <%= link_to document.staff.name, dashboard_staff_path(document.staff), class: "text-brand-700 hover:text-brand-800 block truncate", data: { turbo_frame: "_top" } %>
           </td>
           <td class="py-6 px-6 text-gray-700 whitespace-nowrap hidden lg:table-cell">
             <%= time_ago_in_words(document.updated_at) + " ago" if document.updated_at %>
@@ -62,8 +62,8 @@
             <span class="hidden sm:inline">Previous</span>
           <% end %>
         <% else %>
-          <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">
-            <i class="fas fa-chevron-left sm:hidden"></i>
+          <span class="px-3 py-2 text-sm text-gray-500 cursor-not-allowed" aria-disabled="true">
+            <i class="fas fa-chevron-left sm:hidden" aria-hidden="true"></i>
             <span class="hidden sm:inline">Previous</span>
           </span>
         <% end %>
@@ -73,9 +73,9 @@
           <% if item.is_a?(Integer) %>
             <%= link_to item, dashboard_documents_path(request.query_parameters.merge(page: item)), class: "px-2 sm:px-3 py-2 text-sm #{item == pagy.page ? 'bg-brand-500 text-white rounded' : 'text-gray-600 hover:text-brand-500'}", data: { turbo_frame: "document_list", turbo_action: "advance" } %>
           <% elsif item.is_a?(String) %>
-            <span class="px-2 sm:px-3 py-2 text-sm text-gray-400"><%= item %></span>
+            <span class="px-2 sm:px-3 py-2 text-sm text-gray-500"><%= item %></span>
           <% elsif item == :gap %>
-            <span class="px-1 sm:px-2 text-sm text-gray-400">...</span>
+            <span class="px-1 sm:px-2 text-sm text-gray-500" aria-hidden="true">...</span>
           <% end %>
         <% end %>
 
@@ -85,8 +85,8 @@
             <span class="hidden sm:inline">Next</span>
           <% end %>
         <% else %>
-          <span class="px-3 py-2 text-sm text-gray-400 cursor-not-allowed">
-            <i class="fas fa-chevron-right sm:hidden"></i>
+          <span class="px-3 py-2 text-sm text-gray-500 cursor-not-allowed" aria-disabled="true">
+            <i class="fas fa-chevron-right sm:hidden" aria-hidden="true"></i>
             <span class="hidden sm:inline">Next</span>
           </span>
         <% end %>
