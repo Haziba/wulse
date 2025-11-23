@@ -33,13 +33,13 @@ RSpec.describe "Admin::Sessions", type: :request do
     context "with invalid credentials" do
       it "does not log in with wrong password" do
         post admin_login_path, params: { email: admin.email, password: 'wrongpassword' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(session[:admin_id]).to be_nil
       end
 
       it "does not log in with wrong email" do
         post admin_login_path, params: { email: 'wrong@example.com', password: 'password' }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(session[:admin_id]).to be_nil
       end
 
