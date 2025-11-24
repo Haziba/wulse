@@ -149,6 +149,135 @@ RSpec.describe "Library", type: :system do
     end
   end
 
+  describe "filter list controls" do
+    let!(:cs_book) do
+      doc = create(:document, institution: institution, staff: staff, title: "CS Book")
+      create(:metadatum, document: doc, key: "department", value: "computer science")
+      create(:metadatum, document: doc, key: "language", value: "english")
+      doc
+    end
+
+    let!(:econ_article) do
+      doc = create(:document, institution: institution, staff: staff, title: "Economics Article")
+      create(:metadatum, document: doc, key: "department", value: "economics")
+      create(:metadatum, document: doc, key: "language", value: "spanish")
+      doc
+    end
+
+    let!(:history_paper) do
+      doc = create(:document, institution: institution, staff: staff, title: "History Paper")
+      create(:metadatum, document: doc, key: "department", value: "history")
+      create(:metadatum, document: doc, key: "language", value: "french")
+      doc
+    end
+
+    describe "'all' button" do
+      it "checks all checkboxes in the category" do
+        visit library_path
+
+        find('input[name="department[]"][value="computer science"]').uncheck
+        find('input[name="department[]"][value="economics"]').uncheck
+
+        expect(page).to have_content("History Paper")
+        expect(page).not_to have_content("CS Book")
+        expect(page).not_to have_content("Economics Article")
+
+        within "#filter-category-department" do
+          find('button[data-action="click->filter-list#selectAll"]').click
+        end
+
+        expect(page).to have_content("CS Book")
+        expect(page).to have_content("Economics Article")
+        expect(page).to have_content("History Paper")
+
+        expect(find('input[name="department[]"][value="computer science"]')).to be_checked
+        expect(find('input[name="department[]"][value="economics"]')).to be_checked
+        expect(find('input[name="department[]"][value="history"]')).to be_checked
+      end
+
+      it "updates the URL with compressed filter parameter" do
+        visit library_path
+
+        find('input[name="department[]"][value="computer science"]').uncheck
+
+        within "#filter-category-department" do
+          find('button[data-action="click->filter-list#selectAll"]').click
+        end
+
+        expect(current_url).not_to include("department[]=")
+        expect(current_url).not_to include("f=")
+      end
+    end
+
+    describe "'only' button" do
+      it "unchecks all other checkboxes in the category" do
+        visit library_path
+
+        expect(page).to have_content("CS Book")
+        expect(page).to have_content("Economics Article")
+        expect(page).to have_content("History Paper")
+
+        within find('label', text: /Economics/) do
+          find('button', text: 'only').click
+        end
+
+        expect(page).not_to have_content("CS Book")
+        expect(page).to have_content("Economics Article")
+        expect(page).not_to have_content("History Paper")
+
+        expect(find('input[name="department[]"][value="computer science"]')).not_to be_checked
+        expect(find('input[name="department[]"][value="economics"]')).to be_checked
+        expect(find('input[name="department[]"][value="history"]')).not_to be_checked
+      end
+
+      it "updates the URL with compressed filter parameter" do
+        visit library_path
+
+        within find('label', text: /Economics/) do
+          find('button', text: 'only').click
+        end
+
+        expect(current_url).to include("f=")
+      end
+
+      it "filters results to only the selected option" do
+        visit library_path
+
+        within find('label', text: /Computer Science/) do
+          find('button', text: 'only').click
+        end
+
+        expect(page).to have_content("CS Book")
+        expect(page).not_to have_content("Economics Article")
+        expect(page).not_to have_content("History Paper")
+        expect(page).not_to have_content("Introduction to Ruby Programming")
+      end
+
+      it "works across different filter categories independently" do
+        visit library_path
+
+        within "#filter-category-department" do
+          within find('label', text: /Economics/) do
+            find('button', text: 'only').click
+          end
+        end
+
+        expect(page).to have_content("Economics Article")
+        expect(page).not_to have_content("CS Book")
+
+        within "#filter-category-language" do
+          within find('label', text: /Spanish/) do
+            find('button', text: 'only').click
+          end
+        end
+
+        expect(page).to have_content("Economics Article")
+        expect(page).not_to have_content("CS Book")
+        expect(page).not_to have_content("History Paper")
+      end
+    end
+  end
+
   describe "EPUB reader" do
     let!(:epub_book) do
       doc = create(:document,
