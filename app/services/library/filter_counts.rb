@@ -36,7 +36,7 @@ module Library
     private
 
     def get_filters(scope)
-      document_ids = scope.map(&:id)
+      document_ids = scope.pluck(:id)
 
       simple_counts = Metadatum
         .where(document_id: document_ids)
