@@ -12,9 +12,21 @@ export default class extends Controller<HTMLFormElement> {
   declare readonly filterKeysValue: string[];
 
   private timeout: ReturnType<typeof setTimeout> | null = null;
+  private boundReEnableCheckboxes!: () => void;
+
+  connect(): void {
+    this.boundReEnableCheckboxes = this.reEnableCheckboxes.bind(this);
+    document.addEventListener("turbo:render", this.boundReEnableCheckboxes);
+  }
 
   disconnect(): void {
     if (this.timeout) clearTimeout(this.timeout);
+    document.removeEventListener("turbo:render", this.boundReEnableCheckboxes);
+  }
+
+  private reEnableCheckboxes(): void {
+    const allCheckboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    allCheckboxes.forEach(checkbox => checkbox.disabled = false);
   }
 
   debouncedSubmit(): void {
@@ -59,6 +71,9 @@ export default class extends Controller<HTMLFormElement> {
       const compressed = await compressFilters(filters);
       url.searchParams.set("f", compressed);
     }
+
+    const allCheckboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    allCheckboxes.forEach(checkbox => checkbox.disabled = true);
 
     Turbo.visit(url.toString());
   }
