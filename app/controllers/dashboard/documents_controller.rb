@@ -5,7 +5,12 @@ class Dashboard::DocumentsController < ApplicationController
   before_action :set_document, only: [ :show, :edit, :update, :destroy ]
 
   def index
+<<<<<<< HEAD
     documents = Document.includes(:metadata, :preview_image_attachment, :staff)
+=======
+    documents = Document.all
+      .includes(:metadata, :preview_image_attachment, :staff)
+>>>>>>> ff10d4f (chore: Satisfy bullet)
       .order(created_at: :desc)
 
     if params[:search].present?
@@ -97,7 +102,14 @@ class Dashboard::DocumentsController < ApplicationController
   private
 
   def updated_document_list(page: 1)
+<<<<<<< HEAD
     documents = Document.includes(:metadata, :preview_image_attachment, :staff).order(created_at: :desc)
+=======
+    documents = Document.includes(:metadata).order(created_at: :desc)
+    documents = Document.all
+      .includes(:metadata, :preview_image_attachment, :staff)
+      .order(created_at: :desc)
+>>>>>>> ff10d4f (chore: Satisfy bullet)
 
     if params[:search].present?
       documents = documents.joins(:metadata)
