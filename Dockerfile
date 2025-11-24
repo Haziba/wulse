@@ -8,7 +8,7 @@ WORKDIR /rails
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl wget libjemalloc2 libvips postgresql-client
+    apt-get install --no-install-recommends -y curl wget libjemalloc2 libvips postgresql-client poppler-utils
 
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
