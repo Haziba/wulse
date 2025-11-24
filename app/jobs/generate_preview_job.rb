@@ -8,8 +8,22 @@ class GeneratePreviewJob < ApplicationJob
     return unless record.file.blob.key == expected_blob_key
 
     Preview::Generate.call(record)
+
+    record.reload
+    broadcast_document_update(record)
   rescue => e
     Rails.logger.error "Job failed for #{record_klass}(#{record_id}): #{e.class}: #{e.message}"
     raise
+  end
+
+  private
+
+  def broadcast_document_update(document)
+    Turbo::StreamsChannel.broadcast_replace_to(
+      "institution_#{document.institution_id}",
+      target: "document_#{document.id}",
+      partial: "dashboard/documents/document_row",
+      locals: { document: document }
+    )
   end
 end

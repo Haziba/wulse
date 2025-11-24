@@ -1,0 +1,32 @@
+<tr class="hover:bg-gray-50" id="document_<%= document.id %>">
+  <td class="py-4 px-6">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-14 rounded flex-shrink-0 overflow-hidden">
+        <% if document.preview_image.attached? %>
+          <%= image_tag document.preview_image, class: "w-full h-full object-cover" %>
+        <% else %>
+          <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+            <i class="fas fa-file-alt text-gray-400"></i>
+          </div>
+        <% end %>
+      </div>
+      <%= link_to document.title, dashboard_document_path(document), class: "text-brand-700 hover:text-brand-800 font-medium block truncate", data: { turbo_frame: "_top" } %>
+    </div>
+  </td>
+  <td class="py-6 px-6 hidden md:table-cell">
+    <%= link_to document.staff.name, dashboard_staff_path(document.staff), class: "text-brand-700 hover:text-brand-800 block truncate", data: { turbo_frame: "_top" } %>
+  </td>
+  <td class="py-6 px-6 text-gray-700 whitespace-nowrap hidden lg:table-cell">
+    <%= time_ago_in_words(document.updated_at) + " ago" if document.updated_at %>
+  </td>
+  <td class="py-6 px-6">
+    <div class="flex items-center space-x-4">
+      <%= link_to edit_dashboard_document_path(document), class: "text-gray-600 hover:text-gray-800 text-sm font-medium whitespace-nowrap", data: { turbo_frame: "_top" } do %>
+        <i class="fas fa-edit mr-1"></i><span class="hidden lg:inline">Edit</span>
+      <% end %>
+      <%= button_to dashboard_document_path(document), method: :delete, class: "text-red-600 hover:text-red-800 text-sm font-medium whitespace-nowrap", data: { turbo_confirm: "Are you sure you want to delete this document?" } do %>
+        <i class="fas fa-trash mr-1"></i><span class="hidden lg:inline">Delete</span>
+      <% end %>
+    </div>
+  </td>
+</tr>
