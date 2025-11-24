@@ -244,9 +244,9 @@ RSpec.describe "Library", type: :request do
     end
 
     context "when document does not exist" do
-      it "returns 404 not found" do
+      it "redirects to library index" do
         get library_read_path(id: 99999)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to redirect_to(library_path)
       end
     end
   end

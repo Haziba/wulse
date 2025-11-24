@@ -7,19 +7,19 @@
     icon = is_notice ? "check" : "exclamation-circle"
   %>
 
-  <div data-controller="toast" class="bg-white border-l-4 border-<%= color %>-500 rounded-lg shadow-lg p-4 mb-4 flex items-center space-x-3 animate-slide-up">
+  <aside data-controller="toast" role="status" aria-live="polite" class="bg-white border-l-4 border-<%= color %>-500 rounded-lg shadow-lg p-4 mb-4 flex items-center space-x-3 animate-slide-up">
     <div class="flex-shrink-0">
       <div class="w-10 h-10 bg-<%= color %>-100 rounded-full flex items-center justify-center">
-        <i class="fas fa-<%= icon %> text-<%= color %>-500"></i>
+        <i class="fas fa-<%= icon %> text-<%= color %>-500" aria-hidden="true"></i>
       </div>
     </div>
     <div class="flex-1">
       <p class="font-medium text-gray-900"><%= message %></p>
     </div>
-    <button data-action="click->toast#dismiss" class="text-gray-400 hover:text-gray-600 transition-colors">
-      <i class="fas fa-times"></i>
+    <button data-action="click->toast#dismiss" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Dismiss notification">
+      <i class="fas fa-times" aria-hidden="true"></i>
     </button>
-  </div>
+  </aside>
 <% end %>
 
 <style>
