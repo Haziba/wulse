@@ -93,7 +93,7 @@ export default class extends Controller<HTMLElement> {
       checkbox.checked = checkbox === targetCheckbox;
     });
 
-    this.element.closest("form")?.requestSubmit();
+    this.submitForm();
   }
 
   selectAll(event: Event): void {
@@ -106,7 +106,16 @@ export default class extends Controller<HTMLElement> {
       checkbox.checked = true;
     });
 
-    this.element.closest("form")?.requestSubmit();
+    this.submitForm();
+  }
+
+  private submitForm(): void {
+    const form = this.element.closest("form") as HTMLFormElement;
+    const filterFormController = this.application.getControllerForElementAndIdentifier(
+      form,
+      "filter-form"
+    ) as any;
+    filterFormController.submit();
   }
 
   preventUncheckIfOnlyOption(event: Event): void {
