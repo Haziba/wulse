@@ -92,3 +92,5 @@ gem "pagy", "~> 9.0"
 # Image processing for preview generation
 gem "mini_magick"
 gem "rubyzip"
+
+gem "bullet", "~> 8.1", :groups => [:development, :test]

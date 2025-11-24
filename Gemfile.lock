@@ -117,6 +117,9 @@ GEM
     brakeman (7.1.1)
       racc
     builder (3.3.0)
+    bullet (8.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     capybara (3.40.0)
       addressable
       matrix
@@ -487,6 +490,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
+    uniform_notifier (1.18.0)
     uri (1.0.4)
     useragent (0.16.11)
     virtus (2.0.0)
@@ -526,6 +530,7 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   bootsnap
   brakeman
+  bullet (~> 8.1)
   capybara
   debug
   factory_bot_rails
