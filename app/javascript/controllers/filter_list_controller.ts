@@ -81,10 +81,14 @@ export default class extends Controller<HTMLElement> {
     const item = target.closest("[data-filter-list-target='item']");
     if (!item) return;
 
-    const targetCheckbox = item.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    const targetCheckbox = item.querySelector<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
     if (!targetCheckbox) return;
 
-    const checkboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
     checkboxes.forEach((checkbox) => {
       checkbox.checked = checkbox === targetCheckbox;
     });
@@ -95,12 +99,26 @@ export default class extends Controller<HTMLElement> {
   selectAll(event: Event): void {
     event.preventDefault();
 
-    const checkboxes = this.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
     checkboxes.forEach((checkbox) => {
       checkbox.checked = true;
     });
 
     this.element.closest("form")?.requestSubmit();
+  }
+
+  preventUncheckIfOnlyOption(event: Event): void {
+    const checkbox = event.currentTarget as HTMLInputElement;
+    const checkboxes = this.element.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    );
+
+    if (checkboxes.length === 1 && !checkbox.checked) {
+      checkbox.checked = true;
+      event.preventDefault();
+    }
   }
 
   get isExpanded(): boolean {

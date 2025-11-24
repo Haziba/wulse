@@ -3,7 +3,10 @@ import { compressFilters } from "../utils/filter_compression";
 
 export default class extends Controller<HTMLFormElement> {
   static values = {
-    filterKeys: { type: Array, default: ["document_type", "department", "language", "publishing_date"] }
+    filterKeys: {
+      type: Array,
+      default: ["document_type", "department", "language", "publishing_date"],
+    },
   };
 
   declare readonly filterKeysValue: string[];
@@ -32,10 +35,15 @@ export default class extends Controller<HTMLFormElement> {
     const filters: Record<string, string[]> = {};
 
     for (const key of this.filterKeysValue) {
-      const allCheckboxes = this.element.querySelectorAll<HTMLInputElement>(`input[name="${key}[]"]`);
+      const allCheckboxes = this.element.querySelectorAll<HTMLInputElement>(
+        `input[name="${key}[]"]`
+      );
       const checkedValues = formData.getAll(`${key}[]`) as string[];
 
-      if (checkedValues.length > 0 && checkedValues.length < allCheckboxes.length) {
+      if (
+        checkedValues.length > 0 &&
+        checkedValues.length < allCheckboxes.length
+      ) {
         filters[key] = checkedValues;
       }
     }

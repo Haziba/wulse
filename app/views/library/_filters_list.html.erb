@@ -20,7 +20,7 @@
               <%= check_box_tag "#{filter_param_key}[]",
                                 value,
                                 is_checked,
-                                data: { action: "change->filter-form#submit" },
+                              data: { action: "click->filter-list#preventUncheckIfOnlyOption change->filter-form#submit" },
                                 class: "text-brand-500 rounded border-gray-300 focus:ring-brand-500" %>
               <span class="ml-2 text-sm text-gray-600 flex-1"><%= value.titleize %></span>
               <button type="button"
