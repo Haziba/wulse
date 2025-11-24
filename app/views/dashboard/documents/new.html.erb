@@ -13,21 +13,21 @@
         <% meta = meta_f.object %>
           <% if meta.key == 'title' %>
             <div>
-              <%= f.label :title, "Document Title", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= f.label :title, "Document Title", for: "document_title", class: "block text-sm font-medium text-gray-700 mb-2" %>
               <%= meta_f.hidden_field :key, value: "title" %>
-              <%= meta_f.text_field :value, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+              <%= meta_f.text_field :value, id: "document_title", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
             </div>
           <% elsif meta.key == 'author' %>
             <div>
-              <%= f.label :author, "Author", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= f.label :author, "Author", for: "document_author", class: "block text-sm font-medium text-gray-700 mb-2" %>
               <%= meta_f.hidden_field :key, value: "author" %>
-              <%= meta_f.text_field :value, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+              <%= meta_f.text_field :value, id: "document_author", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
             </div>
           <% elsif meta.key == 'publishing_date' %>
             <div>
-              <%= f.label :publishing_date, "Publishing Date", class: "block text-sm font-medium text-gray-700 mb-2" %>
+              <%= f.label :publishing_date, "Publishing Date", for: "document_publishing_date", class: "block text-sm font-medium text-gray-700 mb-2" %>
               <%= meta_f.hidden_field :key, value: "publishing_date" %>
-              <%= meta_f.date_field :value, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+              <%= meta_f.date_field :value, id: "document_publishing_date", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
             </div>
           <% end %>
       <% end %>
