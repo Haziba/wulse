@@ -6,6 +6,7 @@ class Dashboard::StaffController < ApplicationController
 
   def index
     staffs = Staff.all
+      .includes(:avatar_attachment)
       .order(created_at: :desc)
 
     if params[:search].present?
@@ -157,7 +158,9 @@ class Dashboard::StaffController < ApplicationController
   private
 
   def updated_staff_list(page: 1)
-    staffs = Staff.all.order(created_at: :desc)
+    staffs = Staff.all
+      .includes(:avatar_attachment)
+      .order(created_at: :desc)
 
     if params[:search].present?
       staffs = staffs.where("name ILIKE ? OR email ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
