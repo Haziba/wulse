@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   end
 
   constraints subdomain: /.+/ do
-    get "admin", to: redirect("/dashboard")
+    get "admin(/*path)", to: redirect("/dashboard")
   end
 
   scope :admin, as: :admin do
