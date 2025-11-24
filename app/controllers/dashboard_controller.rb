@@ -17,14 +17,16 @@ class DashboardController < ApplicationController
       @stats[:storage_used_change] = Current.institution.storage_used - last_months_stats.storage_used
     end
 
-    @recent_documents = Current.institution.documents.order(created_at: :desc).includes(:staff, preview_image_attachment: :blob).limit(3)
+    @recent_documents = Current.institution.documents.order(created_at: :desc).includes(:staff, :metadata, preview_image_attachment: :blob).limit(3)
 
-    @staff_overview = Current.institution.staffs
+    staff_overview = Current.institution.staffs
       .left_joins(:documents)
-      .includes(avatar_attachment: :blob)
       .group("staffs.id")
       .select("staffs.*, COUNT(documents.id) AS documents_count")
       .order("documents_count DESC")
       .limit(3)
+
+    ActiveRecord::Associations::Preloader.new(records: staff_overview, associations: { avatar_attachment: :blob }).call
+    @staff_overview = staff_overview
   end
 end

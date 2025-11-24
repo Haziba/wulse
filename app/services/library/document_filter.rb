@@ -14,7 +14,7 @@ module Library
       scope = Document.all
       scope = apply_query_filter(scope)
       scope = apply_metadata_filters(scope)
-      scope.includes(:preview_image_attachment, :file_attachment).distinct
+      scope.includes(preview_image_attachment: :blob, file_attachment: :blob).distinct
     end
 
     private
