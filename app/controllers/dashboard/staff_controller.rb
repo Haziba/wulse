@@ -29,7 +29,7 @@ class Dashboard::StaffController < ApplicationController
   end
 
   def show
-    documents = @staff.documents.order(created_at: :desc)
+    documents = @staff.documents.includes(preview_image_attachment: :blob, file_attachment: :blob).order(created_at: :desc)
 
     if params[:search].present?
       documents = documents.joins(:metadata).where("metadata.value LIKE ?", "%#{params[:search]}%")
