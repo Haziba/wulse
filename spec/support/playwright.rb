@@ -17,6 +17,11 @@ RSpec.configure do |config|
   end
 
   config.after(:each, type: :system) do
+    begin
+      page.execute_script("localStorage.clear(); sessionStorage.clear();")
+    rescue StandardError
+      # Ignore errors if page is not available
+    end
     Capybara.reset_sessions!
   end
 

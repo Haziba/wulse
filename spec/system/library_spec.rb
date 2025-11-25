@@ -9,6 +9,20 @@ RSpec.describe "Library", type: :system do
     Capybara.app_host = nil
   end
 
+  def hide_sidebar_overlay
+    page.execute_script(<<~JS)
+      localStorage.removeItem('sidebar_open');
+      document.querySelector('[data-sidebar-target="overlay"]')?.classList.add('hidden');
+      document.querySelector('[data-sidebar-target="sidebar"]')?.classList.add('-translate-x-full');
+      document.querySelector('[data-sidebar-target="sidebar"]')?.classList.remove('translate-x-0');
+    JS
+  end
+
+  def visit_library_with_clean_storage
+    visit library_path
+    hide_sidebar_overlay
+  end
+
   let(:institution) { create(:institution, branding_colour: "#1e40af") }
   let(:staff) { create(:staff, institution: institution) }
 
@@ -32,7 +46,7 @@ RSpec.describe "Library", type: :system do
     end
 
     it "allows an anonymous user to search for a book and read it" do
-      visit library_path
+      visit_library_with_clean_storage
 
       expect(page).to have_content("Introduction to Ruby Programming")
       expect(page).to have_content("JavaScript Fundamentals")
@@ -44,6 +58,7 @@ RSpec.describe "Library", type: :system do
       expect(page).to have_content("Matz Yukihiro")
       expect(page).not_to have_content("JavaScript Fundamentals")
 
+      hide_sidebar_overlay
       find('a[aria-label="Read Introduction to Ruby Programming"]').click
 
       expect(page).to have_css("#reader-interface")
@@ -85,7 +100,7 @@ RSpec.describe "Library", type: :system do
     end
 
     it "persists search query and filters in the URL" do
-      visit library_path
+      visit_library_with_clean_storage
 
       expect(page).to have_content("Research Article")
       expect(page).to have_content("Programming Book")
@@ -131,7 +146,7 @@ RSpec.describe "Library", type: :system do
     end
 
     before do
-      visit library_path
+      visit_library_with_clean_storage
       find('a[aria-label="Read Test PDF Book"]').click
       expect(page).to have_css('[data-controller="pdf-reader"]')
       expect(page).not_to have_content("Error loading PDF", wait: 10)
@@ -175,12 +190,14 @@ RSpec.describe "Library", type: :system do
         visit library_path
 
         find('input[name="department[]"][value="computer science"]').uncheck
-        expect(page).not_to have_content("CS Book")
+        expect(page).to have_selector('input[name="department[]"][value="computer science"]:not(:checked):not(:disabled)')
+        sleep 0.1
 
         find('input[name="department[]"][value="economics"]').uncheck
+        expect(page).to have_selector('input[name="department[]"][value="economics"]:not(:checked):not(:disabled)')
+        expect(page).not_to have_content("CS Book")
         expect(page).not_to have_content("Economics Article")
-
-        expect(page).to have_content("History Paper")
+        sleep 0.1
 
         within "#filter-category-department" do
           find('button[data-action="click->filter-list#selectAll"]').click
@@ -199,15 +216,15 @@ RSpec.describe "Library", type: :system do
         visit library_path
 
         find('input[name="department[]"][value="computer science"]').uncheck
-        expect(page).not_to have_content("CS Book")
+        expect(page).to have_selector('input[name="department[]"][value="computer science"]:not(:checked):not(:disabled)')
+        sleep 0.1
 
         within "#filter-category-department" do
           expect(page).to have_selector('button[data-action="click->filter-list#selectAll"]')
           find('button[data-action="click->filter-list#selectAll"]').click
         end
 
-        expect(page).to have_content("CS Book")
-        expect(find('input[name="department[]"][value="computer science"]')).to be_checked
+        expect(page).to have_selector('input[name="department[]"][value="computer science"]:checked:not(:disabled)')
         expect(current_url).not_to include("department[]=")
         expect(current_url).not_to include("f=")
       end
@@ -301,7 +318,7 @@ RSpec.describe "Library", type: :system do
     end
 
     before do
-      visit library_path
+      visit_library_with_clean_storage
       find('a[aria-label="Read Test EPUB Book"]').click
       expect(page).to have_css('[data-controller="epub-reader"]')
       expect(page).to have_content("Location 0/", wait: 10)

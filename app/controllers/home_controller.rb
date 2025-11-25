@@ -6,7 +6,7 @@ class HomeController < ApplicationController
       render :landing, layout: false
     else
       @recent_documents = Current.institution.documents
-                                  .includes(preview_image_attachment: :blob, file_attachment: :blob)
+                                  .includes(:preview_image_attachment, :file_attachment)
                                   .order(created_at: :desc)
                                   .limit(3)
     end
