@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Documents", type: :system do
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 

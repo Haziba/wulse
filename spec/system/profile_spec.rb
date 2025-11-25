@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Profile", type: :system do
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 
@@ -66,13 +65,11 @@ RSpec.describe "Profile", type: :system do
       expect(page).to have_content("Profile updated successfully!")
 
       # Verify password was changed by signing out and back in
-      within("#user_profile_menu") do
-        find("button").click
-        click_link "Log Out"
-      end
+      page.driver.with_playwright_page { |p| p.context.clear_cookies }
 
       visit new_session_path
-      fill_in "Email", with: "user@example.com"
+      expect(page).to have_content("Welcome Back")
+      fill_in "Email Address", with: "user@example.com"
       fill_in "Password", with: "newpassword456"
       click_button "Sign In"
 
@@ -96,13 +93,11 @@ RSpec.describe "Profile", type: :system do
       expect(staff.password_digest).to eq(original_password_digest)
 
       # Verify old password still works
-      within("#user_profile_menu") do
-        find("button").click
-        click_link "Log Out"
-      end
+      page.driver.with_playwright_page { |p| p.context.clear_cookies }
 
       visit new_session_path
-      fill_in "Email", with: "user@example.com"
+      expect(page).to have_content("Welcome Back")
+      fill_in "Email Address", with: "user@example.com"
       fill_in "Password", with: "password123"
       click_button "Sign In"
 

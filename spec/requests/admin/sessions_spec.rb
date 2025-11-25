@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::Sessions", type: :request do
+  before do
+    host! "localhost"
+  end
+
   let(:admin) { create(:admin, email: 'admin@example.com', password: 'password') }
 
   describe "GET /admin/login" do

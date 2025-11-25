@@ -1,9 +1,7 @@
 require "rails_helper"
-require "axe-rspec"
 
 RSpec.describe "Accessibility", type: :system do
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 
@@ -57,8 +55,9 @@ RSpec.describe "Accessibility", type: :system do
 
   def sign_in_as(staff)
     visit new_session_path
-    fill_in "Email", with: staff.email
+    fill_in "Email Address", with: staff.email
     fill_in "Password", with: "password123"
     click_button "Sign In"
+    expect(page).to have_current_path(dashboard_path)
   end
 end

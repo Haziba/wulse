@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Home", type: :system do
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 
@@ -57,9 +56,13 @@ RSpec.describe "Home", type: :system do
     it "searches and navigates to library index" do
       visit root_path
 
-      fill_in "q", with: "Machine Learning"
+      within('form[action="/library"]') do
+        fill_in "q", with: "Machine Learning"
+      end
+
       find('form[action="/library"] button[type="submit"]').click
 
+      expect(page).to have_content("Search Results", wait: 5)
       expect(current_path).to eq(library_path)
       expect(current_url).to include("q=Machine")
     end

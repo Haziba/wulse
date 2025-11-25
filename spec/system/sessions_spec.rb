@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "Sessions", type: :system do
   include ActiveJob::TestHelper
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 

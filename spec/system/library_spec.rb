@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Library", type: :system do
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 
@@ -176,11 +175,12 @@ RSpec.describe "Library", type: :system do
         visit library_path
 
         find('input[name="department[]"][value="computer science"]').uncheck
+        expect(page).not_to have_content("CS Book")
+
         find('input[name="department[]"][value="economics"]').uncheck
+        expect(page).not_to have_content("Economics Article")
 
         expect(page).to have_content("History Paper")
-        expect(page).not_to have_content("CS Book")
-        expect(page).not_to have_content("Economics Article")
 
         within "#filter-category-department" do
           find('button[data-action="click->filter-list#selectAll"]').click
@@ -199,11 +199,15 @@ RSpec.describe "Library", type: :system do
         visit library_path
 
         find('input[name="department[]"][value="computer science"]').uncheck
+        expect(page).not_to have_content("CS Book")
 
         within "#filter-category-department" do
+          expect(page).to have_selector('button[data-action="click->filter-list#selectAll"]')
           find('button[data-action="click->filter-list#selectAll"]').click
         end
 
+        expect(page).to have_content("CS Book")
+        expect(find('input[name="department[]"][value="computer science"]')).to be_checked
         expect(current_url).not_to include("department[]=")
         expect(current_url).not_to include("f=")
       end
@@ -237,6 +241,8 @@ RSpec.describe "Library", type: :system do
           find('button', text: 'only').click
         end
 
+        expect(page).to have_content("Economics Article")
+        expect(page).not_to have_content("CS Book")
         expect(current_url).to include("f=")
       end
 

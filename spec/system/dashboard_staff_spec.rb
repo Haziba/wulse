@@ -4,7 +4,6 @@ RSpec.describe "Dashboard Staff", type: :system do
   include ActiveJob::TestHelper
 
   before do
-    driven_by(:selenium_headless)
     Capybara.app_host = "http://#{institution.subdomain}.lvh.me"
   end
 
@@ -17,9 +16,10 @@ RSpec.describe "Dashboard Staff", type: :system do
 
   before do
     visit new_session_path
-    fill_in "Email", with: "admin@example.com"
+    fill_in "Email Address", with: "admin@example.com"
     fill_in "Password", with: "password123"
     click_button "Sign In"
+    expect(page).to have_current_path(dashboard_path)
     visit dashboard_staff_index_path
   end
 
@@ -80,7 +80,8 @@ RSpec.describe "Dashboard Staff", type: :system do
 
   describe "adding a staff member" do
     it "opens modal and creates new staff member" do
-      click_link "Add Staff"
+      first("a.bg-brand-500").click
+      expect(page).to have_selector("dialog", wait: 5)
 
       within("dialog") do
         fill_in "Full Name", with: "New Staff Member"
@@ -93,7 +94,10 @@ RSpec.describe "Dashboard Staff", type: :system do
     end
 
     it "sends welcome email with password reset link" do
-      click_link "Add Staff"
+      ActionMailer::Base.deliveries.clear
+
+      first("a.bg-brand-500").click
+      expect(page).to have_selector("dialog", wait: 5)
 
       within("dialog") do
         fill_in "Full Name", with: "Email Test Staff"
@@ -101,6 +105,7 @@ RSpec.describe "Dashboard Staff", type: :system do
         click_button "Add Staff Member"
       end
 
+      expect(page).to have_content("Email Test Staff")
       perform_enqueued_jobs
 
       email = ActionMailer::Base.deliveries.last
@@ -272,6 +277,7 @@ RSpec.describe "Dashboard Staff", type: :system do
       select "Inactive", from: "Status"
       click_button "Save Changes"
 
+      expect(page).to have_current_path(dashboard_staff_index_path)
       expect(staff_member.reload.status).to eq("inactive")
     end
   end
