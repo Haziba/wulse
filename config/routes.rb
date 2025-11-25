@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index", as: :dashboard
   get "library", to: "library#index", as: :library
   get "library/:id/read", to: "library#read", as: :library_read
+  get "terms", to: "pages#terms", as: :terms
+  get "privacy", to: "pages#privacy", as: :privacy
 
   namespace :dashboard do
     resources :staff do

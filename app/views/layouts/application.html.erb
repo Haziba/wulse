@@ -116,9 +116,13 @@
 
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 text-white mt-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="text-center">
-          <p class="text-brand-200 text-sm">© <%= Time.current.year %> <%= Current.institution.name.titleize %> Research Library. All rights reserved.</p>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-wrap justify-center items-center gap-3 text-xs text-brand-200">
+          <span>© <%= Time.current.year %> <%= Current.institution.name.titleize %></span>
+          <span aria-hidden="true">·</span>
+          <%= link_to "Terms of Service", terms_path, class: "hover:text-white transition-colors underline" %>
+          <span aria-hidden="true">·</span>
+          <%= link_to "Privacy Policy", privacy_path, class: "hover:text-white transition-colors underline" %>
         </div>
       </div>
     </footer>
