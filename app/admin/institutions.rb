@@ -14,11 +14,11 @@ ActiveAdmin.register Institution do
     actions
   end
 
-  form do |f|
+  form html: { multipart: true } do |f|
     f.inputs do
       f.input :name
       f.input :subdomain
-      f.input :logo
+      f.input :logo, as: :file
       f.input :branding_colour, as: :color
     end
     f.actions
