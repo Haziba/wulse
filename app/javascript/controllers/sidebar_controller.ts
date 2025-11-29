@@ -9,19 +9,11 @@ export default class SidebarController extends Controller<HTMLElement> {
   private static readonly STORAGE_KEY = "sidebar_open";
 
   private get isOpen(): boolean {
-    const stored = localStorage.getItem(SidebarController.STORAGE_KEY);
-    if (stored !== null) {
-      return stored === "true";
-    }
-    return this.shouldDefaultToOpen();
+    return localStorage.getItem(SidebarController.STORAGE_KEY) === "true";
   }
 
   private set isOpen(value: boolean) {
     localStorage.setItem(SidebarController.STORAGE_KEY, String(value));
-  }
-
-  private shouldDefaultToOpen(): boolean {
-    return window.innerWidth >= 900;
   }
 
   connect(): void {
