@@ -39,13 +39,13 @@
 <body class="font-sans bg-white">
 
 <header id="header" class="bg-white shadow-sm border-b border-mid-gray">
-    <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
         <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <img src="/icon.png" alt="Wulse" class="w-12 h-12">
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <img src="/icon.png" alt="Wulse" class="w-10 h-10 md:w-12 md:h-12">
                 <div>
-                    <h1 class="font-serif text-3xl font-bold text-burgundy">Wulse</h1>
-                    <p class="text-sm text-dark-gray">Open Source Digital Archive</p>
+                    <h1 class="font-serif text-xl md:text-3xl font-bold text-burgundy">Wulse</h1>
+                    <p class="text-xs md:text-sm text-dark-gray">Open Source Digital Archive</p>
                 </div>
             </div>
             <nav class="hidden md:flex items-center space-x-8">
@@ -55,7 +55,7 @@
                 <span class="text-dark-gray hover:text-burgundy font-medium cursor-pointer">Community</span>
             </nav>
             <div class="flex items-center">
-                <a href="https://github.com/haziba/wulse" target="_blank" class="bg-burgundy text-white px-6 py-2 rounded-md hover:bg-burgundy-dark font-medium">
+                <a href="https://github.com/haziba/wulse" target="_blank" class="bg-burgundy text-white px-4 md:px-6 py-2 rounded-md hover:bg-burgundy-dark font-medium text-sm md:text-base">
                     Get Started
                 </a>
             </div>
@@ -64,11 +64,11 @@
 </header>
 
 <main id="main-content">
-    <section id="hero-section" class="bg-gradient-to-br from-burgundy to-burgundy-dark text-white py-32">
+    <section id="hero-section" class="bg-gradient-to-br from-burgundy to-burgundy-dark text-white py-16 md:py-32">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center w-full">
-                <h2 class="font-serif text-6xl font-bold mb-6 leading-tight">Open Source Digital Archive<br/>for Academic Institutions</h2>
-                <p class="text-xl mb-8 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">Open Source Digital Archive for Academic Institutions</h2>
+                <p class="text-base md:text-xl mb-8 text-gray-200 max-w-3xl mx-auto leading-relaxed">
                     Empower your institution with a modern, self-hosted digital library platform. Upload, organize, and share research papers, theses, and academic documents with complete control over your data.
                 </p>
 
@@ -96,16 +96,16 @@
         </div>
     </section>
 
-    <section id="features-section" class="py-20 bg-light-gray">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Why Choose Wulse?</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Built specifically for academic institutions, Wulse provides everything you need to create a modern digital archive.</p>
+    <section id="features-section" class="py-12 md:py-20 bg-light-gray">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="font-serif text-2xl md:text-4xl font-bold text-dark-gray mb-4 md:mb-6">Why Choose Wulse?</h2>
+                <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto">Built specifically for academic institutions, Wulse provides everything you need to create a modern digital archive.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div id="feature-1" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-university-blue bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+            <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+                <div id="feature-1" class="bg-white rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-shadow flex-shrink-0 w-[85vw] md:w-auto snap-center text-center">
+                    <div class="w-16 h-16 bg-university-blue bg-opacity-10 rounded-lg flex items-center justify-center mb-6 mx-auto">
                         <i class="fas fa-code text-university-blue text-2xl"></i>
                     </div>
                     <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Open Source</h3>
@@ -117,8 +117,8 @@
                     </ul>
                 </div>
 
-                <div id="feature-2" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-navy bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                <div id="feature-2" class="bg-white rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-shadow flex-shrink-0 w-[85vw] md:w-auto snap-center text-center">
+                    <div class="w-16 h-16 bg-navy bg-opacity-10 rounded-lg flex items-center justify-center mb-6 mx-auto">
                         <i class="fas fa-server text-navy text-2xl"></i>
                     </div>
                     <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Self-Hosted</h3>
@@ -130,8 +130,8 @@
                     </ul>
                 </div>
 
-                <div id="feature-3" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                    <div class="w-16 h-16 bg-green-600 bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                <div id="feature-3" class="bg-white rounded-xl p-6 md:p-8 shadow-lg hover:shadow-xl transition-shadow flex-shrink-0 w-[85vw] md:w-auto snap-center text-center">
+                    <div class="w-16 h-16 bg-green-600 bg-opacity-10 rounded-lg flex items-center justify-center mb-6 mx-auto">
                         <i class="fas fa-graduation-cap text-green-600 text-2xl"></i>
                     </div>
                     <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Academic Focused</h3>
@@ -146,15 +146,15 @@
         </div>
     </section>
 
-    <section id="hosting-options" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Choose Your Deployment</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Whether you prefer self-hosting or managed hosting, we've got you covered.</p>
+    <section id="hosting-options" class="py-12 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 md:px-6">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="font-serif text-2xl md:text-4xl font-bold text-dark-gray mb-4 md:mb-6">Choose Your Deployment</h2>
+                <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto">Whether you prefer self-hosting or managed hosting, we've got you covered.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                <div id="self-hosted-option" class="bg-light-gray rounded-xl p-8 border-2 border-transparent hover:border-university-blue transition-colors">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
+                <div id="self-hosted-option" class="bg-light-gray rounded-xl p-6 md:p-8 border-2 border-transparent hover:border-university-blue transition-colors">
                     <div class="text-center mb-8">
                         <div class="w-20 h-20 bg-university-blue bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
                             <i class="fas fa-server text-university-blue text-3xl"></i>
@@ -191,7 +191,7 @@
                     </div>
                 </div>
 
-                <div id="managed-hosting-option" class="bg-gradient-to-br from-navy to-dark-gray rounded-xl p-8 text-white relative overflow-hidden">
+                <div id="managed-hosting-option" class="bg-gradient-to-br from-navy to-dark-gray rounded-xl p-6 md:p-8 text-white relative overflow-hidden">
                     <div class="absolute top-4 right-4 bg-white bg-opacity-20 text-white text-xs px-3 py-1 rounded-full">
                         Coming Soon
                     </div>
@@ -235,14 +235,14 @@
         </div>
     </section>
 
-    <section id="hosting-form" class="py-20 bg-light-gray">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Request Managed Hosting</h2>
-                <p class="text-xl text-gray-600">Interested in our managed hosting service? Fill out the form below and we'll get back to you with pricing and availability.</p>
+    <section id="hosting-form" class="py-12 md:py-20 bg-light-gray">
+        <div class="max-w-4xl mx-auto px-4 md:px-6">
+            <div class="text-center mb-8 md:mb-12">
+                <h2 class="font-serif text-2xl md:text-4xl font-bold text-dark-gray mb-4 md:mb-6">Request Managed Hosting</h2>
+                <p class="text-base md:text-xl text-gray-600">Interested in our managed hosting service? Fill out the form below and we'll get back to you with pricing and availability.</p>
             </div>
 
-            <div id="hosting-form-container" class="bg-white rounded-xl shadow-lg p-8">
+            <div id="hosting-form-container" class="bg-white rounded-xl shadow-lg p-4 md:p-8">
                 <form action="/contact" method="post" data-turbo="true" class="space-y-6">
                     <input type="hidden" name="authenticity_token" value="">
                     <script>document.querySelector('input[name="authenticity_token"]').value = document.querySelector('meta[name="csrf-token"]')?.content || '';</script>
@@ -302,10 +302,10 @@
     </section>
 </main>
 
-<footer id="footer" class="bg-navy text-white py-12">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div>
+<footer id="footer" class="bg-navy text-white py-8 md:py-12">
+    <div class="max-w-7xl mx-auto px-4 md:px-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div class="col-span-2 md:col-span-1">
                 <div class="flex items-center space-x-3 mb-6">
                     <img src="/icon.png" alt="Wulse" class="w-10 h-10">
                     <div>
