@@ -1,4 +1,6 @@
-class ContactController < ApplicationController
+class ContactsController < ApplicationController
+  layout false
+
   def create
     @institution_name = params[:institution_name]
     @institution_type = params[:institution_type]

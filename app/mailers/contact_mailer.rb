@@ -1,5 +1,6 @@
 class ContactMailer < ApplicationMailer
   default from: "Wulse <noreply@wulse.org>"
+  layout "contact_mailer"
 
   def hosting_request(institution_name:, institution_type:, contact_name:, email:, document_volume:, requirements:)
     @institution_name = institution_name
