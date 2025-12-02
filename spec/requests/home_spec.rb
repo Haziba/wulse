@@ -7,9 +7,9 @@ RSpec.describe "Home", type: :request do
         host! "wulse.org"
       end
 
-      it "redirects to admin" do
+      it "renders the landing page" do
         get root_path
-        expect(response).to redirect_to(admin_root_path)
+        expect(response).to have_http_status(:success)
       end
     end
 

@@ -38,15 +38,23 @@ RSpec.describe "Documents", type: :system do
   describe "adding a document" do
     before { sign_in }
 
+    def fill_in_metadata(key, value)
+      # Find the row containing the key input with this value, then fill in the adjacent value input
+      row = find('input[name$="[key]"][value="' + key + '"]').ancestor('[data-metadata-fields-target="row"]')
+      within(row) do
+        find('input[name$="[value]"]').fill_in with: value
+      end
+    end
+
     it "can add a new document" do
       visit dashboard_documents_path
 
       click_link "Add Document"
 
       within("dialog") do
-        fill_in "Document Title", with: "New Test Document"
-        fill_in "Author", with: "Test Author"
-        fill_in "Publishing Date", with: "2024-01-15"
+        fill_in_metadata "title", "New Test Document"
+        fill_in_metadata "author", "Test Author"
+        fill_in_metadata "publishing_date", "2024-01-15"
         attach_file "document[file]", Rails.root.join("spec/fixtures/files/test_document.pdf")
         click_button "Add Document"
       end
@@ -60,9 +68,9 @@ RSpec.describe "Documents", type: :system do
       click_link "Add Document"
 
       within("dialog") do
-        fill_in "Document Title", with: "Document With Preview"
-        fill_in "Author", with: "Preview Author"
-        fill_in "Publishing Date", with: "2024-01-15"
+        fill_in_metadata "title", "Document With Preview"
+        fill_in_metadata "author", "Preview Author"
+        fill_in_metadata "publishing_date", "2024-01-15"
         attach_file "document[file]", Rails.root.join("spec/fixtures/files/test_document.pdf")
       end
 
