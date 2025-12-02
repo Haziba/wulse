@@ -66,6 +66,13 @@ export default class extends Controller<HTMLElement> {
     const datalist = row.querySelector('.value-suggestions') as HTMLDataListElement;
     if (!datalist) return;
 
+    const skipAutocompleteKeys = ['title', 'publishing_date'];
+    const normalizedKey = key.toLowerCase().replace(/\s+/g, '_');
+    if (skipAutocompleteKeys.includes(normalizedKey)) {
+      datalist.innerHTML = '';
+      return;
+    }
+
     try {
       const response = await fetch(`/dashboard/metadata_suggestions?key=${encodeURIComponent(key)}`);
       if (!response.ok) return;

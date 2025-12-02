@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "modal" do %>
   <dialog data-controller="modal" data-action="turbo:submit-end->modal#submitEnd" class="rounded-xl p-0 backdrop:bg-black backdrop:bg-opacity-50 max-w-2xl w-full">
-  <div class="bg-white rounded-xl p-8">
+  <div class="bg-white rounded-xl p-8 max-h-[90vh] overflow-y-auto">
     <div class="flex justify-between items-center mb-6">
       <h3 class="font-serif text-2xl font-semibold text-gray-900">Add New Document</h3>
       <button data-action="click->modal#close" class="text-gray-400 hover:text-gray-600">
@@ -9,29 +9,6 @@
     </div>
 
     <%= form_with model: @document, url: dashboard_documents_path, class: "space-y-6" do |f| %>
-      <%= f.fields_for :metadata do |meta_f| %>
-        <% meta = meta_f.object %>
-          <% if meta.key == 'title' %>
-            <div>
-              <%= f.label :title, "Document Title", for: "document_title", class: "block text-sm font-medium text-gray-700 mb-2" %>
-              <%= meta_f.hidden_field :key, value: "title" %>
-              <%= meta_f.text_field :value, id: "document_title", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
-            </div>
-          <% elsif meta.key == 'author' %>
-            <div>
-              <%= f.label :author, "Author", for: "document_author", class: "block text-sm font-medium text-gray-700 mb-2" %>
-              <%= meta_f.hidden_field :key, value: "author" %>
-              <%= meta_f.text_field :value, id: "document_author", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
-            </div>
-          <% elsif meta.key == 'publishing_date' %>
-            <div>
-              <%= f.label :publishing_date, "Publishing Date", for: "document_publishing_date", class: "block text-sm font-medium text-gray-700 mb-2" %>
-              <%= meta_f.hidden_field :key, value: "publishing_date" %>
-              <%= meta_f.date_field :value, id: "document_publishing_date", required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
-            </div>
-          <% end %>
-      <% end %>
-
       <% if @document.errors[:base].any? %>
         <div class="text-red-600 text-sm">
           <% @document.errors[:base].each do |error| %>
@@ -41,11 +18,17 @@
       <% end %>
 
       <div>
-        <%= f.label :file, "Upload Document", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= f.file_field :file, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Document</label>
+        <%= f.file_field :file, required: true, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent", accept: "application/pdf,application/epub+zip" %>
+        <p class="text-gray-500 text-sm mt-1">Accepts PDF and EPUB files</p>
         <% if @document.errors[:file].any? %>
           <p class="text-red-600 text-sm mt-1"><%= @document.errors[:file].first %></p>
         <% end %>
+      </div>
+
+      <div class="border-t pt-6">
+        <h4 class="font-medium text-gray-900 mb-4">Document Metadata</h4>
+        <%= render "metadata_fields", metadata: @metadata %>
       </div>
 
       <div class="flex space-x-4 pt-6">

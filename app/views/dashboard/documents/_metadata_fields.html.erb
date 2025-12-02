@@ -1,0 +1,34 @@
+<div class="space-y-4" data-controller="metadata-fields">
+  <div data-metadata-fields-target="container" class="space-y-2">
+    <% metadata.each_with_index do |meta, index| %>
+      <% is_required = Document::REQUIRED_METADATA.include?(meta.key) %>
+      <%= render "metadata_row",
+          index: index,
+          id: meta.persisted? ? meta.id : nil,
+          key: meta.key,
+          value: meta.value,
+          required: is_required,
+          editable: true,
+          destroy_value: meta._destroy || 0 %>
+    <% end %>
+  </div>
+
+  <template data-metadata-fields-target="template">
+    <%= render "metadata_row",
+        index: "INDEX",
+        key: "",
+        value: "",
+        required: false,
+        editable: true,
+        destroy_value: 0 %>
+  </template>
+
+  <div class="flex justify-center pt-4">
+    <button type="button"
+            class="bg-brand-50 text-brand-600 px-4 py-2 rounded-lg hover:bg-brand-100 font-medium flex items-center space-x-2"
+            data-action="click->metadata-fields#addRow">
+      <i class="fas fa-plus"></i>
+      <span>Add Another Row</span>
+    </button>
+  </div>
+</div>

@@ -59,39 +59,9 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-xl border border-gray-200 p-6" data-controller="metadata-fields">
+    <div class="bg-white rounded-xl border border-gray-200 p-6">
       <h3 class="font-semibold text-lg text-gray-900 mb-6">Document Metadata</h3>
-
-      <div data-metadata-fields-target="container" class="space-y-4">
-        <%= f.fields_for :metadata, @metadata do |metadata_form| %>
-          <%= render "metadata_row",
-              index: metadata_form.index,
-              key: metadata_form.object.key,
-              value: metadata_form.object.value,
-              required: Document::REQUIRED_METADATA.include?(metadata_form.object.key),
-              editable: true,
-              destroy_value: metadata_form.object._destroy || 0 %>
-        <% end %>
-      </div>
-
-      <template data-metadata-fields-target="template">
-        <%= render "metadata_row",
-            index: "INDEX",
-            key: "",
-            value: "",
-            required: false,
-            editable: true,
-            destroy_value: 0 %>
-      </template>
-
-      <div class="flex justify-center pt-4">
-        <button type="button"
-                class="bg-brand-50 text-brand-600 px-4 py-2 rounded-lg hover:bg-brand-100 font-medium flex items-center space-x-2"
-                data-action="click->metadata-fields#addRow">
-          <i class="fas fa-plus"></i>
-          <span>Add Another Row</span>
-        </button>
-      </div>
+      <%= render "metadata_fields", metadata: @metadata %>
     </div>
   <% end %>
 </div>

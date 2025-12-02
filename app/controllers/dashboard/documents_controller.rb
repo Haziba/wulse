@@ -30,9 +30,7 @@ class Dashboard::DocumentsController < ApplicationController
 
   def new
     @document = Document.new
-    @document.metadata.build(key: "title")
-    @document.metadata.build(key: "author")
-    @document.metadata.build(key: "publishing_date")
+    @metadata = Document::REQUIRED_METADATA.map { |key| @document.metadata.build(key: key) }
   end
 
   def create
@@ -54,6 +52,7 @@ class Dashboard::DocumentsController < ApplicationController
         end
       end
     else
+      @metadata = ordered_metadata_for_new
       render :new, status: :unprocessable_content
     end
   end
@@ -122,6 +121,12 @@ class Dashboard::DocumentsController < ApplicationController
 
   def ordered_metadata
     @ordered_metadata = Document::REQUIRED_METADATA.map { |key| @document.metadata.find_or_initialize_by(key: key) } + @document.metadata.where.not(key: Document::REQUIRED_METADATA)
+  end
+
+  def ordered_metadata_for_new
+    required = Document::REQUIRED_METADATA.map { |key| @document.metadata.detect { |m| m.key == key } || @document.metadata.build(key: key) }
+    additional = @document.metadata.reject { |m| Document::REQUIRED_METADATA.include?(m.key) }
+    required + additional
   end
 
   def set_document

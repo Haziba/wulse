@@ -22,13 +22,14 @@
       <% end %>
     </div>
     <div class="flex gap-2 md:flex-1">
-      <input type="text"
+      <input type="<%= key == 'publishing_date' ? 'date' : 'text' %>"
              name="document[metadata_attributes][<%= index %>][value]"
              value="<%= value %>"
              placeholder="Enter value"
              list="value-suggestions-<%= index %>"
              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-             <%= 'disabled' unless editable %>>
+             <%= 'disabled' unless editable %>
+             <%= 'required' if required %>>
       <datalist id="value-suggestions-<%= index %>" class="value-suggestions"></datalist>
       <% if editable && !required %>
         <button type="button"

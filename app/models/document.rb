@@ -23,7 +23,7 @@
 class Document < ApplicationRecord
   include TracksStorage
 
-  REQUIRED_METADATA = %w[publishing_date author title]
+  REQUIRED_METADATA = %w[title author publishing_date]
   SUGGESTED_METADATA = %w[document_type language department]
 
   acts_as_tenant :institution
@@ -32,7 +32,9 @@ class Document < ApplicationRecord
   belongs_to :institution
 
   has_many :metadata, dependent: :destroy
-  accepts_nested_attributes_for :metadata, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :metadata, allow_destroy: true, reject_if: :reject_blank_optional_metadata
+
+  before_validation :mark_blank_optional_metadata_for_destruction
 
   has_one_attached :file, dependent: :purge_later
   has_one_attached :preview_image, dependent: :purge_later
@@ -79,6 +81,21 @@ class Document < ApplicationRecord
     metadata_meta = metadata.detect { |m| m.key == key && !m.marked_for_destruction? }
     if metadata_meta.nil? || metadata_meta.value.blank?
       errors.add(:base, "#{key} can't be blank")
+    end
+  end
+
+  def reject_blank_optional_metadata(attrs)
+    attrs = attrs.with_indifferent_access
+
+    return false if attrs[:id].present?
+    return false if REQUIRED_METADATA.include?(attrs[:key])
+    attrs[:value].blank?
+  end
+
+  def mark_blank_optional_metadata_for_destruction
+    metadata.each do |meta|
+      next if REQUIRED_METADATA.include?(meta.key)
+      meta.mark_for_destruction if meta.value.blank?
     end
   end
 end

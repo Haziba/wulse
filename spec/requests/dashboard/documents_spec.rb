@@ -313,7 +313,7 @@ RSpec.describe "Dashboard::Documents", type: :request do
           metadata_keys = metadata.map(&:key)
 
           # Required metadata should appear first (factory creates these, order matches REQUIRED_METADATA)
-          expect(metadata_keys[0..2]).to eq([ 'publishing_date', 'author', 'title' ])
+          expect(metadata_keys[0..2]).to eq([ 'title', 'author', 'publishing_date' ])
           # Custom metadata should appear after
           expect(metadata_keys[3..4]).to match_array([ 'publisher', 'year' ])
         end
@@ -444,16 +444,38 @@ RSpec.describe "Dashboard::Documents", type: :request do
           }.to change { document.metadata.count }.by(-1)
         end
 
-        it "rejects blank metadata" do
+        it "deletes existing metadata when value is set to blank" do
           params = {
             document: {
-              metadata_attributes: { "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title }, "1" => { id: existing_metadata.id, key: "isbn", value: "" } }
+              metadata_attributes: {
+                "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title },
+                "1" => { id: existing_metadata.id, key: "isbn", value: "" }
+              }
+            }
+          }
+
+          expect {
+            patch dashboard_document_path(document), params: params
+          }.to change { document.metadata.count }.by(-1)
+
+          expect(document.metadata.find_by(key: 'isbn')).to be_nil
+        end
+
+        it "does not create new metadata with blank value" do
+          params = {
+            document: {
+              metadata_attributes: {
+                "0" => { id: document.metadata.find_by(key: 'title').id, key: "title", value: document.title },
+                "1" => { key: "publisher", value: "" }
+              }
             }
           }
 
           expect {
             patch dashboard_document_path(document), params: params
           }.not_to change { document.metadata.count }
+
+          expect(document.metadata.find_by(key: 'publisher')).to be_nil
         end
         it "updates the document file" do
           params = {
