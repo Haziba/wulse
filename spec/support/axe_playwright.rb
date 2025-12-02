@@ -31,7 +31,7 @@ module AxePlaywright
   def build_failure_message(violations)
     return "No accessibility violations found." if violations.nil? || violations.empty?
 
-    lines = ["Found #{violations.length} accessibility violation(s):"]
+    lines = [ "Found #{violations.length} accessibility violation(s):" ]
 
     violations.each_with_index do |violation, index|
       lines << ""

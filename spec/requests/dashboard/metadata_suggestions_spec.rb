@@ -35,7 +35,7 @@ RSpec.describe "Dashboard::MetadataSuggestions", type: :request do
         get dashboard_metadata_suggestions_path, params: { key: "department" }
 
         values = JSON.parse(response.body)
-        expect(values).to eq(["English", "Science"])
+        expect(values).to eq([ "English", "Science" ])
       end
     end
 

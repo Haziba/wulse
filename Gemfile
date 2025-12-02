@@ -93,4 +93,4 @@ gem "pagy", "~> 9.0"
 gem "mini_magick"
 gem "rubyzip"
 
-gem "bullet", "~> 8.1", :groups => [:development, :test]
+gem "bullet", "~> 8.1", groups: [ :development, :test ]
