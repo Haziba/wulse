@@ -306,6 +306,8 @@ RSpec.describe "Library", type: :system do
         expect(page).to have_content("Economics Article")
         expect(page).not_to have_content("CS Book")
 
+        open_filter_sidebar
+
         within "#filter-category-language" do
           within find('label', text: /Spanish/) do
             find('button', text: 'only').click
