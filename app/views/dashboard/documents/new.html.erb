@@ -50,7 +50,7 @@
 
       <div class="flex space-x-4 pt-6">
         <button type="button" data-action="click->modal#close" class="flex-1 bg-gray-200 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-300 font-medium">Cancel</button>
-        <%= f.submit "Add Document", class: "flex-1 bg-brand-500 text-white py-3 px-4 rounded-lg hover:bg-brand-600 font-medium" %>
+        <%= f.submit "Add Document", class: "flex-1 bg-brand-500 text-white py-3 px-4 rounded-lg hover:bg-brand-600 font-medium disabled:opacity-50 disabled:cursor-not-allowed", data: { turbo_submits_with: "Uploading..." } %>
       </div>
     <% end %>
   </div>
