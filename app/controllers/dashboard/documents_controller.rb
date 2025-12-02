@@ -1,4 +1,6 @@
 class Dashboard::DocumentsController < ApplicationController
+  include DemoModeRestricted
+
   layout "dashboard"
   before_action :require_signed_in
   before_action :full_page_if_no_frame, only: [ :index ]

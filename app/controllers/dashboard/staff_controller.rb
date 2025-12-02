@@ -1,4 +1,7 @@
 class Dashboard::StaffController < ApplicationController
+  include DemoModeRestricted
+  self.demo_restricted_actions = %i[create update destroy deactivate activate reset_password]
+
   layout "dashboard"
   before_action :require_signed_in
   before_action :full_page_if_no_frame, only: [ :index ]

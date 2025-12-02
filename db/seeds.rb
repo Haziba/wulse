@@ -3,7 +3,8 @@ institutions = [ {
   subdomain: "wulse-academy",
   logo: File.open(Rails.root.join("db", "seeds", "images", "wulse-academy-logo.png")),
   branding_colour: "#1B2A41",
-  storage_total: 1000000000
+  storage_total: 1000000000,
+  demo: true
 }, {
   name: "University of Wulse",
   subdomain: "uow",

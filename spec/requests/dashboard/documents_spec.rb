@@ -178,6 +178,51 @@ RSpec.describe "Dashboard::Documents", type: :request do
           expect(response).to have_http_status(:unprocessable_content)
         end
       end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        let(:valid_params) do
+          {
+            document: {
+              metadata_attributes: {
+                "0" => { key: "title", value: "Test Document" },
+                "1" => { key: "author", value: "Test Author" },
+                "2" => { key: "publishing_date", value: "2024-01-01" }
+              },
+              file: fixture_file_upload('test_document.pdf', 'application/pdf')
+            }
+          }
+        end
+
+        it "does not create a new document" do
+          expect {
+            post dashboard_documents_path, params: valid_params
+          }.not_to change(Document, :count)
+        end
+
+        it "returns a turbo stream with an alert toast" do
+          post dashboard_documents_path, params: valid_params, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+          expect(response).to have_http_status(:success)
+          expect(response.body).to include("Changes not allowed in Demo mode")
+        end
+
+        it "redirects with alert on html request" do
+          post dashboard_documents_path, params: valid_params
+          expect(response).to redirect_to(dashboard_path)
+          expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+        end
+      end
     end
   end
 
@@ -555,6 +600,35 @@ RSpec.describe "Dashboard::Documents", type: :request do
           expect(response).to redirect_to(dashboard_documents_path)
         end
       end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_document) { create(:document, institution: demo_institution, staff: demo_staff, title: "Demo Document") }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not update the document" do
+          original_title = demo_document.title
+          patch dashboard_document_path(demo_document), params: {
+            document: { metadata_attributes: { "0" => { id: demo_document.metadata.find_by(key: 'title').id, key: "title", value: "New Title" } } }
+          }
+          expect(demo_document.reload.title).to eq(original_title)
+        end
+
+        it "returns an alert" do
+          patch dashboard_document_path(demo_document), params: {
+            document: { metadata_attributes: { "0" => { id: demo_document.metadata.find_by(key: 'title').id, key: "title", value: "New Title" } } }
+          }
+          expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+        end
+      end
     end
   end
 
@@ -587,6 +661,31 @@ RSpec.describe "Dashboard::Documents", type: :request do
       it "redirects on html request" do
         delete dashboard_document_path(document)
         expect(response).to redirect_to(dashboard_documents_path)
+      end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_document) { create(:document, institution: demo_institution, staff: demo_staff, title: "Demo Document") }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not delete the document" do
+          expect {
+            delete dashboard_document_path(demo_document)
+          }.not_to change(Document, :count)
+        end
+
+        it "returns an alert" do
+          delete dashboard_document_path(demo_document)
+          expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+        end
       end
     end
   end

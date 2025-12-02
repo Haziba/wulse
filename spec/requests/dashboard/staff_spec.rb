@@ -327,6 +327,39 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response).to have_http_status(:unprocessable_content)
         end
       end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        let(:valid_params) do
+          {
+            staff: {
+              name: Faker::Name.name,
+              email: Faker::Internet.email
+            }
+          }
+        end
+
+        it "does not create a new staff member" do
+          expect {
+            post dashboard_staff_index_path, params: valid_params
+          }.not_to change(Staff, :count)
+        end
+
+        it "returns an alert" do
+          post dashboard_staff_index_path, params: valid_params
+          expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+        end
+      end
     end
   end
 
@@ -387,6 +420,31 @@ RSpec.describe "Dashboard::Staff", type: :request do
           patch deactivate_dashboard_staff_path(active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "deactivation_email", "deliver_now", { args: [ active_staff ] })
       end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_active_staff) { create(:staff, institution: demo_institution, status: :active) }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not deactivate the staff member" do
+          expect {
+            patch deactivate_dashboard_staff_path(demo_active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          }.not_to change { demo_active_staff.reload.status }
+        end
+
+        it "returns an alert toast" do
+          patch deactivate_dashboard_staff_path(demo_active_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          expect(response.body).to include("Changes not allowed in Demo mode")
+        end
+      end
     end
   end
 
@@ -446,6 +504,31 @@ RSpec.describe "Dashboard::Staff", type: :request do
         expect {
           patch activate_dashboard_staff_path(inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("StaffMailer", "activation_email", "deliver_now", { args: [ inactive_staff ] })
+      end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_inactive_staff) { create(:staff, institution: demo_institution, status: :inactive) }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not activate the staff member" do
+          expect {
+            patch activate_dashboard_staff_path(demo_inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          }.not_to change { demo_inactive_staff.reload.status }
+        end
+
+        it "returns an alert toast" do
+          patch activate_dashboard_staff_path(demo_inactive_staff), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          expect(response.body).to include("Changes not allowed in Demo mode")
+        end
       end
     end
   end
@@ -517,6 +600,31 @@ RSpec.describe "Dashboard::Staff", type: :request do
           expect(response.body).to include("Unable to delete staff who has documents")
         end
       end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_staff_to_delete) { create(:staff, institution: demo_institution, name: "Demo Staff") }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not delete the staff member" do
+          expect {
+            delete dashboard_staff_path(demo_staff_to_delete)
+          }.not_to change(Staff, :count)
+        end
+
+        it "returns an alert" do
+          delete dashboard_staff_path(demo_staff_to_delete)
+          expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+        end
+      end
     end
   end
 
@@ -575,6 +683,31 @@ RSpec.describe "Dashboard::Staff", type: :request do
         expect {
           patch reset_password_dashboard_staff_path(staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
         }.to have_enqueued_job(ActionMailer::MailDeliveryJob).with("PasswordResetMailer", "reset_password", "deliver_now", { args: [ an_instance_of(PasswordReset) ] })
+      end
+
+      context "when institution is in demo mode" do
+        let(:demo_institution) { create(:institution, demo: true) }
+        let(:demo_staff) { create(:staff, institution: demo_institution) }
+        let!(:demo_staff_to_reset) { create(:staff, institution: demo_institution, name: "Demo Staff to Reset") }
+
+        before do
+          host! "#{demo_institution.subdomain}.lvh.me"
+          post session_path, params: {
+            email: demo_staff.email,
+            password: demo_staff.password
+          }
+        end
+
+        it "does not create a password reset record" do
+          expect {
+            patch reset_password_dashboard_staff_path(demo_staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          }.not_to change(PasswordReset, :count)
+        end
+
+        it "returns an alert toast" do
+          patch reset_password_dashboard_staff_path(demo_staff_to_reset), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+          expect(response.body).to include("Changes not allowed in Demo mode")
+        end
       end
     end
   end

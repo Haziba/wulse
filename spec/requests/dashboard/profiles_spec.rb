@@ -39,6 +39,28 @@ RSpec.describe "Dashboard::Profiles", type: :request do
       end
     end
 
+    context "when institution is in demo mode" do
+      let(:demo_institution) { create(:institution, demo: true) }
+      let(:demo_staff) { create(:staff, institution: demo_institution, password: "password123") }
+
+      before do
+        host! "#{demo_institution.subdomain}.lvh.me"
+        post session_path, params: { email: demo_staff.email, password: "password123" }
+      end
+
+      it "blocks profile updates" do
+        patch dashboard_profile_path, params: { staff: { name: "New Name" } }
+        expect(response).to redirect_to(dashboard_path)
+        expect(flash[:alert]).to eq("Changes not allowed in Demo mode.")
+      end
+
+      it "does not update the staff" do
+        old_name = demo_staff.name
+        patch dashboard_profile_path, params: { staff: { name: "New Name" } }
+        expect(demo_staff.reload.name).to eq(old_name)
+      end
+    end
+
     context "when authenticated" do
       before do
         post session_path, params: {

@@ -4,6 +4,7 @@
 #
 #  id              :uuid             not null, primary key
 #  branding_colour :string           not null
+#  demo            :boolean          default(FALSE), not null
 #  name            :string           not null
 #  storage_total   :bigint           default(0), not null
 #  storage_used    :bigint           default(0), not null

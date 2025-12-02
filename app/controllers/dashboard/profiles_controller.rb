@@ -1,4 +1,6 @@
 class Dashboard::ProfilesController < ApplicationController
+  include DemoModeRestricted
+
   layout "dashboard"
   before_action :require_signed_in
 
