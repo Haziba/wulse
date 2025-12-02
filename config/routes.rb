@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
     resources :documents
     resource :profile, only: [ :edit, :update ]
+    get "metadata_suggestions", to: "metadata_suggestions#index"
   end
 
   constraints subdomain: /.+/ do
