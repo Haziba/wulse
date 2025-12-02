@@ -18,9 +18,26 @@ RSpec.describe "Library", type: :system do
     JS
   end
 
+  def open_filter_sidebar
+    # On smaller viewports, the sidebar is hidden off-screen and needs to be opened
+    page.execute_script(<<~JS)
+      const sidebar = document.querySelector('[data-sidebar-target="sidebar"]');
+      if (sidebar) {
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+      }
+    JS
+  end
+
   def visit_library_with_clean_storage
     visit library_path
     hide_sidebar_overlay
+  end
+
+  def visit_library_with_filters
+    visit library_path
+    hide_sidebar_overlay
+    open_filter_sidebar
   end
 
   let(:institution) { create(:institution, branding_colour: "#1e40af") }
@@ -100,7 +117,7 @@ RSpec.describe "Library", type: :system do
     end
 
     it "persists search query and filters in the URL" do
-      visit_library_with_clean_storage
+      visit_library_with_filters
 
       expect(page).to have_content("Research Article")
       expect(page).to have_content("Programming Book")
@@ -114,6 +131,7 @@ RSpec.describe "Library", type: :system do
       expect(page).not_to have_content("Research Article")
       expect(current_url).to include("q=Programming")
 
+      open_filter_sidebar
       find('input[name="document_type[]"][value="book"]').uncheck
 
       expect(page).not_to have_content("Programming Book")
@@ -121,6 +139,7 @@ RSpec.describe "Library", type: :system do
 
       filtered_url = current_url
       visit filtered_url
+      open_filter_sidebar
 
       expect(find_field("q").value).to eq("Programming")
       expect(find('input[name="document_type[]"][value="book"]')).not_to be_checked
@@ -187,17 +206,15 @@ RSpec.describe "Library", type: :system do
 
     describe "'all' button" do
       it "checks all checkboxes in the category" do
-        visit library_path
+        visit_library_with_filters
 
         find('input[name="department[]"][value="computer science"]').uncheck
-        expect(page).to have_selector('input[name="department[]"][value="computer science"]:not(:checked):not(:disabled)')
-        sleep 0.1
+        expect(page).not_to have_content("CS Book")
+        open_filter_sidebar
 
         find('input[name="department[]"][value="economics"]').uncheck
-        expect(page).to have_selector('input[name="department[]"][value="economics"]:not(:checked):not(:disabled)')
-        expect(page).not_to have_content("CS Book")
         expect(page).not_to have_content("Economics Article")
-        sleep 0.1
+        open_filter_sidebar
 
         within "#filter-category-department" do
           find('button[data-action="click->filter-list#selectAll"]').click
@@ -207,24 +224,25 @@ RSpec.describe "Library", type: :system do
         expect(page).to have_content("Economics Article")
         expect(page).to have_content("History Paper")
 
+        open_filter_sidebar
         expect(find('input[name="department[]"][value="computer science"]')).to be_checked
         expect(find('input[name="department[]"][value="economics"]')).to be_checked
         expect(find('input[name="department[]"][value="history"]')).to be_checked
       end
 
       it "updates the URL with compressed filter parameter" do
-        visit library_path
+        visit_library_with_filters
 
         find('input[name="department[]"][value="computer science"]').uncheck
-        expect(page).to have_selector('input[name="department[]"][value="computer science"]:not(:checked):not(:disabled)')
-        sleep 0.1
+        # Wait for Turbo to complete the update
+        expect(page).not_to have_content("CS Book")
+        open_filter_sidebar
 
         within "#filter-category-department" do
-          expect(page).to have_selector('button[data-action="click->filter-list#selectAll"]')
           find('button[data-action="click->filter-list#selectAll"]').click
         end
 
-        expect(page).to have_selector('input[name="department[]"][value="computer science"]:checked:not(:disabled)')
+        expect(page).to have_content("CS Book")
         expect(current_url).not_to include("department[]=")
         expect(current_url).not_to include("f=")
       end
@@ -232,7 +250,7 @@ RSpec.describe "Library", type: :system do
 
     describe "'only' button" do
       it "unchecks all other checkboxes in the category" do
-        visit library_path
+        visit_library_with_filters
 
         expect(page).to have_content("CS Book")
         expect(page).to have_content("Economics Article")
@@ -252,7 +270,7 @@ RSpec.describe "Library", type: :system do
       end
 
       it "updates the URL with compressed filter parameter" do
-        visit library_path
+        visit_library_with_filters
 
         within find('label', text: /Economics/) do
           find('button', text: 'only').click
@@ -264,7 +282,7 @@ RSpec.describe "Library", type: :system do
       end
 
       it "filters results to only the selected option" do
-        visit library_path
+        visit_library_with_filters
 
         within find('label', text: /Computer Science/) do
           find('button', text: 'only').click
@@ -277,7 +295,7 @@ RSpec.describe "Library", type: :system do
       end
 
       it "works across different filter categories independently" do
-        visit library_path
+        visit_library_with_filters
 
         within "#filter-category-department" do
           within find('label', text: /Economics/) do
