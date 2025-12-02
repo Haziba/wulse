@@ -1,9 +1,9 @@
 class HomeController < ApplicationController
-  layout "library"
+  layout "library", except: :landing
 
   def index
     if !Current.institution.present?
-      redirect_to admin_root_path
+      render :landing, layout: false
     else
       @recent_documents = Current.institution.documents
                                   .includes(:preview_image_attachment, :file_attachment)

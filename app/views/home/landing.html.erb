@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= form_authenticity_token %>">
+    <title>Wulse - Open Source Digital Archive</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.4/dist/turbo.es2017-esm.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        .font-serif { font-family: 'Merriweather', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'burgundy': '#800020',
+                        'burgundy-light': '#A0293D',
+                        'burgundy-dark': '#5C001A',
+                        'navy': '#1B2A41',
+                        'university-blue': '#2F80ED',
+                        'light-gray': '#F5F6FA',
+                        'mid-gray': '#D1D5DB',
+                        'dark-gray': '#333333'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-white">
+
+<header id="header" class="bg-white shadow-sm border-b border-mid-gray">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="/icon.png" alt="Wulse" class="w-12 h-12">
+                <div>
+                    <h1 class="font-serif text-3xl font-bold text-burgundy">Wulse</h1>
+                    <p class="text-sm text-dark-gray">Open Source Digital Archive</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#features-section" class="text-dark-gray hover:text-burgundy font-medium">Features</a>
+                <a href="#hosting-options" class="text-dark-gray hover:text-burgundy font-medium">Hosting</a>
+                <a href="https://github.com/haziba/wulse" target="_blank" class="text-dark-gray hover:text-burgundy font-medium">Documentation</a>
+                <span class="text-dark-gray hover:text-burgundy font-medium cursor-pointer">Community</span>
+            </nav>
+            <div class="flex items-center">
+                <a href="https://github.com/haziba/wulse" target="_blank" class="bg-burgundy text-white px-6 py-2 rounded-md hover:bg-burgundy-dark font-medium">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main id="main-content">
+    <section id="hero-section" class="bg-gradient-to-br from-burgundy to-burgundy-dark text-white py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center w-full">
+                <h2 class="font-serif text-6xl font-bold mb-6 leading-tight">Open Source Digital Archive<br/>for Academic Institutions</h2>
+                <p class="text-xl mb-8 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                    Empower your institution with a modern, self-hosted digital library platform. Upload, organize, and share research papers, theses, and academic documents with complete control over your data.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <a href="https://github.com/haziba/wulse" target="_blank" class="bg-white text-burgundy px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center">
+                        <i class="fab fa-github mr-3 text-xl"></i>
+                        View on GitHub
+                    </a>
+                    <button onclick="document.getElementById('hosting-form').scrollIntoView({behavior: 'smooth'})" class="bg-burgundy-light text-white px-8 py-4 rounded-lg font-semibold hover:bg-burgundy border-2 border-white transition-colors">
+                        Request Hosting
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-center space-x-8 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-code text-green-400"></i>
+                        <span>Open Source</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-server text-blue-400"></i>
+                        <span>Self-Hosted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features-section" class="py-20 bg-light-gray">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Why Choose Wulse?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Built specifically for academic institutions, Wulse provides everything you need to create a modern digital archive.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div id="feature-1" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-university-blue bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-code text-university-blue text-2xl"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Open Source</h3>
+                    <p class="text-gray-600 mb-6">Complete transparency and freedom. Modify, extend, and customize Wulse to fit your institution's specific needs.</p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>MIT License</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Community Driven</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>No Vendor Lock-in</li>
+                    </ul>
+                </div>
+
+                <div id="feature-2" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-navy bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-server text-navy text-2xl"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Self-Hosted</h3>
+                    <p class="text-gray-600 mb-6">Maintain complete control over your data and infrastructure. Host on your own servers or cloud platform.</p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Data Sovereignty</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Custom Branding</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>No licensing fees</li>
+                    </ul>
+                </div>
+
+                <div id="feature-3" class="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-green-600 bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-graduation-cap text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Academic Focused</h3>
+                    <p class="text-gray-600 mb-6">Purpose-built for universities, research institutions, and academic libraries in mind.</p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Metadata search</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>E-reader</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Unlimited free downloads</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hosting-options" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Choose Your Deployment</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Whether you prefer self-hosting or managed hosting, we've got you covered.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div id="self-hosted-option" class="bg-light-gray rounded-xl p-8 border-2 border-transparent hover:border-university-blue transition-colors">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-university-blue bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-server text-university-blue text-3xl"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-dark-gray mb-4">Self-Hosted</h3>
+                        <p class="text-gray-600 mb-6">Deploy Wulse on your own infrastructure with complete control and customization.</p>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span class="text-dark-gray">Complete data control</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span class="text-dark-gray">Unlimited customization</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span class="text-dark-gray">No recurring fees</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span class="text-dark-gray">Community support</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-university-blue mb-2">Free</div>
+                        <div class="text-gray-600 mb-6">Open source forever</div>
+                        <a href="https://github.com/haziba/wulse" target="_blank" class="block w-full bg-university-blue text-white py-3 rounded-lg font-semibold hover:bg-navy transition-colors">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+
+                <div id="managed-hosting-option" class="bg-gradient-to-br from-navy to-dark-gray rounded-xl p-8 text-white relative overflow-hidden">
+                    <div class="absolute top-4 right-4 bg-white bg-opacity-20 text-white text-xs px-3 py-1 rounded-full">
+                        Coming Soon
+                    </div>
+
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-cloud text-white text-3xl"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold mb-4">Managed Hosting</h3>
+                        <p class="text-gray-200 mb-6">Let us handle the infrastructure while you focus on your research and content.</p>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Fully managed infrastructure</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Automatic updates & backups</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>24/7 monitoring & support</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Custom domain & SSL</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2">Contact Us</div>
+                        <div class="text-gray-200 mb-6">For pricing information</div>
+                        <button onclick="document.getElementById('hosting-form').scrollIntoView({behavior: 'smooth'})" class="block w-full bg-white text-navy py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                            Request Info
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hosting-form" class="py-20 bg-light-gray">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="font-serif text-4xl font-bold text-dark-gray mb-6">Request Managed Hosting</h2>
+                <p class="text-xl text-gray-600">Interested in our managed hosting service? Fill out the form below and we'll get back to you with pricing and availability.</p>
+            </div>
+
+            <div id="hosting-form-container" class="bg-white rounded-xl shadow-lg p-8">
+                <form action="/contact" method="post" data-turbo="true" class="space-y-6">
+                    <input type="hidden" name="authenticity_token" value="">
+                    <script>document.querySelector('input[name="authenticity_token"]').value = document.querySelector('meta[name="csrf-token"]')?.content || '';</script>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-dark-gray mb-2">Institution Name *</label>
+                            <input type="text" name="institution_name" required class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-dark-gray mb-2">Institution Type</label>
+                            <select name="institution_type" class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent">
+                                <option>University</option>
+                                <option>Research Institute</option>
+                                <option>Library</option>
+                                <option>Government Agency</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-dark-gray mb-2">Contact Name *</label>
+                            <input type="text" name="contact_name" required class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-dark-gray mb-2">Email Address *</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-dark-gray mb-2">Estimated Document Volume</label>
+                        <select name="document_volume" class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent">
+                            <option>Less than 1,000 documents</option>
+                            <option>1,000 - 10,000 documents</option>
+                            <option>10,000 - 50,000 documents</option>
+                            <option>50,000 - 100,000 documents</option>
+                            <option>More than 100,000 documents</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-dark-gray mb-2">Additional Requirements</label>
+                        <textarea name="requirements" rows="4" class="w-full px-4 py-3 border border-mid-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy focus:border-transparent" placeholder="Tell us about any specific requirements, integrations, or customisations you need..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="bg-burgundy text-white px-8 py-4 rounded-lg font-semibold hover:bg-burgundy-dark transition-colors">
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer id="footer" class="bg-navy text-white py-12">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <img src="/icon.png" alt="Wulse" class="w-10 h-10">
+                    <div>
+                        <h3 class="font-serif text-xl font-bold">Wulse</h3>
+                        <p class="text-sm text-gray-300">Open Source Digital Archive</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm">Empowering academic institutions with modern digital archive solutions.</p>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4">Product</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#features-section" class="text-gray-300 hover:text-white">Features</a></li>
+                    <li><a href="#hosting-options" class="text-gray-300 hover:text-white">Hosting</a></li>
+                    <li><a href="#hosting-form" class="text-gray-300 hover:text-white">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://github.com/haziba/wulse" target="_blank" class="text-gray-300 hover:text-white">GitHub</a></li>
+                    <li><a href="https://github.com/haziba/wulse" target="_blank" class="text-gray-300 hover:text-white">Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-600 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-sm text-gray-300">&copy; <%= Time.current.year %> Wulse. Released under the MIT License.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="https://github.com/haziba/wulse" target="_blank" class="text-gray-300 hover:text-white">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
