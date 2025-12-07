@@ -28,7 +28,7 @@ RSpec.describe DemoModeRestricted, type: :controller do
 
   before do
     routes.draw do
-      resources :anonymous, only: [:index, :create, :update, :destroy]
+      resources :anonymous, only: [ :index, :create, :update, :destroy ]
     end
   end
 
@@ -136,7 +136,7 @@ RSpec.describe DemoModeRestricted, type: :controller do
 
     before do
       routes.draw do
-        resources :anonymous, only: [:create, :update] do
+        resources :anonymous, only: [ :create, :update ] do
           member do
             post :custom_action
           end
