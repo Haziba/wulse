@@ -197,6 +197,7 @@ GEM
       has_scope (>= 0.6)
       railties (>= 6.0)
       responders (>= 2)
+    iniparse (1.5.0)
     io-console (0.8.1)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -291,6 +292,10 @@ GEM
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.3)
+    overcommit (0.68.0)
+      childprocess (>= 0.6.3, < 6)
+      iniparse (~> 1.4)
+      rexml (>= 3.3.9)
     pagy (9.4.0)
     parallel (1.27.0)
     parser (3.3.9.0)
@@ -375,6 +380,7 @@ GEM
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
+    rexml (3.4.4)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -543,6 +549,7 @@ DEPENDENCIES
   kamal
   letter_opener
   mini_magick
+  overcommit
   pagy (~> 9.0)
   pg (~> 1.1)
   puma (>= 5.0)
