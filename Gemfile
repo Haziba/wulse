@@ -65,6 +65,9 @@ group :development do
 
   # Preview emails in the browser
   gem "letter_opener"
+
+  # Git commit hook
+  gem "overcommit"
 end
 
 group :test do
