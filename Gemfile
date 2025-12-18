@@ -90,7 +90,7 @@ gem "bcrypt", "~> 3.1"
 gem "activeadmin", "~> 3.4"
 gem "sassc-rails"
 
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.2"
 
 # Image processing for preview generation
 gem "mini_magick"
