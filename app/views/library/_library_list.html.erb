@@ -26,7 +26,7 @@
   </div>
   <div class="flex items-center space-x-1 sm:space-x-2">
     <% if pagy.prev %>
-      <%= link_to library_path(request.params.merge(page: pagy.prev)), class: "px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100" do %>
+      <%= link_to library_path(request.query_parameters.merge(page: pagy.prev)), class: "px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_action: "advance" } do %>
         <i class="fas fa-chevron-left"></i>
       <% end %>
     <% else %>
@@ -38,7 +38,7 @@
 
     <% pagy.series.each do |item| %>
       <% if item.is_a?(Integer) %>
-        <%= link_to item, library_path(request.params.merge(page: item)), class: "px-2 sm:px-3 py-2 #{item == pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg" %>
+        <%= link_to item, library_path(request.query_parameters.merge(page: item)), class: "px-2 sm:px-3 py-2 #{item == pagy.page ? 'bg-brand-500 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-100'} rounded-lg", data: { turbo_action: "advance" } %>
       <% elsif item.is_a?(String) %>
         <span class="px-2 sm:px-3 py-2 text-gray-500"><%= item %></span>
       <% elsif item == :gap %>
@@ -47,7 +47,7 @@
     <% end %>
 
     <% if pagy.next %>
-      <%= link_to library_path(request.params.merge(page: pagy.next)), class: "px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100" do %>
+      <%= link_to library_path(request.query_parameters.merge(page: pagy.next)), class: "px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100", data: { turbo_action: "advance" } do %>
         <i class="fas fa-chevron-right"></i>
       <% end %>
     <% else %>

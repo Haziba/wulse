@@ -146,6 +146,46 @@ RSpec.describe "Library", type: :system do
       expect(find('input[name="document_type[]"][value="article"]')).to be_checked
       expect(page).not_to have_content("Programming Book")
     end
+
+    context "with pagination" do
+      before do
+        # Create enough documents for multiple pages (10 per page)
+        12.times do |i|
+          create(:document,
+            institution: institution,
+            staff: staff,
+            title: "Extra Book #{i + 1}",
+            author: "Author #{i + 1}"
+          )
+        end
+      end
+
+      it "preserves query parameters when clicking pagination links" do
+        visit_library_with_filters
+
+        fill_in "q", with: "Extra"
+        find('button[aria-label="Search"]', match: :first).click
+
+        # Wait for search results to update
+        expect(page).to have_content("12/15 documents found")
+        expect(current_url).to include("q=Extra")
+
+        # Navigate to page 2 using the page number link
+        click_link "2"
+
+        expect(page).to have_content("Showing 11 to 12 of 12 results")
+        expect(current_url).to include("page=2")
+        expect(current_url).to include("q=Extra")
+        expect(current_url).not_to include("controller=")
+        expect(current_url).not_to include("action=")
+
+        # Navigate back to page 1 using the page number link
+        click_link "1"
+
+        expect(page).to have_content("Showing 1 to 10 of 12 results")
+        expect(current_url).to include("q=Extra")
+      end
+    end
   end
 
   describe "PDF reader" do
